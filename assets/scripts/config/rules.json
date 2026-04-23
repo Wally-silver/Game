@@ -1,0 +1,14 @@
+[
+  {
+    "id": "rule_noon_nap",
+    "name": "午休强制令",
+    "desc": "中午全员停工 30 分钟，快乐提升，金币产出下降",
+    "category": "social"
+  },
+  {
+    "id": "rule_double_shift",
+    "name": "全民加班日",
+    "desc": "短期金币上涨，但秩序与快乐波动",
+    "category": "economy"
+  }
+]

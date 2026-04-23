@@ -1,0 +1,5 @@
+{
+  "name": "Launch",
+  "description": "Bootstrap scene used to initialize App and route to Home.",
+  "nodes": []
+}

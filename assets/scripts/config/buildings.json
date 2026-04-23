@@ -1,0 +1,5 @@
+[
+  { "id": "bakery", "name": "面包店", "type": "industry", "base_output": 12 },
+  { "id": "office", "name": "办公室", "type": "service", "base_output": 15 },
+  { "id": "park", "name": "公园", "type": "public", "base_output": 4 }
+]

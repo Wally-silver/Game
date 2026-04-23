@@ -1,0 +1,4 @@
+[
+  { "id": "event_supply_late", "name": "供应延迟", "effect_type": "order", "effect_value": -5 },
+  { "id": "event_park_show", "name": "公园演出", "effect_type": "happiness", "effect_value": 8 }
+]
