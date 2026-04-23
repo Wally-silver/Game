@@ -1,5 +1,10 @@
 {
   "name": "Home",
-  "description": "Main town scene.",
-  "nodes": []
+  "description": "Attach HomeView. Bind onTapStartGame -> Battle, onTapViewResult -> Result.",
+  "ui": {
+    "goldLabel": "金币",
+    "inspirationLabel": "灵感",
+    "startGameButton": "开始游戏",
+    "viewResultButton": "查看结果页"
+  }
 }

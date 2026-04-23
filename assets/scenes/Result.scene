@@ -1,5 +1,8 @@
 {
   "name": "Result",
-  "description": "Round result and daily report scene.",
-  "nodes": []
+  "description": "Attach ResultReportView. Show placeholder report area and back-home button.",
+  "ui": {
+    "placeholderLabel": "Result Placeholder",
+    "backButton": "返回主页"
+  }
 }

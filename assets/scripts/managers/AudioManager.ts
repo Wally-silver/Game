@@ -1,12 +1,16 @@
 /**
- * Lightweight audio facade to decouple gameplay logic from actual audio APIs.
+ * 音频管理占位层：后续接入微信小游戏音频策略。
  */
 export class AudioManager {
-  public playSfx(_name: string): void {
-    // Intentionally minimal for phase A.
+  public playBgm(_key: string): void {
+    // 阶段 A 占位
   }
 
-  public playBgm(_name: string): void {
-    // Intentionally minimal for phase A.
+  public playSfx(_key: string): void {
+    // 阶段 A 占位
+  }
+
+  public stopAll(): void {
+    // 阶段 A 占位
   }
 }

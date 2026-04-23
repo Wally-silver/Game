@@ -1,4 +1,7 @@
 [
-  { "id": "resident_001", "name": "小李", "job": "baker" },
-  { "id": "resident_002", "name": "小王", "job": "clerk" }
+  { "id": "job_baker", "name": "烘焙师", "job": "baker", "base_efficiency": 1.1 },
+  { "id": "job_clerk", "name": "文员", "job": "clerk", "base_efficiency": 1.0 },
+  { "id": "job_guard", "name": "巡逻员", "job": "guard", "base_efficiency": 0.9 },
+  { "id": "job_artist", "name": "表演者", "job": "artist", "base_efficiency": 1.2 },
+  { "id": "job_nurse", "name": "护理员", "job": "nurse", "base_efficiency": 1.0 }
 ]

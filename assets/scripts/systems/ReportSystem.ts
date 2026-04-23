@@ -1,8 +1,13 @@
+import { ReportModel } from '../models/ReportModel';
+
 /**
- * End-of-round report generator placeholder.
+ * 日报系统骨架：组装最小日报对象。
  */
 export class ReportSystem {
-  public buildDailyTitle(): string {
-    return '平静的一天';
+  public buildReport(input: ReportModel): ReportModel {
+    return {
+      ...input,
+      title: input.title || '今日镇务平稳',
+    };
   }
 }

@@ -1,4 +1,37 @@
 [
-  { "id": "event_supply_late", "name": "供应延迟", "effect_type": "order", "effect_value": -5 },
-  { "id": "event_park_show", "name": "公园演出", "effect_type": "happiness", "effect_value": 8 }
+  {
+    "id": "event_supply_late",
+    "name": "供应延迟",
+    "trigger": "random",
+    "effect_type": "order",
+    "effect_value": -5
+  },
+  {
+    "id": "event_street_show",
+    "name": "街头演出",
+    "trigger": "park_active",
+    "effect_type": "happiness",
+    "effect_value": 8
+  },
+  {
+    "id": "event_bonus_order",
+    "name": "突发大单",
+    "trigger": "office_active",
+    "effect_type": "gold",
+    "effect_value": 20
+  },
+  {
+    "id": "event_rainy_day",
+    "name": "暴雨来袭",
+    "trigger": "weather",
+    "effect_type": "order",
+    "effect_value": -8
+  },
+  {
+    "id": "event_kindness_story",
+    "name": "暖心故事",
+    "trigger": "random",
+    "effect_type": "happiness",
+    "effect_value": 5
+  }
 ]

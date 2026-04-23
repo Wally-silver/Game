@@ -1,39 +1,52 @@
+export type EventPayload = Record<string, unknown> | string | number | boolean | null | undefined;
+export type EventHandler<T = EventPayload> = (payload?: T) => void;
+
 /**
- * Simple typed event bus used by managers/systems.
+ * 轻量事件总线：模块间通信统一从这里走。
  */
-export type EventHandler<T = unknown> = (payload: T) => void;
-
 export class EventBus {
-  private listeners = new Map<string, Set<EventHandler>>();
+  private handlers = new Map<string, Set<EventHandler>>();
 
-  public on<T = unknown>(eventName: string, handler: EventHandler<T>): () => void {
-    if (!this.listeners.has(eventName)) {
-      this.listeners.set(eventName, new Set<EventHandler>());
+  public on<T = EventPayload>(event: string, handler: EventHandler<T>): () => void {
+    if (!this.handlers.has(event)) {
+      this.handlers.set(event, new Set<EventHandler>());
     }
-    this.listeners.get(eventName)!.add(handler as EventHandler);
-    return () => this.off(eventName, handler);
+    this.handlers.get(event)!.add(handler as EventHandler);
+    return () => this.off(event, handler);
   }
 
-  public off<T = unknown>(eventName: string, handler: EventHandler<T>): void {
-    const handlers = this.listeners.get(eventName);
-    if (!handlers) {
+  public once<T = EventPayload>(event: string, handler: EventHandler<T>): () => void {
+    const unsubscribe = this.on<T>(event, (payload) => {
+      unsubscribe();
+      handler(payload);
+    });
+    return unsubscribe;
+  }
+
+  public off<T = EventPayload>(event: string, handler: EventHandler<T>): void {
+    const set = this.handlers.get(event);
+    if (!set) {
       return;
     }
-    handlers.delete(handler as EventHandler);
-    if (handlers.size === 0) {
-      this.listeners.delete(eventName);
+    set.delete(handler as EventHandler);
+    if (set.size === 0) {
+      this.handlers.delete(event);
     }
   }
 
-  public emit<T = unknown>(eventName: string, payload: T): void {
-    const handlers = this.listeners.get(eventName);
-    if (!handlers) {
+  public emit<T = EventPayload>(event: string, payload?: T): void {
+    const set = this.handlers.get(event);
+    if (!set) {
       return;
     }
-    handlers.forEach((handler) => handler(payload));
+    [...set].forEach((handler) => handler(payload));
   }
 
-  public clear(): void {
-    this.listeners.clear();
+  public clear(event?: string): void {
+    if (event) {
+      this.handlers.delete(event);
+      return;
+    }
+    this.handlers.clear();
   }
 }

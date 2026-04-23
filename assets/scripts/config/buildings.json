@@ -1,5 +1,37 @@
 [
-  { "id": "bakery", "name": "面包店", "type": "industry", "base_output": 12 },
-  { "id": "office", "name": "办公室", "type": "service", "base_output": 15 },
-  { "id": "park", "name": "公园", "type": "public", "base_output": 4 }
+  {
+    "id": "bakery",
+    "name": "面包店",
+    "type": "production",
+    "base_output": 12,
+    "capacity": 3
+  },
+  {
+    "id": "office",
+    "name": "办公室",
+    "type": "service",
+    "base_output": 15,
+    "capacity": 4
+  },
+  {
+    "id": "park",
+    "name": "公园",
+    "type": "public",
+    "base_output": 4,
+    "capacity": 8
+  },
+  {
+    "id": "clinic",
+    "name": "诊所",
+    "type": "support",
+    "base_output": 6,
+    "capacity": 2
+  },
+  {
+    "id": "canteen",
+    "name": "食堂",
+    "type": "support",
+    "base_output": 8,
+    "capacity": 5
+  }
 ]

@@ -1,5 +1,8 @@
 {
   "name": "Battle",
-  "description": "Round simulation scene.",
-  "nodes": []
+  "description": "Attach BattleHUD. Show placeholder and back-home button.",
+  "ui": {
+    "placeholderLabel": "Battle Placeholder",
+    "backButton": "返回主页"
+  }
 }

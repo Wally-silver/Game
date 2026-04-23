@@ -1,40 +1,48 @@
-import { EVENT_KEYS } from './Constants';
+import { director } from 'cc';
+import { EVENT_NAME, SCENE_NAME } from './Constants';
 import { EventBus } from './EventBus';
 
-export interface SceneAdapter {
-  loadScene(sceneName: string): Promise<void>;
+export interface SceneLoadingHooks {
+  beforeLoad?: (sceneName: string) => void;
+  afterLoad?: (sceneName: string) => void;
 }
 
 /**
- * Scene transition gateway to keep scene API out of gameplay logic.
+ * 场景跳转封装层。页面只依赖这个类，不直接碰 director。
  */
 export class SceneRouter {
-  private currentScene = '';
-
   constructor(
-    private readonly adapter: SceneAdapter,
     private readonly eventBus: EventBus,
+    private readonly hooks?: SceneLoadingHooks,
   ) {}
 
-  public async goTo(sceneName: string): Promise<void> {
-    if (sceneName === this.currentScene) {
-      return;
-    }
-
-    this.eventBus.emit(EVENT_KEYS.SCENE_WILL_CHANGE, {
-      from: this.currentScene,
-      to: sceneName,
-    });
-
-    await this.adapter.loadScene(sceneName);
-    this.currentScene = sceneName;
-
-    this.eventBus.emit(EVENT_KEYS.SCENE_DID_CHANGE, {
-      current: this.currentScene,
-    });
+  public async goHome(): Promise<void> {
+    await this.load(SCENE_NAME.HOME);
   }
 
-  public getCurrentScene(): string {
-    return this.currentScene;
+  public async goBattle(): Promise<void> {
+    await this.load(SCENE_NAME.BATTLE);
+  }
+
+  public async goResult(): Promise<void> {
+    await this.load(SCENE_NAME.RESULT);
+  }
+
+  public async load(sceneName: string): Promise<void> {
+    this.hooks?.beforeLoad?.(sceneName);
+    this.eventBus.emit(EVENT_NAME.SCENE_LOADING, { sceneName, loading: true });
+
+    await new Promise<void>((resolve, reject) => {
+      director.loadScene(sceneName, (err) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve();
+      });
+    });
+
+    this.eventBus.emit(EVENT_NAME.SCENE_LOADING, { sceneName, loading: false });
+    this.hooks?.afterLoad?.(sceneName);
   }
 }

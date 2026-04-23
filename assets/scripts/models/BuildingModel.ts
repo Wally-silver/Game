@@ -3,4 +3,5 @@ export interface BuildingModel {
   name: string;
   type: string;
   base_output: number;
+  capacity: number;
 }

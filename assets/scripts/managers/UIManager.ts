@@ -1,5 +1,5 @@
 /**
- * Central UI registry for opening/closing windows in a consistent way.
+ * UI 状态管理器：统一记录弹窗/面板开关状态。
  */
 export class UIManager {
   private openedPanels = new Set<string>();
@@ -14,5 +14,9 @@ export class UIManager {
 
   public isOpen(panelId: string): boolean {
     return this.openedPanels.has(panelId);
+  }
+
+  public closeAll(): void {
+    this.openedPanels.clear();
   }
 }

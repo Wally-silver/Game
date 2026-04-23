@@ -1,5 +1,7 @@
 {
   "name": "Launch",
-  "description": "Bootstrap scene used to initialize App and route to Home.",
-  "nodes": []
+  "description": "Attach LaunchView + App on root node. LaunchView calls App.bootstrap() then routes to Home.",
+  "ui": {
+    "statusLabel": "初始化状态文本"
+  }
 }

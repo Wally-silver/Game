@@ -2,13 +2,41 @@
   {
     "id": "rule_noon_nap",
     "name": "午休强制令",
-    "desc": "中午全员停工 30 分钟，快乐提升，金币产出下降",
-    "category": "social"
+    "desc": "中午统一午休，快乐+8，金币产出-5%",
+    "category": "social",
+    "risk_score": 1,
+    "fun_score": 3
   },
   {
     "id": "rule_double_shift",
     "name": "全民加班日",
-    "desc": "短期金币上涨，但秩序与快乐波动",
-    "category": "economy"
+    "desc": "全镇加班，金币+15%，快乐-10",
+    "category": "economy",
+    "risk_score": 4,
+    "fun_score": 2
+  },
+  {
+    "id": "rule_music_morning",
+    "name": "晨间广播",
+    "desc": "每日清晨播放广播，秩序+6，快乐+2",
+    "category": "order",
+    "risk_score": 1,
+    "fun_score": 2
+  },
+  {
+    "id": "rule_park_dance",
+    "name": "广场舞计划",
+    "desc": "公园时段活动，快乐+10，办公室效率-5%",
+    "category": "festival",
+    "risk_score": 2,
+    "fun_score": 4
+  },
+  {
+    "id": "rule_lights_out",
+    "name": "十点熄灯",
+    "desc": "夜间熄灯，秩序+10，夜间收益-8%",
+    "category": "safety",
+    "risk_score": 2,
+    "fun_score": 1
   }
 ]
