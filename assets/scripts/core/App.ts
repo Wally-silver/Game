@@ -25,7 +25,7 @@ export class App extends Component {
   public readonly saveManager = new SaveManager();
   public readonly uiManager = new UIManager();
   public readonly audioManager = new AudioManager();
-  public readonly battleManager = new BattleManager(this.gameState);
+  public readonly battleManager = new BattleManager(this.gameState, this.configManager, this.eventBus);
   public readonly sceneRouter = new SceneRouter(this.eventBus, {
     beforeLoad: (scene) => Logger.info(`Loading scene: ${scene}`),
     afterLoad: (scene) => Logger.info(`Loaded scene: ${scene}`),

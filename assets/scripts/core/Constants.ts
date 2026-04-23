@@ -13,6 +13,8 @@ export const EVENT_NAME = {
   CONFIG_LOADED: 'config_loaded',
   CONFIG_LOAD_FAILED: 'config_load_failed',
   SCENE_LOADING: 'scene_loading',
+  BATTLE_EVENT_TRIGGERED: 'battle_event_triggered',
+  BATTLE_ENDED: 'battle_ended',
 } as const;
 
 export const CONFIG_KEY = {
@@ -27,4 +29,15 @@ export const DEFAULT_PLAYER_STATE = {
   playerLevel: 1,
   gold: 100,
   inspiration: 20,
+};
+
+export const BATTLE_DEFAULTS = {
+  durationSeconds: 120,
+  startOrder: 70,
+  startJoy: 60,
+  startGold: 100,
+  targetGold: 180,
+  targetProgress: 100,
+  buildingTickInterval: 1,
+  eventTickInterval: 5,
 };

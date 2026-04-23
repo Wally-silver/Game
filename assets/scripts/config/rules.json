@@ -1,42 +1,133 @@
 [
   {
-    "id": "rule_noon_nap",
-    "name": "午休强制令",
-    "desc": "中午统一午休，快乐+8，金币产出-5%",
+    "id": "rule_fast_walk",
+    "name": "全员快步走",
+    "desc": "居民行动速度提升，但秩序波动增大。",
+    "category": "resident",
+    "risk_score": 3,
+    "fun_score": 3,
+    "tags": ["speed", "risk"],
+    "effects": [
+      { "target": "resident_speed", "type": "mul", "value": 1.2 },
+      { "target": "order_change", "type": "add", "value": -1 }
+    ]
+  },
+  {
+    "id": "rule_office_double",
+    "name": "办公室加倍努力",
+    "desc": "金币增长更快，但快乐下降。",
+    "category": "building",
+    "risk_score": 4,
+    "fun_score": 2,
+    "tags": ["office", "gold"],
+    "effects": [
+      { "target": "gold_gain", "type": "mul", "value": 1.2 },
+      { "target": "joy_change", "type": "add", "value": -2 }
+    ]
+  },
+  {
+    "id": "rule_park_open",
+    "name": "公园全天开放",
+    "desc": "快乐恢复增强，金币产出略降。",
+    "category": "public",
+    "risk_score": 1,
+    "fun_score": 4,
+    "tags": ["park", "joy_up"],
+    "effects": [
+      { "target": "joy_change", "type": "add", "value": 2 },
+      { "target": "gold_gain", "type": "mul", "value": 0.92 }
+    ]
+  },
+  {
+    "id": "rule_bread_discount",
+    "name": "面包半价",
+    "desc": "收益下降但居民心情更好。",
+    "category": "economy",
+    "risk_score": 2,
+    "fun_score": 4,
+    "tags": ["bakery", "discount"],
+    "effects": [
+      { "target": "building_output", "type": "mul", "value": 0.9 },
+      { "target": "resident_mood", "type": "add", "value": 2 }
+    ]
+  },
+  {
+    "id": "rule_no_complain",
+    "name": "禁止抱怨",
+    "desc": "短期秩序上升，后续情绪承压。",
+    "category": "order",
+    "risk_score": 3,
+    "fun_score": 2,
+    "tags": ["strict"],
+    "effects": [
+      { "target": "order_change", "type": "add", "value": 3 },
+      { "target": "resident_mood", "type": "add", "value": -1 }
+    ]
+  },
+  {
+    "id": "rule_work_smile",
+    "name": "工作要微笑",
+    "desc": "快乐提高，产能略降。",
     "category": "social",
     "risk_score": 1,
-    "fun_score": 3
+    "fun_score": 3,
+    "tags": ["joy_up"],
+    "effects": [
+      { "target": "joy_change", "type": "add", "value": 2 },
+      { "target": "building_output", "type": "mul", "value": 0.95 }
+    ]
   },
   {
-    "id": "rule_double_shift",
-    "name": "全民加班日",
-    "desc": "全镇加班，金币+15%，快乐-10",
-    "category": "economy",
-    "risk_score": 4,
-    "fun_score": 2
-  },
-  {
-    "id": "rule_music_morning",
-    "name": "晨间广播",
-    "desc": "每日清晨播放广播，秩序+6，快乐+2",
+    "id": "rule_strict_clock",
+    "name": "严格打卡",
+    "desc": "秩序提升，居民速度下降。",
     "category": "order",
+    "risk_score": 2,
+    "fun_score": 1,
+    "tags": ["strict"],
+    "effects": [
+      { "target": "order_change", "type": "add", "value": 2 },
+      { "target": "resident_speed", "type": "mul", "value": 0.9 }
+    ]
+  },
+  {
+    "id": "rule_bonus_day",
+    "name": "临时奖金日",
+    "desc": "居民心情更好，金币净收益略降。",
+    "category": "economy",
     "risk_score": 1,
-    "fun_score": 2
+    "fun_score": 3,
+    "tags": ["reward"],
+    "effects": [
+      { "target": "resident_mood", "type": "add", "value": 3 },
+      { "target": "gold_gain", "type": "mul", "value": 0.9 }
+    ]
   },
   {
-    "id": "rule_park_dance",
-    "name": "广场舞计划",
-    "desc": "公园时段活动，快乐+10，办公室效率-5%",
-    "category": "festival",
-    "risk_score": 2,
-    "fun_score": 4
+    "id": "rule_output_push",
+    "name": "全镇冲产能",
+    "desc": "建筑产出提升，快乐下降。",
+    "category": "building",
+    "risk_score": 4,
+    "fun_score": 2,
+    "tags": ["rush"],
+    "effects": [
+      { "target": "building_output", "type": "mul", "value": 1.25 },
+      { "target": "joy_change", "type": "add", "value": -2 }
+    ]
   },
   {
-    "id": "rule_lights_out",
-    "name": "十点熄灯",
-    "desc": "夜间熄灯，秩序+10，夜间收益-8%",
-    "category": "safety",
-    "risk_score": 2,
-    "fun_score": 1
+    "id": "rule_harmony_first",
+    "name": "和谐第一",
+    "desc": "秩序和快乐双提升，但金币增速较慢。",
+    "category": "balance",
+    "risk_score": 1,
+    "fun_score": 2,
+    "tags": ["balance"],
+    "effects": [
+      { "target": "order_change", "type": "add", "value": 2 },
+      { "target": "joy_change", "type": "add", "value": 1 },
+      { "target": "gold_gain", "type": "mul", "value": 0.85 }
+    ]
   }
 ]

@@ -1,8 +1,8 @@
 {
   "name": "Result",
-  "description": "Attach ResultReportView. Show placeholder report area and back-home button.",
+  "description": "Attach ResultReportView. Show minimal report fields and buttons: 返回主页/再来一局.",
   "ui": {
-    "placeholderLabel": "Result Placeholder",
-    "backButton": "返回主页"
+    "fields": ["ruleName", "reportTitle", "success", "finalOrder", "finalJoy", "finalGold", "eventCount"],
+    "buttons": ["backHome", "replay"]
   }
 }

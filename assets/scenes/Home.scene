@@ -1,10 +1,10 @@
 {
   "name": "Home",
-  "description": "Attach HomeView. Bind onTapStartGame -> Battle, onTapViewResult -> Result.",
+  "description": "Attach HomeView. Show gold/inspiration and button: 开始原型战局.",
   "ui": {
     "goldLabel": "金币",
     "inspirationLabel": "灵感",
-    "startGameButton": "开始游戏",
-    "viewResultButton": "查看结果页"
+    "startGameButton": "开始原型战局",
+    "viewResultButton": "查看结果页(调试)"
   }
 }

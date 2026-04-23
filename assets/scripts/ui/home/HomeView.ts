@@ -4,7 +4,7 @@ import { App } from '../../core/App';
 const { ccclass, property } = _decorator;
 
 /**
- * Home.scene 控制器：展示资源并提供场景跳转按钮回调。
+ * Home.scene 控制器：显示资源并进入原型战局。
  */
 @ccclass('HomeView')
 export class HomeView extends Component {
@@ -32,11 +32,7 @@ export class HomeView extends Component {
       return;
     }
 
-    if (this.goldLabel) {
-      this.goldLabel.string = `金币: ${snapshot.gold}`;
-    }
-    if (this.inspirationLabel) {
-      this.inspirationLabel.string = `灵感: ${snapshot.inspiration}`;
-    }
+    this.goldLabel && (this.goldLabel.string = `金币: ${snapshot.gold}`);
+    this.inspirationLabel && (this.inspirationLabel.string = `灵感: ${snapshot.inspiration}`);
   }
 }

@@ -2,11 +2,15 @@ import { DEFAULT_PLAYER_STATE, EVENT_NAME } from './Constants';
 import { EventBus } from './EventBus';
 
 export interface CurrentRunData {
-  selectedRuleId?: string;
-  elapsedSeconds?: number;
-  order?: number;
-  happiness?: number;
-  coinsEarned?: number;
+  selectedRuleId: string | null;
+  selectedRuleName: string;
+  order: number;
+  joy: number;
+  gold: number;
+  timer: number;
+  goalProgress: number;
+  started: boolean;
+  ended: boolean;
 }
 
 export interface GameStateSnapshot {
@@ -37,11 +41,6 @@ export class GameState {
     return JSON.parse(JSON.stringify(this.state)) as GameStateSnapshot;
   }
 
-  public setPlayerLevel(level: number): void {
-    this.state.playerLevel = Math.max(1, Math.floor(level));
-    this.broadcast();
-  }
-
   public addGold(delta: number): void {
     this.state.gold = Math.max(0, this.state.gold + delta);
     this.broadcast();
@@ -59,13 +58,16 @@ export class GameState {
     }
   }
 
-  public setEncyclopediaProgress(entryId: string, unlocked: boolean): void {
-    this.state.encyclopediaProgress[entryId] = unlocked;
+  public setCurrentRunData(data: CurrentRunData | null): void {
+    this.state.currentRunData = data;
     this.broadcast();
   }
 
-  public setCurrentRunData(data: CurrentRunData | null): void {
-    this.state.currentRunData = data;
+  public patchCurrentRunData(patch: Partial<CurrentRunData>): void {
+    if (!this.state.currentRunData) {
+      return;
+    }
+    this.state.currentRunData = { ...this.state.currentRunData, ...patch };
     this.broadcast();
   }
 

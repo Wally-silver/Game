@@ -1,7 +1,12 @@
 [
-  { "id": "title_001", "title": "怪话生效，小镇稳定运行" },
-  { "id": "title_002", "title": "离谱规则下的平衡一天" },
-  { "id": "title_003", "title": "秩序与快乐的拉扯" },
-  { "id": "title_004", "title": "今日镇务：风险可控" },
-  { "id": "title_005", "title": "居民反馈：还算满意" }
+  { "id": "report_001", "title": "怪话生效，小镇稳住了", "success_bias": true },
+  { "id": "report_002", "title": "今日镇规：有惊无险", "success_bias": true },
+  { "id": "report_003", "title": "秩序与快乐勉强平衡", "success_bias": true },
+  { "id": "report_004", "title": "居民满意度尚可", "success_bias": true },
+  { "id": "report_005", "title": "离谱但有效的一天", "success_bias": true },
+  { "id": "report_006", "title": "怪话失控，镇务告急", "success_bias": false },
+  { "id": "report_007", "title": "居民情绪崩盘的一天", "success_bias": false },
+  { "id": "report_008", "title": "秩序跌穿警戒线", "success_bias": false },
+  { "id": "report_009", "title": "办公室怨气冲天", "success_bias": false },
+  { "id": "report_010", "title": "今日复盘：需要更稳健规则", "success_bias": false }
 ]

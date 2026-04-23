@@ -1,7 +1,47 @@
 [
-  { "id": "job_baker", "name": "烘焙师", "job": "baker", "base_efficiency": 1.1 },
-  { "id": "job_clerk", "name": "文员", "job": "clerk", "base_efficiency": 1.0 },
-  { "id": "job_guard", "name": "巡逻员", "job": "guard", "base_efficiency": 0.9 },
-  { "id": "job_artist", "name": "表演者", "job": "artist", "base_efficiency": 1.2 },
-  { "id": "job_nurse", "name": "护理员", "job": "nurse", "base_efficiency": 1.0 }
+  {
+    "id": "resident_001",
+    "name": "阿面",
+    "profession": "baker",
+    "mood": 62,
+    "energy": 88,
+    "currentBuilding": "bakery",
+    "currentState": "normal"
+  },
+  {
+    "id": "resident_002",
+    "name": "小赵",
+    "profession": "clerk",
+    "mood": 58,
+    "energy": 80,
+    "currentBuilding": "office",
+    "currentState": "normal"
+  },
+  {
+    "id": "resident_003",
+    "name": "圆圆",
+    "profession": "gardener",
+    "mood": 66,
+    "energy": 85,
+    "currentBuilding": "park",
+    "currentState": "normal"
+  },
+  {
+    "id": "resident_004",
+    "name": "胖达",
+    "profession": "assistant",
+    "mood": 54,
+    "energy": 82,
+    "currentBuilding": "office",
+    "currentState": "normal"
+  },
+  {
+    "id": "resident_005",
+    "name": "阿橘",
+    "profession": "vendor",
+    "mood": 60,
+    "energy": 84,
+    "currentBuilding": "bakery",
+    "currentState": "normal"
+  }
 ]

@@ -1,6 +1,9 @@
 export interface ReportModel {
-  title: string;
-  chosenRuleName: string;
-  score: number;
-  targetAchieved: boolean;
+  ruleName: string;
+  reportTitle: string;
+  success: boolean;
+  finalOrder: number;
+  finalJoy: number;
+  finalGold: number;
+  eventCount: number;
 }

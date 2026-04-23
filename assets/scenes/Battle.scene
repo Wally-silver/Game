@@ -1,8 +1,10 @@
 {
   "name": "Battle",
-  "description": "Attach BattleHUD. Show placeholder and back-home button.",
+  "description": "Attach BattleHUD and RuleSelectPopup. Show timer/order/joy/gold/rule/goal/buildings/event feed.",
   "ui": {
-    "placeholderLabel": "Battle Placeholder",
-    "backButton": "返回主页"
+    "resourcePanel": ["timer", "order", "joy", "gold", "rule", "goal"],
+    "buildingActions": ["bakery/office/park overtime", "bakery/office/park pause"],
+    "eventFeed": "滚动播报",
+    "rulePopup": "3选1规则卡"
   }
 }
