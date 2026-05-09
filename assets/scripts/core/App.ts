@@ -17,6 +17,7 @@ const { ccclass } = _decorator;
  */
 @ccclass('App')
 export class App extends Component {
+  public latestBattleReport: import('../models/ReportModel').ReportModel | null = null;
   public static instance: App | null = null;
 
   public readonly eventBus = new EventBus();

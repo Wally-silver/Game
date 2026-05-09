@@ -1,10 +1,10 @@
 {
   "name": "Battle",
-  "description": "Mount BattleSceneController + BattleHUD + RuleSelectPopup. Controller drives battle lifecycle, HUD handles view/input only.",
+  "description": "Minimal runtime scene entry. Mount BattleSceneController; controller creates HUD + rule popup roots when missing.",
   "ui": {
-    "topBar": ["timer", "order", "joy", "gold", "rule", "goal"],
-    "buildingList": "dynamic BuildingActionItem list via buildingListRoot + buildingItemTemplate",
-    "rulePopup": "dynamic RuleOptionItem list via optionListRoot + optionTemplate",
-    "eventFeed": "battle event log"
+    "runtime_build": true,
+    "controller": "BattleSceneController",
+    "hud": "BattleHUD",
+    "popup": "RuleSelectPopup"
   }
 }

@@ -1,5 +1,6 @@
 import { _decorator, Component, instantiate, Label, Node } from 'cc';
 import { RuleModel } from '../../models/RuleModel';
+import { SceneUIFactory } from '../../utils/SceneUIFactory';
 import { RuleOptionItem } from './RuleOptionItem';
 
 const { ccclass, property } = _decorator;
@@ -14,6 +15,10 @@ export class RuleSelectPopup extends Component {
   private onPicked: ((ruleId: string) => void) | null = null;
   private optionNodes: Node[] = [];
 
+  protected onLoad(): void {
+    this.ensureUI();
+  }
+
   public open(candidates: RuleModel[], onPicked: (ruleId: string) => void): void {
     this.onPicked = onPicked;
     (this.root ?? this.node).active = true;
@@ -22,6 +27,25 @@ export class RuleSelectPopup extends Component {
   }
 
   public close(): void { (this.root ?? this.node).active = false; }
+
+  private ensureUI(): void {
+    if (!this.root) {
+      this.root = SceneUIFactory.createPanel(this.node, 'RulePopupRoot', 680, 800);
+    }
+    if (!this.titleLabel) {
+      this.titleLabel = SceneUIFactory.createLabel(this.root, 'PopupTitle', '请选择规则', 26);
+    }
+    if (!this.optionListRoot) {
+      this.optionListRoot = SceneUIFactory.createVerticalLayout(this.root, 'OptionList', 10);
+    }
+    if (!this.optionTemplate) {
+      this.optionTemplate = new Node('RuleOptionTemplate');
+      this.optionTemplate.parent = this.optionListRoot;
+      this.optionTemplate.addComponent(RuleOptionItem);
+      this.optionTemplate.active = false;
+    }
+    this.root.active = false;
+  }
 
   private renderCandidates(candidates: RuleModel[]): void {
     if (!this.optionListRoot || !this.optionTemplate) return;
@@ -38,7 +62,6 @@ export class RuleSelectPopup extends Component {
       const item = node.getComponent(RuleOptionItem) ?? node.addComponent(RuleOptionItem);
       item.bind(rule, (selectedRule) => this.pick(selectedRule.id));
     });
-    this.optionTemplate.active = false;
   }
 
   private pick(ruleId: string): void {

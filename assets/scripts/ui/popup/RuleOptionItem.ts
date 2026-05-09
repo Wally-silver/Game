@@ -1,5 +1,6 @@
 import { _decorator, Button, Component, Label, Node } from 'cc';
 import { RuleModel } from '../../models/RuleModel';
+import { SceneUIFactory } from '../../utils/SceneUIFactory';
 
 const { ccclass, property } = _decorator;
 
@@ -16,6 +17,20 @@ export class RuleOptionItem extends Component {
 
   private rule: RuleModel | null = null;
   private onPicked: ((rule: RuleModel) => void) | null = null;
+
+  protected onLoad(): void {
+    if (!this.ruleNameLabel) {
+      this.ruleNameLabel = SceneUIFactory.createLabel(this.node, 'RuleName', '规则名');
+      this.ruleDescLabel = SceneUIFactory.createLabel(this.node, 'RuleDesc', '规则描述', 18);
+      this.riskLabel = SceneUIFactory.createLabel(this.node, 'Risk', '风险: 0', 18);
+      this.funLabel = SceneUIFactory.createLabel(this.node, 'Fun', '趣味: 0', 18);
+      this.selectButton = SceneUIFactory.createButton(this.node, 'SelectBtn', '选择').button;
+      this.selectButton.node.on(Button.EventType.CLICK, () => this.onTapSelect());
+      this.detailButtonPlaceholder = new Node('DetailPlaceholder'); this.detailButtonPlaceholder.parent = this.node;
+      this.spiritTagPlaceholder = new Node('SpiritTagPlaceholder'); this.spiritTagPlaceholder.parent = this.node;
+      this.riskIconPlaceholder = new Node('RiskIconPlaceholder'); this.riskIconPlaceholder.parent = this.node;
+    }
+  }
 
   public bind(rule: RuleModel, onPicked: (rule: RuleModel) => void): void {
     this.rule = rule;

@@ -11,6 +11,7 @@ import { ResidentSystem } from '../systems/ResidentSystem';
 import { RuleSystem } from '../systems/RuleSystem';
 import { MathUtil } from '../utils/MathUtil';
 import { ConfigManager } from './ConfigManager';
+import { App } from '../core/App';
 
 interface BattleTopState { timer: number; order: number; joy: number; gold: number; goalProgress: number; }
 
@@ -185,6 +186,9 @@ export class BattleManager {
     };
 
     this.lastReport = this.reportSystem.buildReport(this.settlementData);
+    if (App.instance) {
+      App.instance.latestBattleReport = this.lastReport;
+    }
     this.gameState.patchCurrentRunData({ ended: true });
     this.eventBus.emit(EVENT_NAME.BATTLE_SETTLEMENT_READY, this.lastReport);
     this.eventBus.emit(EVENT_NAME.BATTLE_ENDED, this.lastReport);

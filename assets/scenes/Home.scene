@@ -1,10 +1,9 @@
 {
   "name": "Home",
-  "description": "Entry scene. HomeView shows player resources and routes to Battle/Result.",
+  "description": "Minimal runtime scene entry. Mount HomeSceneController only; controller builds UI tree at runtime.",
   "ui": {
-    "goldLabel": "金币",
-    "inspirationLabel": "灵感",
-    "startGameButton": "开始原型战局",
-    "viewResultButton": "查看结果页(调试)"
+    "runtime_build": true,
+    "controller": "HomeSceneController",
+    "actions": ["start_battle", "debug_result"]
   }
 }

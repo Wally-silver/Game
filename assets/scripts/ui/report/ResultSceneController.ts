@@ -1,4 +1,4 @@
-import { _decorator, Component } from 'cc';
+import { _decorator, Button, Component, Node } from 'cc';
 import { App } from '../../core/App';
 import { ResultReportView } from './ResultReportView';
 
@@ -9,14 +9,23 @@ export class ResultSceneController extends Component {
   @property(ResultReportView) public reportView: ResultReportView | null = null;
 
   protected start(): void {
-    this.reportView?.bindReport(App.instance?.battleManager.getLastReport() ?? null);
+    if (!this.reportView) {
+      const node = new Node('ResultReportViewNode');
+      node.parent = this.node;
+      this.reportView = node.addComponent(ResultReportView);
+    }
+
+    const report = App.instance?.latestBattleReport ?? App.instance?.battleManager.getLastReport() ?? null;
+    this.reportView.bindReport(report);
+
+    if (this.reportView.backButton) {
+      this.reportView.backButton.node.on(Button.EventType.CLICK, () => this.onTapBackHome());
+    }
+    if (this.reportView.retryButton) {
+      this.reportView.retryButton.node.on(Button.EventType.CLICK, () => this.onTapReplay());
+    }
   }
 
-  public onTapBackHome(): void {
-    void App.instance?.sceneRouter.goHome();
-  }
-
-  public onTapReplay(): void {
-    void App.instance?.sceneRouter.goBattle();
-  }
+  public onTapBackHome(): void { void App.instance?.sceneRouter.goHome(); }
+  public onTapReplay(): void { void App.instance?.sceneRouter.goBattle(); }
 }
