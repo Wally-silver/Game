@@ -1,10 +1,10 @@
 {
   "name": "Battle",
-  "description": "Attach BattleHUD and RuleSelectPopup. Show timer/order/joy/gold/rule/goal/buildings/event feed.",
+  "description": "Mount BattleSceneController + BattleHUD + RuleSelectPopup. Controller drives battle lifecycle, HUD handles view/input only.",
   "ui": {
-    "resourcePanel": ["timer", "order", "joy", "gold", "rule", "goal"],
-    "buildingActions": ["bakery/office/park overtime", "bakery/office/park pause"],
-    "eventFeed": "滚动播报",
-    "rulePopup": "3选1规则卡"
+    "topBar": ["timer", "order", "joy", "gold", "rule", "goal"],
+    "buildingList": "dynamic BuildingActionItem list via buildingListRoot + buildingItemTemplate",
+    "rulePopup": "dynamic RuleOptionItem list via optionListRoot + optionTemplate",
+    "eventFeed": "battle event log"
   }
 }

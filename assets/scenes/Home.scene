@@ -1,6 +1,6 @@
 {
   "name": "Home",
-  "description": "Attach HomeView. Show gold/inspiration and button: 开始原型战局.",
+  "description": "Entry scene. HomeView shows player resources and routes to Battle/Result.",
   "ui": {
     "goldLabel": "金币",
     "inspirationLabel": "灵感",

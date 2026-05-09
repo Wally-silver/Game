@@ -1,6 +1,6 @@
 {
   "name": "Result",
-  "description": "Attach ResultReportView. Show minimal report fields and buttons: 返回主页/再来一局.",
+  "description": "Mount ResultSceneController + ResultReportView. Controller binds report and handles replay/home actions.",
   "ui": {
     "fields": ["ruleName", "reportTitle", "success", "finalOrder", "finalJoy", "finalGold", "eventCount"],
     "buttons": ["backHome", "replay"]

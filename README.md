@@ -1,69 +1,69 @@
-# 《怪话小镇》- 阶段 B（最小可玩原型）
+# 《怪话小镇》- 产品化基础版（Phase B+）
 
-当前仓库已实现：
-- Home -> Battle -> Result 的可跑通单局闭环
-- 进入 Battle 后弹出 3 选 1 规则
-- 规则生效后，建筑/居民/事件驱动资源变化
-- 支持对建筑执行「加班」「暂停」两种干预
-- 回合结束自动进入 Result，生成最简镇规日报
+当前状态：
+- 可玩单局闭环：Home -> Battle -> Result
+- Battle 场景已拆分为 Controller + HUD + Item 组件
+- 规则弹窗与建筑列表均为动态项生成
+- 运行态与结算态模型标准化（BattleRuntimeState / BattleSettlementData）
 
-## 目录
+## 核心模块
 
-```text
-assets/scripts/
-  core/
-  managers/
-  systems/
-  models/
-  ui/
-    home/
-    battle/
-    popup/
-    report/
-  config/
-```
+- `BattleSceneController`：Battle 场景生命周期协调（初始化、规则选择、更新驱动、结算跳转）
+- `BattleHUD`：纯 HUD 视图层（显示/输入回调）
+- `BuildingActionItem`：建筑列表项组件
+- `RuleSelectPopup` + `RuleOptionItem`：动态规则项选择弹窗
+- `ResultSceneController` + `ResultReportView`：结算页数据绑定与交互
 
-## Cocos Editor 接线说明（关键）
+## Cocos Editor 挂载说明
 
-1. `Launch.scene`
-   - 挂 `LaunchView`（会触发 `App.bootstrap()`）
+### Launch.scene
+- 挂 `LaunchView`
 
-2. `Home.scene`
-   - 挂 `HomeView`
-   - 绑定按钮：
-     - 开始原型战局 -> `onTapStartGame`
-     - 查看结果页 -> `onTapViewResult`（调试）
+### Home.scene
+- 挂 `HomeView`
+- 按钮绑定：
+  - 开始原型战局 -> `onTapStartGame`
+  - 查看结果页（调试） -> `onTapViewResult`
 
-3. `Battle.scene`
-   - 挂 `BattleHUD`
-   - 建筑区使用 `BuildingActionItem` 动态列表（容器 + 模板节点）
-   - 同场景挂 `RuleSelectPopup`
-   - 在 `BattleHUD.rulePopup` 绑定该 `RuleSelectPopup` 组件
-   - 绑定按钮：
-     - `onTapBackHome`
-   - 建筑操作改为统一入口：
-     - `onTapBuildingOvertime('<buildingId>')`
-     - `onTapBuildingPause('<buildingId>')`
-   - `RuleSelectPopup` 使用动态规则项（`RuleOptionItem`），通过 `optionListRoot + optionTemplate` 运行时生成
+### Battle.scene
+- 挂 `BattleSceneController`
+- 挂 `BattleHUD`
+- 挂 `RuleSelectPopup`
+- 在 `BattleSceneController` 上绑定：
+  - `hud` -> BattleHUD
+  - `rulePopup` -> RuleSelectPopup
+- BattleHUD 中：
+  - `buildingListRoot`：建筑项容器
+  - `buildingItemTemplate`：单个建筑项模板节点（挂 `BuildingActionItem`）
+- RuleSelectPopup 中：
+  - `optionListRoot`：规则项容器
+  - `optionTemplate`：规则项模板节点（挂 `RuleOptionItem`）
 
-4. `Result.scene`
-   - 挂 `ResultReportView`
-   - 绑定按钮：
-     - `onTapBackHome`
-     - `onTapReplay`
+### Result.scene
+- 挂 `ResultSceneController`
+- 挂 `ResultReportView`
+- 在 `ResultSceneController.reportView` 绑定 `ResultReportView`
+- 按钮绑定到 `ResultSceneController`：
+  - `onTapBackHome`
+  - `onTapReplay`
 
-## 运行
+## 运行流程
 
-1. 用 Cocos Creator 打开 `/workspace/Game`
-2. 设置 `Launch.scene` 为启动场景
-3. 运行后：
-   - Home 点击“开始原型战局”进入 Battle
-   - 先选 1 条规则，再观察资源变化与事件播报
-   - 使用建筑加班/暂停按钮干预
-   - 倒计时结束或失败条件触发后自动进入 Result
+1. 打开项目并以 `Launch.scene` 启动
+2. Home 点击“开始原型战局”进入 Battle
+3. BattleSceneController 初始化战局并弹出规则选择
+4. 选择规则后，Controller 在 `update(dt)` 驱动 BattleManager
+5. HUD 响应局部事件刷新资源/建筑/规则/事件
+6. 结算后跳转 Result，由 ResultSceneController 绑定报告数据
 
-## 判定逻辑（当前原型）
+## 已实现与未实现边界
 
-- 初始：order=70, joy=60, gold=100, timer=120
-- 失败：order<=0 或 joy<=0
-- 结束成功：倒计时归零后，order>0 且（goalProgress>=100 或 gold>=180）
+已实现：
+- 原型战局循环、规则影响、建筑状态、事件触发、基础日报
+
+未实现（仅预留接口或待后续）：
+- 图鉴正式功能
+- 精灵正式功能
+- 商城正式功能
+- 每日挑战正式功能
+- 微信小游戏平台能力（分享/广告/排行榜/支付）

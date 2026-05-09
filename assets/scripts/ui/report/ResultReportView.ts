@@ -1,5 +1,5 @@
 import { _decorator, Component, Label } from 'cc';
-import { App } from '../../core/App';
+import { ReportModel } from '../../models/ReportModel';
 
 const { ccclass, property } = _decorator;
 
@@ -13,9 +13,11 @@ export class ResultReportView extends Component {
   @property(Label) public goldLabel: Label | null = null;
   @property(Label) public eventCountLabel: Label | null = null;
 
-  protected start(): void {
-    const report = App.instance?.battleManager.getLastReport();
-    if (!report) { if (this.titleLabel) this.titleLabel.string = '暂无结算数据'; return; }
+  public bindReport(report: ReportModel | null): void {
+    if (!report) {
+      this.titleLabel && (this.titleLabel.string = '暂无结算数据');
+      return;
+    }
     const s = report.settlement;
     this.ruleNameLabel && (this.ruleNameLabel.string = `今日规则：${s.currentRuleName}`);
     this.titleLabel && (this.titleLabel.string = `标题：${report.reportTitle}`);
@@ -25,7 +27,4 @@ export class ResultReportView extends Component {
     this.goldLabel && (this.goldLabel.string = `最终金币：${s.finalGold}`);
     this.eventCountLabel && (this.eventCountLabel.string = `关键事件数：${s.triggeredEvents.length}`);
   }
-
-  public onTapBackHome(): void { void App.instance?.sceneRouter.goHome(); }
-  public onTapReplay(): void { void App.instance?.sceneRouter.goBattle(); }
 }
