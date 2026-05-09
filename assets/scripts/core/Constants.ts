@@ -15,6 +15,10 @@ export const EVENT_NAME = {
   SCENE_LOADING: 'scene_loading',
   BATTLE_EVENT_TRIGGERED: 'battle_event_triggered',
   BATTLE_ENDED: 'battle_ended',
+  BATTLE_RESOURCE_CHANGED: 'battle_resource_changed',
+  BATTLE_BUILDINGS_CHANGED: 'battle_buildings_changed',
+  BATTLE_RULE_SELECTED: 'battle_rule_selected',
+  BATTLE_SETTLEMENT_READY: 'battle_settlement_ready',
 } as const;
 
 export const CONFIG_KEY = {

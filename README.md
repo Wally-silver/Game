@@ -36,6 +36,7 @@ assets/scripts/
 
 3. `Battle.scene`
    - 挂 `BattleHUD`
+   - 建筑区使用 `BuildingActionItem` 动态列表（容器 + 模板节点）
    - 同场景挂 `RuleSelectPopup`
    - 在 `BattleHUD.rulePopup` 绑定该 `RuleSelectPopup` 组件
    - 绑定按钮：
@@ -43,7 +44,7 @@ assets/scripts/
    - 建筑操作改为统一入口：
      - `onTapBuildingOvertime('<buildingId>')`
      - `onTapBuildingPause('<buildingId>')`
-   - `RuleSelectPopup` 使用动态规则项（`RuleOptionItem`）
+   - `RuleSelectPopup` 使用动态规则项（`RuleOptionItem`），通过 `optionListRoot + optionTemplate` 运行时生成
 
 4. `Result.scene`
    - 挂 `ResultReportView`

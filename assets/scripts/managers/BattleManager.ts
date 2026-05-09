@@ -47,7 +47,10 @@ export class BattleManager {
     this.candidates = this.ruleSystem.generateCandidates(3);
     this.runtime.buildings = this.buildingSystem.getRuntimeBuildings();
     this.runtime.residents = this.residentSystem.getResidents();
+    this.eventBus.emit(EVENT_NAME.BATTLE_BUILDINGS_CHANGED, this.runtime.buildings);
     this.gameState.setCurrentRunData({ selectedRuleId: null, selectedRuleName: '未选择', order: this.runtime.order, joy: this.runtime.joy, gold: this.runtime.gold, timer: this.runtime.timer, goalProgress: this.runtime.goalProgress, started: false, ended: false });
+    this.eventBus.emit(EVENT_NAME.BATTLE_BUILDINGS_CHANGED, this.runtime.buildings);
+    this.eventBus.emit(EVENT_NAME.BATTLE_RESOURCE_CHANGED, { order: this.runtime.order, joy: this.runtime.joy, gold: this.runtime.gold, timer: this.runtime.timer, goalProgress: this.runtime.goalProgress });
     return this.candidates;
   }
 
@@ -58,6 +61,7 @@ export class BattleManager {
     this.runtime.currentRuleCategory = rule.category;
     this.runtime.running = true;
     this.gameState.patchCurrentRunData({ selectedRuleId: rule.id, selectedRuleName: rule.name, started: true });
+    this.eventBus.emit(EVENT_NAME.BATTLE_RULE_SELECTED, { ruleId: rule.id, ruleName: rule.name });
     return true;
   }
 
@@ -71,11 +75,12 @@ export class BattleManager {
     this.runtime.joy = MathUtil.clamp(this.runtime.joy, -100, 100);
     this.runtime.goalProgress = MathUtil.clamp(this.runtime.goalProgress, 0, 100);
     this.gameState.patchCurrentRunData({ order: this.runtime.order, joy: this.runtime.joy, gold: this.runtime.gold, timer: Math.ceil(this.runtime.timer), goalProgress: this.runtime.goalProgress });
+    this.eventBus.emit(EVENT_NAME.BATTLE_RESOURCE_CHANGED, { order: this.runtime.order, joy: this.runtime.joy, gold: this.runtime.gold, timer: this.runtime.timer, goalProgress: this.runtime.goalProgress });
     this.checkEndConditions();
   }
 
-  public toggleBuildingOvertime(buildingId: string): void { this.buildingSystem.toggleOvertime(buildingId); this.runtime.buildings = this.buildingSystem.getRuntimeBuildings(); }
-  public toggleBuildingPause(buildingId: string): void { this.buildingSystem.togglePause(buildingId); this.runtime.buildings = this.buildingSystem.getRuntimeBuildings(); }
+  public toggleBuildingOvertime(buildingId: string): void { this.buildingSystem.toggleOvertime(buildingId); this.runtime.buildings = this.buildingSystem.getRuntimeBuildings(); this.eventBus.emit(EVENT_NAME.BATTLE_BUILDINGS_CHANGED, this.runtime.buildings); }
+  public toggleBuildingPause(buildingId: string): void { this.buildingSystem.togglePause(buildingId); this.runtime.buildings = this.buildingSystem.getRuntimeBuildings(); this.eventBus.emit(EVENT_NAME.BATTLE_BUILDINGS_CHANGED, this.runtime.buildings); }
   public getRuntimeState(): BattleRuntimeState { return JSON.parse(JSON.stringify(this.runtime)) as BattleRuntimeState; }
   public getSnapshot(): BattleRuntimeState { return this.getRuntimeState(); }
   public getLastReport(): ReportModel | null { return this.lastReport ? JSON.parse(JSON.stringify(this.lastReport)) : null; }
@@ -88,6 +93,7 @@ export class BattleManager {
     this.runtime.gold += result.gold; this.runtime.joy += result.joy; this.runtime.order += result.order; this.runtime.goalProgress += result.goalProgress;
     this.runtime.buildings = this.buildingSystem.getRuntimeBuildings();
     this.runtime.residents = this.residentSystem.getResidents();
+    this.eventBus.emit(EVENT_NAME.BATTLE_BUILDINGS_CHANGED, this.runtime.buildings);
   }
 
   private tickEvents(): void {
@@ -96,6 +102,7 @@ export class BattleManager {
     if (!event) return;
     this.runtime.order += event.effect_order; this.runtime.joy += event.effect_joy; this.runtime.gold += event.effect_gold; this.runtime.goalProgress += event.effect_goal;
     this.runtime.triggeredEvents.unshift(event); this.runtime.triggeredEvents = this.runtime.triggeredEvents.slice(0, 12);
+    this.eventBus.emit(EVENT_NAME.BATTLE_BUILDINGS_CHANGED, this.runtime.buildings);
   }
 
   private checkEndConditions(): void {
@@ -122,6 +129,7 @@ export class BattleManager {
     };
     this.lastReport = this.reportSystem.buildReport(this.settlementData);
     this.gameState.patchCurrentRunData({ ended: true });
+    this.eventBus.emit(EVENT_NAME.BATTLE_SETTLEMENT_READY, this.lastReport);
     this.eventBus.emit(EVENT_NAME.BATTLE_ENDED, this.lastReport);
   }
 

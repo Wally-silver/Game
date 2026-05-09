@@ -1,4 +1,4 @@
-import { _decorator, Button, Component, Label } from 'cc';
+import { _decorator, Component, Label } from 'cc';
 import { RuleModel } from '../../models/RuleModel';
 
 const { ccclass, property } = _decorator;
@@ -6,12 +6,11 @@ const { ccclass, property } = _decorator;
 @ccclass('RuleOptionItem')
 export class RuleOptionItem extends Component {
   @property(Label) public contentLabel: Label | null = null;
-  @property(Button) public selectButton: Button | null = null;
 
   private rule: RuleModel | null = null;
-  private onPicked: ((ruleId: string) => void) | null = null;
+  private onPicked: ((rule: RuleModel) => void) | null = null;
 
-  public bind(rule: RuleModel, onPicked: (ruleId: string) => void): void {
+  public bind(rule: RuleModel, onPicked: (rule: RuleModel) => void): void {
     this.rule = rule;
     this.onPicked = onPicked;
     if (this.contentLabel) {
@@ -21,6 +20,6 @@ export class RuleOptionItem extends Component {
 
   public onTapSelect(): void {
     if (!this.rule || !this.onPicked) return;
-    this.onPicked(this.rule.id);
+    this.onPicked(this.rule);
   }
 }
