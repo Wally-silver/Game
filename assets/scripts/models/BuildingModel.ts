@@ -1,4 +1,4 @@
-export type BuildingState = 'normal' | 'paused' | 'overtime';
+export type BuildingState = 'normal' | 'understaffed' | 'overloaded' | 'paused' | 'overtime' | 'abnormal';
 
 export interface BuildingModel {
   id: string;
@@ -8,6 +8,9 @@ export interface BuildingModel {
   worker_need: number;
   joy_effect: number;
   order_effect: number;
+  pressure_limit?: number;
+  risk_factor?: number;
+  display_order?: number;
 }
 
 export interface BuildingRuntime {
@@ -19,4 +22,6 @@ export interface BuildingRuntime {
   current_output: number;
   current_workers: number;
   worker_need: number;
+  pressure: number;
+  risk: number;
 }

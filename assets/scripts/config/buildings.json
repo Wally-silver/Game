@@ -6,7 +6,10 @@
     "base_output": 12,
     "worker_need": 2,
     "joy_effect": 1,
-    "order_effect": 0
+    "order_effect": 0,
+    "pressure_limit": 70,
+    "risk_factor": 1.1,
+    "display_order": 1
   },
   {
     "id": "office",
@@ -15,7 +18,10 @@
     "base_output": 18,
     "worker_need": 2,
     "joy_effect": -2,
-    "order_effect": -1
+    "order_effect": -1,
+    "pressure_limit": 75,
+    "risk_factor": 1.3,
+    "display_order": 2
   },
   {
     "id": "park",
@@ -24,6 +30,9 @@
     "base_output": 2,
     "worker_need": 1,
     "joy_effect": 4,
-    "order_effect": 2
+    "order_effect": 2,
+    "pressure_limit": 80,
+    "risk_factor": 1.5,
+    "display_order": 3
   }
 ]

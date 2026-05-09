@@ -39,9 +39,11 @@ assets/scripts/
    - 同场景挂 `RuleSelectPopup`
    - 在 `BattleHUD.rulePopup` 绑定该 `RuleSelectPopup` 组件
    - 绑定按钮：
-     - `onTapBakeryOvertime` / `onTapOfficeOvertime` / `onTapParkOvertime`
-     - `onTapBakeryPause` / `onTapOfficePause` / `onTapParkPause`
      - `onTapBackHome`
+   - 建筑操作改为统一入口：
+     - `onTapBuildingOvertime('<buildingId>')`
+     - `onTapBuildingPause('<buildingId>')`
+   - `RuleSelectPopup` 使用动态规则项（`RuleOptionItem`）
 
 4. `Result.scene`
    - 挂 `ResultReportView`

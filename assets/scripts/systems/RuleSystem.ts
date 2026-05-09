@@ -2,9 +2,6 @@ import { CONFIG_KEY } from '../core/Constants';
 import { ConfigManager } from '../managers/ConfigManager';
 import { RuleEffectTarget, RuleModel } from '../models/RuleModel';
 
-/**
- * 规则系统：3选1候选 + 规则生效查询。
- */
 export class RuleSystem {
   private activeRule: RuleModel | null = null;
   private candidates: RuleModel[] = [];
@@ -19,10 +16,6 @@ export class RuleSystem {
     return this.candidates;
   }
 
-  public getCandidates(): RuleModel[] {
-    return [...this.candidates];
-  }
-
   public applyRule(ruleId: string): RuleModel | null {
     const picked = this.candidates.find((rule) => rule.id === ruleId) ?? null;
     this.activeRule = picked;
@@ -33,20 +26,18 @@ export class RuleSystem {
     return this.activeRule;
   }
 
+  public getActiveRuleCategory(): string {
+    return this.activeRule?.category ?? 'none';
+  }
+
   public getMultiplier(target: RuleEffectTarget): number {
-    if (!this.activeRule) {
-      return 1;
-    }
-    const mulEffects = this.activeRule.effects.filter((effect) => effect.target === target && effect.type === 'mul');
-    return mulEffects.reduce((acc, effect) => acc * effect.value, 1);
+    if (!this.activeRule) return 1;
+    return this.activeRule.effects.filter((e) => e.target === target && e.type === 'mul').reduce((a, e) => a * e.value, 1);
   }
 
   public getAdditive(target: RuleEffectTarget): number {
-    if (!this.activeRule) {
-      return 0;
-    }
-    const addEffects = this.activeRule.effects.filter((effect) => effect.target === target && effect.type === 'add');
-    return addEffects.reduce((acc, effect) => acc + effect.value, 0);
+    if (!this.activeRule) return 0;
+    return this.activeRule.effects.filter((e) => e.target === target && e.type === 'add').reduce((a, e) => a + e.value, 0);
   }
 
   public hasTag(tag: string): boolean {

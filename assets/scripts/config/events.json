@@ -9,7 +9,8 @@
     "effect_order": -2,
     "effect_gold": 18,
     "effect_joy": 1,
-    "effect_goal": 8
+    "effect_goal": 8,
+    "min_gold": 110
   },
   {
     "id": "event_office_complain",
@@ -21,7 +22,8 @@
     "effect_order": -3,
     "effect_joy": -6,
     "effect_gold": -5,
-    "effect_goal": 0
+    "effect_goal": 0,
+    "rule_category": "building"
   },
   {
     "id": "event_park_festival",
@@ -33,7 +35,8 @@
     "effect_order": 2,
     "effect_joy": 8,
     "effect_gold": 0,
-    "effect_goal": 5
+    "effect_goal": 5,
+    "min_goal_progress": 20
   },
   {
     "id": "event_overtime_accident",
@@ -45,7 +48,8 @@
     "effect_order": -6,
     "effect_joy": -5,
     "effect_gold": -8,
-    "effect_goal": -4
+    "effect_goal": -4,
+    "building_id": "office"
   },
   {
     "id": "event_tired_recovery",
@@ -57,6 +61,7 @@
     "effect_order": 1,
     "effect_joy": 6,
     "effect_gold": -3,
-    "effect_goal": 3
+    "effect_goal": 3,
+    "min_event_count": 1
   }
 ]

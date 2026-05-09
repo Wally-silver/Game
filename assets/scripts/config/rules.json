@@ -6,11 +6,23 @@
     "category": "resident",
     "risk_score": 3,
     "fun_score": 3,
-    "tags": ["speed", "risk"],
+    "tags": [
+      "speed",
+      "risk"
+    ],
     "effects": [
-      { "target": "resident_speed", "type": "mul", "value": 1.2 },
-      { "target": "order_change", "type": "add", "value": -1 }
-    ]
+      {
+        "target": "resident_speed",
+        "type": "mul",
+        "value": 1.2
+      },
+      {
+        "target": "order_change",
+        "type": "add",
+        "value": -1
+      }
+    ],
+    "rule_category": "resident"
   },
   {
     "id": "rule_office_double",
@@ -19,11 +31,23 @@
     "category": "building",
     "risk_score": 4,
     "fun_score": 2,
-    "tags": ["office", "gold"],
+    "tags": [
+      "office",
+      "gold"
+    ],
     "effects": [
-      { "target": "gold_gain", "type": "mul", "value": 1.2 },
-      { "target": "joy_change", "type": "add", "value": -2 }
-    ]
+      {
+        "target": "gold_gain",
+        "type": "mul",
+        "value": 1.2
+      },
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": -2
+      }
+    ],
+    "rule_category": "building"
   },
   {
     "id": "rule_park_open",
@@ -32,11 +56,23 @@
     "category": "public",
     "risk_score": 1,
     "fun_score": 4,
-    "tags": ["park", "joy_up"],
+    "tags": [
+      "park",
+      "joy_up"
+    ],
     "effects": [
-      { "target": "joy_change", "type": "add", "value": 2 },
-      { "target": "gold_gain", "type": "mul", "value": 0.92 }
-    ]
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": 2
+      },
+      {
+        "target": "gold_gain",
+        "type": "mul",
+        "value": 0.92
+      }
+    ],
+    "rule_category": "public"
   },
   {
     "id": "rule_bread_discount",
@@ -45,11 +81,23 @@
     "category": "economy",
     "risk_score": 2,
     "fun_score": 4,
-    "tags": ["bakery", "discount"],
+    "tags": [
+      "bakery",
+      "discount"
+    ],
     "effects": [
-      { "target": "building_output", "type": "mul", "value": 0.9 },
-      { "target": "resident_mood", "type": "add", "value": 2 }
-    ]
+      {
+        "target": "building_output",
+        "type": "mul",
+        "value": 0.9
+      },
+      {
+        "target": "resident_mood",
+        "type": "add",
+        "value": 2
+      }
+    ],
+    "rule_category": "economy"
   },
   {
     "id": "rule_no_complain",
@@ -58,11 +106,22 @@
     "category": "order",
     "risk_score": 3,
     "fun_score": 2,
-    "tags": ["strict"],
+    "tags": [
+      "strict"
+    ],
     "effects": [
-      { "target": "order_change", "type": "add", "value": 3 },
-      { "target": "resident_mood", "type": "add", "value": -1 }
-    ]
+      {
+        "target": "order_change",
+        "type": "add",
+        "value": 3
+      },
+      {
+        "target": "resident_mood",
+        "type": "add",
+        "value": -1
+      }
+    ],
+    "rule_category": "order"
   },
   {
     "id": "rule_work_smile",
@@ -71,11 +130,22 @@
     "category": "social",
     "risk_score": 1,
     "fun_score": 3,
-    "tags": ["joy_up"],
+    "tags": [
+      "joy_up"
+    ],
     "effects": [
-      { "target": "joy_change", "type": "add", "value": 2 },
-      { "target": "building_output", "type": "mul", "value": 0.95 }
-    ]
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": 2
+      },
+      {
+        "target": "building_output",
+        "type": "mul",
+        "value": 0.95
+      }
+    ],
+    "rule_category": "social"
   },
   {
     "id": "rule_strict_clock",
@@ -84,11 +154,22 @@
     "category": "order",
     "risk_score": 2,
     "fun_score": 1,
-    "tags": ["strict"],
+    "tags": [
+      "strict"
+    ],
     "effects": [
-      { "target": "order_change", "type": "add", "value": 2 },
-      { "target": "resident_speed", "type": "mul", "value": 0.9 }
-    ]
+      {
+        "target": "order_change",
+        "type": "add",
+        "value": 2
+      },
+      {
+        "target": "resident_speed",
+        "type": "mul",
+        "value": 0.9
+      }
+    ],
+    "rule_category": "order"
   },
   {
     "id": "rule_bonus_day",
@@ -97,11 +178,22 @@
     "category": "economy",
     "risk_score": 1,
     "fun_score": 3,
-    "tags": ["reward"],
+    "tags": [
+      "reward"
+    ],
     "effects": [
-      { "target": "resident_mood", "type": "add", "value": 3 },
-      { "target": "gold_gain", "type": "mul", "value": 0.9 }
-    ]
+      {
+        "target": "resident_mood",
+        "type": "add",
+        "value": 3
+      },
+      {
+        "target": "gold_gain",
+        "type": "mul",
+        "value": 0.9
+      }
+    ],
+    "rule_category": "economy"
   },
   {
     "id": "rule_output_push",
@@ -110,11 +202,22 @@
     "category": "building",
     "risk_score": 4,
     "fun_score": 2,
-    "tags": ["rush"],
+    "tags": [
+      "rush"
+    ],
     "effects": [
-      { "target": "building_output", "type": "mul", "value": 1.25 },
-      { "target": "joy_change", "type": "add", "value": -2 }
-    ]
+      {
+        "target": "building_output",
+        "type": "mul",
+        "value": 1.25
+      },
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": -2
+      }
+    ],
+    "rule_category": "building"
   },
   {
     "id": "rule_harmony_first",
@@ -123,11 +226,26 @@
     "category": "balance",
     "risk_score": 1,
     "fun_score": 2,
-    "tags": ["balance"],
+    "tags": [
+      "balance"
+    ],
     "effects": [
-      { "target": "order_change", "type": "add", "value": 2 },
-      { "target": "joy_change", "type": "add", "value": 1 },
-      { "target": "gold_gain", "type": "mul", "value": 0.85 }
-    ]
+      {
+        "target": "order_change",
+        "type": "add",
+        "value": 2
+      },
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": 1
+      },
+      {
+        "target": "gold_gain",
+        "type": "mul",
+        "value": 0.85
+      }
+    ],
+    "rule_category": "balance"
   }
 ]
