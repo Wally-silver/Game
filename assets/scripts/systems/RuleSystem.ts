@@ -16,6 +16,16 @@ export class RuleSystem {
     return this.candidates;
   }
 
+
+  public generateCandidatesFromPool(ruleIds: string[], count = 3): RuleModel[] {
+    const pool = this.configManager.getAll<RuleModel>(CONFIG_KEY.RULES).filter((r) => ruleIds.includes(r.id));
+    const source = pool.length > 0 ? pool : this.configManager.getAll<RuleModel>(CONFIG_KEY.RULES);
+    const shuffled = [...source].sort(() => Math.random() - 0.5);
+    this.candidates = shuffled.slice(0, Math.max(1, count));
+    this.activeRule = null;
+    return this.candidates;
+  }
+
   public applyRule(ruleId: string): RuleModel | null {
     const picked = this.candidates.find((rule) => rule.id === ruleId) ?? null;
     this.activeRule = picked;

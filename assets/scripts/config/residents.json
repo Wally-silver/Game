@@ -43,5 +43,32 @@
     "energy": 84,
     "currentBuilding": "bakery",
     "currentState": "normal"
+  },
+  {
+    "id": "res_06",
+    "name": "林邮差",
+    "profession": "邮递员",
+    "mood": 62,
+    "energy": 78,
+    "currentBuilding": "PostOffice",
+    "currentState": "normal"
+  },
+  {
+    "id": "res_07",
+    "name": "顾修理",
+    "profession": "维修师",
+    "mood": 58,
+    "energy": 82,
+    "currentBuilding": "RepairShop",
+    "currentState": "normal"
+  },
+  {
+    "id": "res_08",
+    "name": "周店长",
+    "profession": "店员",
+    "mood": 70,
+    "energy": 74,
+    "currentBuilding": "ConvenienceStore",
+    "currentState": "normal"
   }
 ]

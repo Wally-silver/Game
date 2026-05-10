@@ -34,5 +34,41 @@
     "pressure_limit": 80,
     "risk_factor": 1.5,
     "display_order": 3
+  },
+  {
+    "id": "RepairShop",
+    "name": "修理铺",
+    "type": "industry",
+    "base_output": 18,
+    "worker_need": 2,
+    "joy_effect": 0,
+    "order_effect": 2,
+    "pressure_limit": 78,
+    "risk_factor": 1.05,
+    "display_order": 4
+  },
+  {
+    "id": "ConvenienceStore",
+    "name": "便利店",
+    "type": "service",
+    "base_output": 16,
+    "worker_need": 2,
+    "joy_effect": 1,
+    "order_effect": 1,
+    "pressure_limit": 72,
+    "risk_factor": 1.15,
+    "display_order": 5
+  },
+  {
+    "id": "PostOffice",
+    "name": "邮局",
+    "type": "service",
+    "base_output": 20,
+    "worker_need": 3,
+    "joy_effect": 0,
+    "order_effect": 1,
+    "pressure_limit": 76,
+    "risk_factor": 1.2,
+    "display_order": 6
   }
 ]

@@ -8,6 +8,8 @@ const { ccclass, property } = _decorator;
 interface BattleHudCallbacks {
   onTapBuildingOvertime: (buildingId: string) => void;
   onTapBuildingPause: (buildingId: string) => void;
+  onTapBuildingReassign: (buildingId: string) => void;
+  onTapStabilize: () => void;
   onTapBackHome: () => void;
 }
 
@@ -18,6 +20,7 @@ export class BattleHUD extends Component {
   @property(Label) public joyLabel: Label | null = null;
   @property(Label) public goldLabel: Label | null = null;
   @property(Label) public ruleLabel: Label | null = null;
+  @property(Label) public ruleDetailLabel: Label | null = null;
   @property(Label) public goalLabel: Label | null = null;
   @property(Label) public eventFeedLabel: Label | null = null;
   @property(Label) public hintLabel: Label | null = null;
@@ -66,6 +69,8 @@ export class BattleHUD extends Component {
 
   public onTapBuildingOvertime(buildingId: string): void { this.callbacks?.onTapBuildingOvertime(buildingId); }
   public onTapBuildingPause(buildingId: string): void { this.callbacks?.onTapBuildingPause(buildingId); }
+  public onTapBuildingReassign(buildingId: string): void { this.callbacks?.onTapBuildingReassign(buildingId); }
+  public onTapStabilize(): void { this.callbacks?.onTapStabilize(); }
   public onTapBackHome(): void { this.callbacks?.onTapBackHome(); }
 
   private ensureUI(): void {
@@ -75,7 +80,8 @@ export class BattleHUD extends Component {
     this.orderLabel = this.orderLabel ?? SceneUIFactory.ensureLabel(col, 'Order', '秩序: 0');
     this.joyLabel = this.joyLabel ?? SceneUIFactory.ensureLabel(col, 'Joy', '快乐: 0');
     this.goldLabel = this.goldLabel ?? SceneUIFactory.ensureLabel(col, 'Gold', '金币: 0');
-    this.ruleLabel = this.ruleLabel ?? SceneUIFactory.ensureLabel(col, 'Rule', '规则: 未选择');
+    this.ruleLabel = this.ruleLabel ?? SceneUIFactory.ensureLabel(col, 'Rule', '【当前镇规】未选择');
+    this.ruleDetailLabel = this.ruleDetailLabel ?? SceneUIFactory.ensureLabel(col, 'RuleDetail', '风险: - | 趣味: - | 说明: -', 18);
     this.goalLabel = this.goalLabel ?? SceneUIFactory.ensureLabel(col, 'Goal', '目标进度: 0%');
     this.eventFeedLabel = this.eventFeedLabel ?? SceneUIFactory.ensureLabel(col, 'Events', '暂无事件');
     this.hintLabel = this.hintLabel ?? SceneUIFactory.ensureLabel(col, 'Hint', '');
@@ -86,13 +92,19 @@ export class BattleHUD extends Component {
       this.buildingItemTemplate.active = false;
       this.buildingItemTemplate.addComponent(BuildingActionItem);
     }
+    const stabilize = SceneUIFactory.ensureButton(col, 'StabilizeBtn', '全镇安抚(20金币)');
+    stabilize.node.off(Button.EventType.CLICK);
+    stabilize.node.on(Button.EventType.CLICK, () => this.onTapStabilize());
     const back = SceneUIFactory.ensureButton(col, 'BackHomeBtn', '返回主页');
     back.node.off(Button.EventType.CLICK);
     back.node.on(Button.EventType.CLICK, () => this.onTapBackHome());
   }
 
   private refreshTopBar(snapshot: BattleRuntimeState): void { this.timerLabel && (this.timerLabel.string = `时间: ${Math.ceil(snapshot.timer)}s`); this.orderLabel && (this.orderLabel.string = `秩序: ${Math.round(snapshot.order)}`); this.joyLabel && (this.joyLabel.string = `快乐: ${Math.round(snapshot.joy)}`); this.goldLabel && (this.goldLabel.string = `金币: ${Math.round(snapshot.gold)}`); }
-  private refreshRuleInfo(snapshot: BattleRuntimeState): void { this.ruleLabel && (this.ruleLabel.string = `规则: ${snapshot.currentRuleName}`); }
+  private refreshRuleInfo(snapshot: BattleRuntimeState): void {
+    this.ruleLabel && (this.ruleLabel.string = `【当前镇规】${snapshot.currentRuleName}`);
+    this.ruleDetailLabel && (this.ruleDetailLabel.string = snapshot.currentRuleCategory === 'none' ? '风险: - | 趣味: - | 说明: 等待选择' : `类别: ${snapshot.currentRuleCategory} | 风险/趣味: 见规则播报`);
+  }
   private refreshGoal(snapshot: BattleRuntimeState): void { this.goalLabel && (this.goalLabel.string = `目标进度: ${Math.round(snapshot.goalProgress)}%`); }
 
   private refreshBuildings(snapshot: BattleRuntimeState): void {
@@ -105,7 +117,7 @@ export class BattleHUD extends Component {
         node.parent = this.buildingListRoot!;
         node.active = true;
         item = node.getComponent(BuildingActionItem) ?? node.addComponent(BuildingActionItem);
-        item.bind(b, { onOvertime: (id) => this.onTapBuildingOvertime(id), onPause: (id) => this.onTapBuildingPause(id) });
+        item.bind(b, { onOvertime: (id) => this.onTapBuildingOvertime(id), onPause: (id) => this.onTapBuildingPause(id), onReassign: (id) => this.onTapBuildingReassign(id) });
         this.buildingItems.set(b.id, item);
       } else {
         item.node.active = true;

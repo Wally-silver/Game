@@ -13,7 +13,7 @@ export class ResidentSystem {
   constructor(private readonly configManager: ConfigManager) {}
 
   public initialize(buildings: BuildingRuntime[]): ResidentModel[] {
-    const templates = this.configManager.getAll<ResidentModel>(CONFIG_KEY.RESIDENTS).slice(0, 5);
+    const templates = this.configManager.getAll<ResidentModel>(CONFIG_KEY.RESIDENTS).slice(0, 8);
     this.residents = templates.map((item, index) => ({
       ...item,
       currentBuilding: buildings[index % buildings.length].id,
@@ -74,5 +74,18 @@ export class ResidentSystem {
 
   public hasState(state: ResidentState): boolean {
     return this.residents.some((item) => item.currentState === state);
+  }
+
+  public reassignSupport(targetBuildingId: string, allBuildingIds: string[]): { ok: boolean; from?: string; resident?: string } {
+    const fromGroups = allBuildingIds
+      .filter((id) => id !== targetBuildingId)
+      .map((id) => ({ id, count: this.residents.filter((r) => r.currentBuilding === id).length }))
+      .sort((a, b) => b.count - a.count);
+    const from = fromGroups.find((g) => g.count >= 2);
+    if (!from) return { ok: false };
+    const picked = this.residents.find((r) => r.currentBuilding === from.id && r.currentState !== 'tired') ?? this.residents.find((r) => r.currentBuilding === from.id);
+    if (!picked) return { ok: false };
+    picked.currentBuilding = targetBuildingId;
+    return { ok: true, from: from.id, resident: picked.name };
   }
 }

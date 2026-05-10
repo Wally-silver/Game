@@ -30,6 +30,9 @@ export class BattleManager {
   private eventTickAccumulator = 0;
   private lastTopState: BattleTopState | null = null;
   private lastBuildingSignature = '';
+  private stabilizeCharges = 2;
+  private stabilizeCooldown = 0;
+  private milestone50Done = false;
 
   constructor(private readonly gameState: GameState, private readonly configManager: ConfigManager, private readonly eventBus: EventBus) {
     this.ruleSystem = new RuleSystem(this.configManager);
@@ -51,11 +54,19 @@ export class BattleManager {
     this.eventTickAccumulator = 0;
     this.lastTopState = null;
     this.lastBuildingSignature = '';
+    this.stabilizeCharges = 2;
+    this.stabilizeCooldown = 0;
+    this.milestone50Done = false;
 
     const buildings = this.buildingSystem.initialize();
     this.residentSystem.initialize(buildings);
     this.eventSystem.initialize();
-    this.candidates = this.ruleSystem.generateCandidates(3);
+    const snapshot = this.gameState.getSnapshot();
+    if (snapshot.unlockedRules.length === 0) {
+      this.configManager.getAll<RuleModel>('rules').slice(0, 10).forEach((r) => this.gameState.unlockRule(r.id));
+    }
+    const unlocked = this.gameState.getSnapshot().unlockedRules;
+    this.candidates = unlocked.length > 0 ? this.ruleSystem.generateCandidatesFromPool(unlocked, 3) : this.ruleSystem.generateCandidates(3);
     this.runtime.buildings = this.buildingSystem.getRuntimeBuildings();
     this.runtime.residents = this.residentSystem.getResidents();
 
@@ -73,7 +84,7 @@ export class BattleManager {
     this.runtime.currentRuleCategory = rule.category;
     this.runtime.running = true;
     this.gameState.patchCurrentRunData({ selectedRuleId: rule.id, selectedRuleName: rule.name, started: true });
-    this.eventBus.emit(EVENT_NAME.BATTLE_RULE_SELECTED, { ruleId: rule.id, ruleName: rule.name });
+    this.eventBus.emit(EVENT_NAME.BATTLE_RULE_SELECTED, { ruleId: rule.id, ruleName: rule.name, ruleDesc: rule.desc, risk: rule.risk_score, fun: rule.fun_score });
     return true;
   }
 
@@ -105,6 +116,7 @@ export class BattleManager {
     this.runtime.joy = MathUtil.clamp(this.runtime.joy, -100, 100);
     this.runtime.goalProgress = MathUtil.clamp(this.runtime.goalProgress, 0, 100);
 
+    this.stabilizeCooldown = Math.max(0, this.stabilizeCooldown - deltaTime);
     this.gameState.patchCurrentRunData({ order: this.runtime.order, joy: this.runtime.joy, gold: this.runtime.gold, timer: Math.ceil(this.runtime.timer), goalProgress: this.runtime.goalProgress });
 
     if (dirtyResource || this.runtime.timer !== (this.lastTopState?.timer ?? -1)) {
@@ -114,6 +126,10 @@ export class BattleManager {
       this.emitBuildingsIfChanged();
     }
 
+    if (!this.milestone50Done && this.runtime.goalProgress >= 50) {
+      this.milestone50Done = true;
+      this.eventBus.emit(EVENT_NAME.BATTLE_EVENT_TRIGGERED, { id: 'milestone_50', name: '里程碑播报', desc: '【镇报】本局目标已突破 50%，全镇士气上扬！', effect_order: 0, effect_joy: 0, effect_gold: 0, effect_goal: 0 });
+    }
     this.checkEndConditions();
   }
 
@@ -127,6 +143,32 @@ export class BattleManager {
     this.buildingSystem.togglePause(buildingId);
     this.runtime.buildings = this.buildingSystem.getRuntimeBuildings();
     this.emitBuildingsIfChanged();
+  }
+
+
+
+  public reassignSupport(buildingId: string): { ok: boolean; message: string } {
+    const result = this.residentSystem.reassignSupport(buildingId, this.runtime.buildings.map((b) => b.id));
+    if (!result.ok) return { ok: false, message: '暂无可调配人手，调岗失败。' };
+    this.runtime.residents = this.residentSystem.getResidents();
+    this.runtime.buildings = this.buildingSystem.getRuntimeBuildings();
+    this.runtime.buildings.forEach((b) => this.buildingSystem.setWorkers(b.id, this.residentSystem.getBuildingWorkforce(b.id)));
+    this.runtime.buildings = this.buildingSystem.getRuntimeBuildings();
+    this.emitBuildingsIfChanged();
+    return { ok: true, message: `已从${result.from}调岗1人支援${buildingId}。` };
+  }
+
+  public stabilizeTown(): { ok: boolean; message: string } {
+    if (this.stabilizeCharges <= 0) return { ok: false, message: '安抚次数已用尽。' };
+    if (this.stabilizeCooldown > 0) return { ok: false, message: `安抚冷却中（${Math.ceil(this.stabilizeCooldown)}s）` };
+    if (this.runtime.gold < 20) return { ok: false, message: '金币不足，无法组织安抚。' };
+    this.runtime.gold -= 20;
+    this.runtime.joy = Math.min(100, this.runtime.joy + 10);
+    this.runtime.order = Math.min(100, this.runtime.order + 8);
+    this.stabilizeCharges -= 1;
+    this.stabilizeCooldown = 20;
+    this.emitResourceIfChanged();
+    return { ok: true, message: `已执行全镇安抚，局势回稳（剩余${this.stabilizeCharges}次）` };
   }
 
   public getRuntimeState(): BattleRuntimeState { return JSON.parse(JSON.stringify(this.runtime)) as BattleRuntimeState; }
@@ -156,6 +198,7 @@ export class BattleManager {
     this.runtime.goalProgress += event.effect_goal;
     this.runtime.triggeredEvents.unshift(event);
     this.runtime.triggeredEvents = this.runtime.triggeredEvents.slice(0, 12);
+    this.gameState.addSeenEvent(event.id);
     return true;
   }
 
@@ -188,11 +231,20 @@ export class BattleManager {
       triggeredEvents: this.runtime.triggeredEvents,
     };
 
-    this.lastReport = this.reportSystem.buildReport(this.settlementData);
+    let unlockedRuleId: string | undefined;
+    if (this.runtime.success && this.runtime.goalProgress >= 80) {
+      const allRuleIds = this.configManager.getAll<RuleModel>('rules').map((r) => r.id);
+      const unlocked = this.gameState.getSnapshot().unlockedRules;
+      const next = allRuleIds.find((id) => !unlocked.includes(id));
+      if (next) { this.gameState.unlockRule(next); unlockedRuleId = next; }
+    }
+
+    this.lastReport = this.reportSystem.buildReport(this.settlementData, unlockedRuleId);
     if (App.instance) {
       App.instance.latestBattleReport = this.lastReport;
     }
     this.gameState.patchCurrentRunData({ ended: true });
+    this.gameState.incrementRunCount();
     this.eventBus.emit(EVENT_NAME.BATTLE_SETTLEMENT_READY, this.lastReport);
     this.eventBus.emit(EVENT_NAME.BATTLE_ENDED, this.lastReport);
   }

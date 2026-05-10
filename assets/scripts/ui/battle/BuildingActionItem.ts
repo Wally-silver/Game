@@ -7,6 +7,7 @@ const { ccclass, property } = _decorator;
 export interface BuildingActionHandlers {
   onOvertime: (buildingId: string) => void;
   onPause: (buildingId: string) => void;
+  onReassign: (buildingId: string) => void;
 }
 
 @ccclass('BuildingActionItem')
@@ -17,6 +18,7 @@ export class BuildingActionItem extends Component {
   @property(Label) public workforceLabel: Label | null = null;
   @property(Button) public overtimeButton: Button | null = null;
   @property(Button) public pauseButton: Button | null = null;
+  @property(Button) public reassignButton: Button | null = null;
   @property(Node) public abnormalHighlight: Node | null = null;
 
   private buildingId = '';
@@ -35,7 +37,8 @@ export class BuildingActionItem extends Component {
   public refresh(data: BuildingRuntime): void {
     this.buildingId = data.id;
     this.nameLabel && (this.nameLabel.string = data.name);
-    this.stateLabel && (this.stateLabel.string = `状态: ${data.state}`);
+    const stateHint = data.state === 'abnormal' ? '⚠严重异常' : data.state === 'overloaded' ? '⚠过载' : data.state === 'understaffed' ? '⚠缺员' : data.state;
+    this.stateLabel && (this.stateLabel.string = `状态: ${stateHint}`);
     this.outputLabel && (this.outputLabel.string = `产出: ${data.current_output}`);
     this.workforceLabel && (this.workforceLabel.string = `人力: ${data.current_workers}/${data.worker_need}`);
 
@@ -45,6 +48,7 @@ export class BuildingActionItem extends Component {
 
   public onTapOvertime(): void { if (this.handlers) this.handlers.onOvertime(this.buildingId); }
   public onTapPause(): void { if (this.handlers) this.handlers.onPause(this.buildingId); }
+  public onTapReassign(): void { if (this.handlers) this.handlers.onReassign(this.buildingId); }
 
   private ensureUI(): void {
     this.nameLabel = this.nameLabel ?? SceneUIFactory.ensureLabel(this.node, 'BuildingName', '建筑');
@@ -58,9 +62,14 @@ export class BuildingActionItem extends Component {
     overtime.node.on(Button.EventType.CLICK, () => this.onTapOvertime());
 
     const pause = SceneUIFactory.ensureButton(this.node, 'PauseBtn', '暂停');
+    const reassign = SceneUIFactory.ensureButton(this.node, 'ReassignBtn', '调岗支援');
     this.pauseButton = this.pauseButton ?? pause.button;
     pause.node.off(Button.EventType.CLICK);
     pause.node.on(Button.EventType.CLICK, () => this.onTapPause());
+
+    this.reassignButton = this.reassignButton ?? reassign.button;
+    reassign.node.off(Button.EventType.CLICK);
+    reassign.node.on(Button.EventType.CLICK, () => this.onTapReassign());
 
     if (!this.abnormalHighlight) {
       this.abnormalHighlight = this.node.getChildByName('AbnormalHighlight') ?? new Node('AbnormalHighlight');

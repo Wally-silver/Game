@@ -19,6 +19,8 @@ export interface GameStateSnapshot {
   inspiration: number;
   unlockedRules: string[];
   encyclopediaProgress: Record<string, boolean>;
+  seenEvents: string[];
+  runCount: number;
   currentRunData: CurrentRunData | null;
 }
 
@@ -32,6 +34,8 @@ export class GameState {
     inspiration: DEFAULT_PLAYER_STATE.inspiration,
     unlockedRules: [],
     encyclopediaProgress: {},
+    seenEvents: [],
+    runCount: 0,
     currentRunData: null,
   };
 
@@ -60,6 +64,18 @@ export class GameState {
 
   public setCurrentRunData(data: CurrentRunData | null): void {
     this.state.currentRunData = data;
+    this.broadcast();
+  }
+
+  public addSeenEvent(eventId: string): void {
+    if (!this.state.seenEvents.includes(eventId)) {
+      this.state.seenEvents.push(eventId);
+      this.broadcast();
+    }
+  }
+
+  public incrementRunCount(): void {
+    this.state.runCount += 1;
     this.broadcast();
   }
 
