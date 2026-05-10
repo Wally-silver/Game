@@ -32,13 +32,13 @@ export class RuleSelectPopup extends Component {
 
   private ensureUI(): void {
     if (!this.root) {
-      this.root = SceneUIFactory.createPanel(this.node, 'RulePopupRoot', 680, 800);
+      this.root = SceneUIFactory.ensurePanel(this.node, 'RulePopupRoot', 680, 800);
     }
     if (!this.titleLabel) {
-      this.titleLabel = SceneUIFactory.createLabel(this.root, 'PopupTitle', '请选择规则', 26);
+      this.titleLabel = SceneUIFactory.ensureLabel(this.root, 'PopupTitle', '请选择规则', 26);
     }
     if (!this.optionListRoot) {
-      this.optionListRoot = SceneUIFactory.createVerticalLayout(this.root, 'OptionList', 10);
+      this.optionListRoot = SceneUIFactory.ensureVerticalGroup(this.root, 'OptionList', 10);
     }
     if (!this.optionTemplate) {
       this.optionTemplate = new Node('RuleOptionTemplate');

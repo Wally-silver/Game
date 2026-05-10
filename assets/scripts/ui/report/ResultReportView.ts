@@ -34,16 +34,16 @@ export class ResultReportView extends Component {
   }
 
   private ensureUI(): void {
-    const root = SceneUIFactory.createPanel(this.node, 'ResultViewRoot');
-    const col = SceneUIFactory.createVerticalLayout(root, 'ResultColumn', 10);
-    this.ruleNameLabel = this.ruleNameLabel ?? SceneUIFactory.createLabel(col, 'Rule', '今日规则：-');
-    this.titleLabel = this.titleLabel ?? SceneUIFactory.createLabel(col, 'Title', '标题：-');
-    this.successLabel = this.successLabel ?? SceneUIFactory.createLabel(col, 'Success', '结果：-');
-    this.orderLabel = this.orderLabel ?? SceneUIFactory.createLabel(col, 'Order', '最终秩序：-');
-    this.joyLabel = this.joyLabel ?? SceneUIFactory.createLabel(col, 'Joy', '最终快乐：-');
-    this.goldLabel = this.goldLabel ?? SceneUIFactory.createLabel(col, 'Gold', '最终金币：-');
-    this.eventCountLabel = this.eventCountLabel ?? SceneUIFactory.createLabel(col, 'EventCount', '关键事件数：-');
-    this.backButton = this.backButton ?? SceneUIFactory.createButton(col, 'BackBtn', '返回主页').button;
-    this.retryButton = this.retryButton ?? SceneUIFactory.createButton(col, 'RetryBtn', '再来一局').button;
+    const root = SceneUIFactory.ensurePanel(this.node, 'ResultViewRoot');
+    const col = SceneUIFactory.ensureVerticalGroup(root, 'ResultColumn', 10);
+    this.ruleNameLabel = this.ruleNameLabel ?? SceneUIFactory.ensureLabel(col, 'Rule', '今日规则：-');
+    this.titleLabel = this.titleLabel ?? SceneUIFactory.ensureLabel(col, 'Title', '标题：-');
+    this.successLabel = this.successLabel ?? SceneUIFactory.ensureLabel(col, 'Success', '结果：-');
+    this.orderLabel = this.orderLabel ?? SceneUIFactory.ensureLabel(col, 'Order', '最终秩序：-');
+    this.joyLabel = this.joyLabel ?? SceneUIFactory.ensureLabel(col, 'Joy', '最终快乐：-');
+    this.goldLabel = this.goldLabel ?? SceneUIFactory.ensureLabel(col, 'Gold', '最终金币：-');
+    this.eventCountLabel = this.eventCountLabel ?? SceneUIFactory.ensureLabel(col, 'EventCount', '关键事件数：-');
+    this.backButton = this.backButton ?? SceneUIFactory.ensureButton(col, 'BackBtn', '返回主页').button;
+    this.retryButton = this.retryButton ?? SceneUIFactory.ensureButton(col, 'RetryBtn', '再来一局').button;
   }
 }

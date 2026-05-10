@@ -19,17 +19,20 @@ export class RuleOptionItem extends Component {
   private onPicked: ((rule: RuleModel) => void) | null = null;
 
   protected onLoad(): void {
-    if (!this.ruleNameLabel) {
-      this.ruleNameLabel = SceneUIFactory.createLabel(this.node, 'RuleName', '规则名');
-      this.ruleDescLabel = SceneUIFactory.createLabel(this.node, 'RuleDesc', '规则描述', 18);
-      this.riskLabel = SceneUIFactory.createLabel(this.node, 'Risk', '风险: 0', 18);
-      this.funLabel = SceneUIFactory.createLabel(this.node, 'Fun', '趣味: 0', 18);
-      this.selectButton = SceneUIFactory.createButton(this.node, 'SelectBtn', '选择').button;
-      this.selectButton.node.on(Button.EventType.CLICK, () => this.onTapSelect());
-      this.detailButtonPlaceholder = new Node('DetailPlaceholder'); this.detailButtonPlaceholder.parent = this.node;
-      this.spiritTagPlaceholder = new Node('SpiritTagPlaceholder'); this.spiritTagPlaceholder.parent = this.node;
-      this.riskIconPlaceholder = new Node('RiskIconPlaceholder'); this.riskIconPlaceholder.parent = this.node;
-    }
+    this.ruleNameLabel = this.ruleNameLabel ?? SceneUIFactory.ensureLabel(this.node, 'RuleName', '规则名');
+    this.ruleDescLabel = this.ruleDescLabel ?? SceneUIFactory.ensureLabel(this.node, 'RuleDesc', '规则描述', 18);
+    this.riskLabel = this.riskLabel ?? SceneUIFactory.ensureLabel(this.node, 'Risk', '风险: 0', 18);
+    this.funLabel = this.funLabel ?? SceneUIFactory.ensureLabel(this.node, 'Fun', '趣味: 0', 18);
+    const select = SceneUIFactory.ensureButton(this.node, 'SelectBtn', '选择');
+    this.selectButton = this.selectButton ?? select.button;
+    select.node.off(Button.EventType.CLICK);
+    select.node.on(Button.EventType.CLICK, () => this.onTapSelect());
+    this.detailButtonPlaceholder = this.detailButtonPlaceholder ?? this.node.getChildByName('DetailPlaceholder') ?? new Node('DetailPlaceholder');
+    this.detailButtonPlaceholder.parent = this.node;
+    this.spiritTagPlaceholder = this.spiritTagPlaceholder ?? this.node.getChildByName('SpiritTagPlaceholder') ?? new Node('SpiritTagPlaceholder');
+    this.spiritTagPlaceholder.parent = this.node;
+    this.riskIconPlaceholder = this.riskIconPlaceholder ?? this.node.getChildByName('RiskIconPlaceholder') ?? new Node('RiskIconPlaceholder');
+    this.riskIconPlaceholder.parent = this.node;
   }
 
   public bind(rule: RuleModel, onPicked: (rule: RuleModel) => void): void {

@@ -1,5 +1,6 @@
 import { _decorator, Button, Component, Label, Node } from 'cc';
 import { BuildingRuntime } from '../../models/BuildingModel';
+import { SceneUIFactory } from '../../utils/SceneUIFactory';
 
 const { ccclass, property } = _decorator;
 
@@ -21,7 +22,12 @@ export class BuildingActionItem extends Component {
   private buildingId = '';
   private handlers: BuildingActionHandlers | null = null;
 
+  protected onLoad(): void {
+    this.ensureUI();
+  }
+
   public bind(data: BuildingRuntime, handlers: BuildingActionHandlers): void {
+    this.ensureUI();
     this.handlers = handlers;
     this.refresh(data);
   }
@@ -39,4 +45,27 @@ export class BuildingActionItem extends Component {
 
   public onTapOvertime(): void { if (this.handlers) this.handlers.onOvertime(this.buildingId); }
   public onTapPause(): void { if (this.handlers) this.handlers.onPause(this.buildingId); }
+
+  private ensureUI(): void {
+    this.nameLabel = this.nameLabel ?? SceneUIFactory.ensureLabel(this.node, 'BuildingName', '建筑');
+    this.stateLabel = this.stateLabel ?? SceneUIFactory.ensureLabel(this.node, 'State', '状态: normal', 18);
+    this.outputLabel = this.outputLabel ?? SceneUIFactory.ensureLabel(this.node, 'Output', '产出: 0', 18);
+    this.workforceLabel = this.workforceLabel ?? SceneUIFactory.ensureLabel(this.node, 'Workforce', '人力: 0/0', 18);
+
+    const overtime = SceneUIFactory.ensureButton(this.node, 'OvertimeBtn', '加班');
+    this.overtimeButton = this.overtimeButton ?? overtime.button;
+    overtime.node.off(Button.EventType.CLICK);
+    overtime.node.on(Button.EventType.CLICK, () => this.onTapOvertime());
+
+    const pause = SceneUIFactory.ensureButton(this.node, 'PauseBtn', '暂停');
+    this.pauseButton = this.pauseButton ?? pause.button;
+    pause.node.off(Button.EventType.CLICK);
+    pause.node.on(Button.EventType.CLICK, () => this.onTapPause());
+
+    if (!this.abnormalHighlight) {
+      this.abnormalHighlight = this.node.getChildByName('AbnormalHighlight') ?? new Node('AbnormalHighlight');
+      this.abnormalHighlight.parent = this.node;
+      this.abnormalHighlight.active = false;
+    }
+  }
 }

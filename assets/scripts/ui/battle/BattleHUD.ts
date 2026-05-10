@@ -34,9 +34,9 @@ export class BattleHUD extends Component {
   public ensureRuntimeNodes(): void {
     this.ensureUI();
     if (!this.buildingListRoot) {
-      const root = this.node.getChildByName('HUDRoot') ?? SceneUIFactory.createPanel(this.node, 'HUDRoot');
-      const col = root.getChildByName('HUDColumn') ?? SceneUIFactory.createVerticalLayout(root, 'HUDColumn', 8);
-      this.buildingListRoot = SceneUIFactory.createVerticalLayout(col, 'BuildingList', 6);
+      const root = this.node.getChildByName('HUDRoot') ?? SceneUIFactory.ensurePanel(this.node, 'HUDRoot');
+      const col = root.getChildByName('HUDColumn') ?? SceneUIFactory.ensureVerticalGroup(root, 'HUDColumn', 8);
+      this.buildingListRoot = SceneUIFactory.ensureVerticalGroup(col, 'BuildingList', 6);
     }
     if (!this.buildingItemTemplate) {
       this.buildingItemTemplate = new Node('BuildingItemTemplate');
@@ -69,24 +69,25 @@ export class BattleHUD extends Component {
   public onTapBackHome(): void { this.callbacks?.onTapBackHome(); }
 
   private ensureUI(): void {
-    const root = SceneUIFactory.createPanel(this.node, 'HUDRoot');
-    const col = SceneUIFactory.createVerticalLayout(root, 'HUDColumn', 8);
-    this.timerLabel = this.timerLabel ?? SceneUIFactory.createLabel(col, 'Timer', '时间: 0');
-    this.orderLabel = this.orderLabel ?? SceneUIFactory.createLabel(col, 'Order', '秩序: 0');
-    this.joyLabel = this.joyLabel ?? SceneUIFactory.createLabel(col, 'Joy', '快乐: 0');
-    this.goldLabel = this.goldLabel ?? SceneUIFactory.createLabel(col, 'Gold', '金币: 0');
-    this.ruleLabel = this.ruleLabel ?? SceneUIFactory.createLabel(col, 'Rule', '规则: 未选择');
-    this.goalLabel = this.goalLabel ?? SceneUIFactory.createLabel(col, 'Goal', '目标进度: 0%');
-    this.eventFeedLabel = this.eventFeedLabel ?? SceneUIFactory.createLabel(col, 'Events', '暂无事件');
-    this.hintLabel = this.hintLabel ?? SceneUIFactory.createLabel(col, 'Hint', '');
-    this.buildingListRoot = this.buildingListRoot ?? SceneUIFactory.createVerticalLayout(col, 'BuildingList', 6);
+    const root = SceneUIFactory.ensurePanel(this.node, 'HUDRoot');
+    const col = SceneUIFactory.ensureVerticalGroup(root, 'HUDColumn', 8);
+    this.timerLabel = this.timerLabel ?? SceneUIFactory.ensureLabel(col, 'Timer', '时间: 0');
+    this.orderLabel = this.orderLabel ?? SceneUIFactory.ensureLabel(col, 'Order', '秩序: 0');
+    this.joyLabel = this.joyLabel ?? SceneUIFactory.ensureLabel(col, 'Joy', '快乐: 0');
+    this.goldLabel = this.goldLabel ?? SceneUIFactory.ensureLabel(col, 'Gold', '金币: 0');
+    this.ruleLabel = this.ruleLabel ?? SceneUIFactory.ensureLabel(col, 'Rule', '规则: 未选择');
+    this.goalLabel = this.goalLabel ?? SceneUIFactory.ensureLabel(col, 'Goal', '目标进度: 0%');
+    this.eventFeedLabel = this.eventFeedLabel ?? SceneUIFactory.ensureLabel(col, 'Events', '暂无事件');
+    this.hintLabel = this.hintLabel ?? SceneUIFactory.ensureLabel(col, 'Hint', '');
+    this.buildingListRoot = this.buildingListRoot ?? SceneUIFactory.ensureVerticalGroup(col, 'BuildingList', 6);
     if (!this.buildingItemTemplate) {
       this.buildingItemTemplate = new Node('BuildingItemTemplate');
       this.buildingItemTemplate.parent = this.buildingListRoot;
       this.buildingItemTemplate.active = false;
       this.buildingItemTemplate.addComponent(BuildingActionItem);
     }
-    const back = SceneUIFactory.createButton(col, 'BackHomeBtn', '返回主页');
+    const back = SceneUIFactory.ensureButton(col, 'BackHomeBtn', '返回主页');
+    back.node.off(Button.EventType.CLICK);
     back.node.on(Button.EventType.CLICK, () => this.onTapBackHome());
   }
 

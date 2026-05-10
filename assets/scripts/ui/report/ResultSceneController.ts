@@ -15,13 +15,16 @@ export class ResultSceneController extends Component {
       this.reportView = node.addComponent(ResultReportView);
     }
 
-    const report = App.instance?.latestBattleReport ?? App.instance?.battleManager.getLastReport() ?? null;
+    const app = App.instance;
+    const report = app?.getLatestBattleReport() ?? app?.battleManager.getLastReport() ?? null;
     this.reportView.bindReport(report);
 
     if (this.reportView.backButton) {
+      this.reportView.backButton.node.off(Button.EventType.CLICK);
       this.reportView.backButton.node.on(Button.EventType.CLICK, () => this.onTapBackHome());
     }
     if (this.reportView.retryButton) {
+      this.reportView.retryButton.node.off(Button.EventType.CLICK);
       this.reportView.retryButton.node.on(Button.EventType.CLICK, () => this.onTapReplay());
     }
   }

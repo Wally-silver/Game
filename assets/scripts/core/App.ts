@@ -41,6 +41,10 @@ export class App extends Component {
     afterLoad: (scene) => Logger.info(`Loaded scene: ${scene}`),
   });
 
+  public getLatestBattleReport(): ReportModel | null {
+    return this.latestBattleReport ? JSON.parse(JSON.stringify(this.latestBattleReport)) : null;
+  }
+
   public static getServices(): AppServices {
     if (!App.instance) {
       throw new Error('App is not initialized.');

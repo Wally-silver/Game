@@ -25,8 +25,9 @@ Launch -> Home -> Battle -> Result
 ## 5) 运行时构建 UI 方案
 项目采用“最小 scene + 运行时构建 UI”策略：
 - Scene 中只需挂载控制器脚本
-- 控制器和 UI 组件会在节点缺失时自动创建 Label/Button/容器
+- 控制器和 UI 组件会在节点缺失时自动创建 Label/Button/容器（统一使用 SceneUIFactory.ensure*）
 - 大幅降低“必须手工补齐几十个节点”风险
+- 同名节点优先复用，避免 onLoad/start 重复进入时 UI 堆叠
 
 ## 6) Cocos Creator 打开与运行
 1. 打开 `/workspace/Game`
@@ -54,12 +55,14 @@ Launch -> Home -> Battle -> Result
 6. Result 点击返回主页或再来一局
 
 ## 9) 脚本职责（核心）
-- `HomeSceneController`：主页入口与 UI
+- `HomeSceneController`：主页唯一入口与 UI 初始化
+- `HomeView`：兼容占位，不承载业务初始化
 - `BattleSceneController`：战局生命周期协调
 - `BattleHUD`：展示与输入回调
 - `RuleSelectPopup`：规则选择弹窗
 - `ResultSceneController`：结算页数据绑定与交互
 - `ResultReportView`：结算展示视图
+- `App.latestBattleReport` / `App.getLatestBattleReport()`：Battle -> Result 标准化结果入口（BattleManager 在新战局开始时清空）
 
 ## 10) Mock/占位说明
 - 数值、规则、事件、日报标题均为本地 mock 配置

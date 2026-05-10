@@ -43,6 +43,9 @@ export class BattleManager {
   public setupNewBattle(): RuleModel[] {
     this.runtime = this.createInitialRuntime();
     this.lastReport = null;
+    if (App.instance) {
+      App.instance.latestBattleReport = null;
+    }
     this.settlementData = null;
     this.buildingTickAccumulator = 0;
     this.eventTickAccumulator = 0;
