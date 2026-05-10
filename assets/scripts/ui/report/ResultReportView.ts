@@ -36,7 +36,7 @@ export class ResultReportView extends Component {
     this.successLabel && (this.successLabel.string = `结果：${s.success ? '成功' : '失败'}`);
     this.orderLabel && (this.orderLabel.string = `最终秩序：${s.finalOrder}`);
     this.joyLabel && (this.joyLabel.string = `最终快乐：${s.finalJoy}`);
-    this.goldLabel && (this.goldLabel.string = `最终金币：${s.finalGold}`);
+    this.goldLabel && (this.goldLabel.string = `最终金币：${s.finalGold}（本局奖励+${s.rewardGold}）`);
     this.eventCountLabel && (this.eventCountLabel.string = `关键事件数：${s.triggeredEvents.length}`);
     this.starsLabel && (this.starsLabel.string = `评级：${'★'.repeat(report.stars)}${'☆'.repeat(5 - report.stars)}`);
     this.keyEventLabel && (this.keyEventLabel.string = `关键事件：${report.keyEventTitle}`);

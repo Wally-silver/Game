@@ -41,7 +41,7 @@ export const BATTLE_DEFAULTS = {
   startJoy: 58,
   startGold: 90,
   targetGold: 190,
-  targetProgress: 110,
+  targetProgress: 100,
   buildingTickInterval: 1,
   eventTickInterval: 4,
 };

@@ -20,6 +20,7 @@ export interface BattleRuntimeState {
 
 export interface BattleSettlementData {
   success: boolean;
+  rewardGold: number;
   timerUsed: number;
   finalOrder: number;
   finalJoy: number;

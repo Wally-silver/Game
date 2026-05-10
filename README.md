@@ -91,3 +91,14 @@ Launch -> Home -> Battle -> Result
 - GameState 支持 progression 的导入/导出，Battle 临时态与永久态分离。
 - SceneUIFactory 增加安全点击绑定与模板保留清理能力，降低重复绑定与重复创建风险。
 - Battle 生命周期补充 pause/resume/stop，场景反复进入更稳。
+
+
+## 14) Progression 闭环（本轮修复）
+- progression 持久化字段：version、playerGold、inspiration、highestStars、unlockedRules、seenEvents、totalRuns、totalWins、settings。
+- 保存时机：当前通过 `GAME_STATE_CHANGED` 统一触发保存；核心进度写入仍只在结算、解锁、首见事件、设置变更节点发生。
+- 胜局统计：仅在 `BattleManager.endBattle(success)` 内记录，Result 展示层不再累计胜局。
+- 成功条件：`goalProgress >= 100` 或 `gold >= targetGold`，并且 order > 0。
+- 本局金币转永久金币：结算奖励公式（保守版）
+  - `rewardGold = max(6, floor(finalGold * 0.12) + successBonus + starsEstimateBonus)`
+  - 其中 successBonus 成功时 +12，starsEstimateBonus 按结算阶段给 3~12。
+  - rewardGold 在结算时写入 `GameState.addGold()` 并持久化。

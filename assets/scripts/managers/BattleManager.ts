@@ -243,7 +243,11 @@ export class BattleManager {
     this.runtime.ended = true;
     this.runtime.success = success;
 
+    const starsEstimate = this.runtime.success ? (this.runtime.goalProgress >= 95 ? 4 : 3) : 1;
+    const rewardGold = Math.max(6, Math.floor(this.runtime.gold * 0.12) + (success ? 12 : 0) + starsEstimate * 3);
+
     this.settlementData = {
+      rewardGold,
       success,
       timerUsed: BATTLE_DEFAULTS.durationSeconds - this.runtime.timer,
       finalOrder: Math.round(this.runtime.order),
@@ -270,8 +274,10 @@ export class BattleManager {
     if (App.instance) {
       App.instance.latestBattleReport = this.lastReport;
     }
+    this.gameState.addGold(rewardGold);
     this.gameState.patchCurrentRunData({ ended: true });
     this.gameState.incrementRunCount();
+    if (success) this.gameState.incrementWinCount();
     this.eventBus.emit(EVENT_NAME.BATTLE_SETTLEMENT_READY, this.lastReport);
     this.eventBus.emit(EVENT_NAME.BATTLE_ENDED, this.lastReport);
   }
