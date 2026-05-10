@@ -1,4 +1,4 @@
-import { Button, Color, Component, Label, Layout, Node, UITransform } from 'cc';
+import { Button, Color, Label, Layout, Node, UITransform } from 'cc';
 
 export class SceneUIFactory {
   public static createPanel(parent: Node, name: string, width = 720, height = 1280): Node {
@@ -40,12 +40,4 @@ export class SceneUIFactory {
     return { node, button, label };
   }
 
-  public static ensureChild<T extends Component>(root: Node, name: string, create: () => T): T {
-    const existing = root.getChildByName(name);
-    if (existing) {
-      const comp = existing.getComponent(create().constructor as never) as T | null;
-      if (comp) return comp;
-    }
-    return create();
-  }
 }
