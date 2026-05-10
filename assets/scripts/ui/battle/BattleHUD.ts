@@ -30,6 +30,7 @@ export class BattleHUD extends Component {
   private callbacks: BattleHudCallbacks | null = null;
   private eventLogs: string[] = [];
   private latestHint = '';
+  private latestRuleFlavor = '风险: - | 趣味: - | 说明: 等待选择';
   private buildingItems = new Map<string, BuildingActionItem>();
 
   protected onLoad(): void { this.ensureUI(); }
@@ -53,6 +54,7 @@ export class BattleHUD extends Component {
     this.callbacks = null;
     this.eventLogs = [];
     this.latestHint = '';
+    this.latestRuleFlavor = '风险: - | 趣味: - | 说明: 等待选择';
     this.buildingItems.forEach((item) => item.node.destroy());
     this.buildingItems.clear();
     this.refreshEvents();
@@ -66,6 +68,7 @@ export class BattleHUD extends Component {
   public refreshBuildingState(snapshot: BattleRuntimeState): void { this.refreshBuildings(snapshot); }
   public appendEventLog(message: string): void { this.eventLogs.unshift(message); this.eventLogs = this.eventLogs.slice(0, 8); this.refreshEvents(); }
   public setHint(message: string): void { this.latestHint = message; this.refreshHint(); }
+  public setRuleFlavor(message: string): void { this.latestRuleFlavor = message; this.refreshRuleDetail(); }
 
   public onTapBuildingOvertime(buildingId: string): void { this.callbacks?.onTapBuildingOvertime(buildingId); }
   public onTapBuildingPause(buildingId: string): void { this.callbacks?.onTapBuildingPause(buildingId); }
@@ -103,7 +106,7 @@ export class BattleHUD extends Component {
   private refreshTopBar(snapshot: BattleRuntimeState): void { this.timerLabel && (this.timerLabel.string = `时间: ${Math.ceil(snapshot.timer)}s`); this.orderLabel && (this.orderLabel.string = `秩序: ${Math.round(snapshot.order)}`); this.joyLabel && (this.joyLabel.string = `快乐: ${Math.round(snapshot.joy)}`); this.goldLabel && (this.goldLabel.string = `金币: ${Math.round(snapshot.gold)}`); }
   private refreshRuleInfo(snapshot: BattleRuntimeState): void {
     this.ruleLabel && (this.ruleLabel.string = `【当前镇规】${snapshot.currentRuleName}`);
-    this.ruleDetailLabel && (this.ruleDetailLabel.string = snapshot.currentRuleCategory === 'none' ? '风险: - | 趣味: - | 说明: 等待选择' : `类别: ${snapshot.currentRuleCategory} | 风险/趣味: 见规则播报`);
+    this.ruleDetailLabel && (this.ruleDetailLabel.string = snapshot.currentRuleCategory === 'none' ? '风险: - | 趣味: - | 说明: 等待选择' : `类别: ${snapshot.currentRuleCategory} | ${this.latestRuleFlavor}`);
   }
   private refreshGoal(snapshot: BattleRuntimeState): void { this.goalLabel && (this.goalLabel.string = `目标进度: ${Math.round(snapshot.goalProgress)}%`); }
 
@@ -130,4 +133,5 @@ export class BattleHUD extends Component {
 
   private refreshEvents(): void { if (this.eventFeedLabel) this.eventFeedLabel.string = this.eventLogs.length > 0 ? this.eventLogs.join('\n') : '暂无事件'; }
   private refreshHint(): void { if (this.hintLabel) this.hintLabel.string = this.latestHint; }
+  private refreshRuleDetail(): void { if (this.ruleDetailLabel) this.ruleDetailLabel.string = this.latestRuleFlavor; }
 }

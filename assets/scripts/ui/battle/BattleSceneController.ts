@@ -30,8 +30,8 @@ export class BattleSceneController extends Component {
     this.hud.bindCallbacks({
       onTapBuildingOvertime: (id) => app.battleManager.toggleBuildingOvertime(id),
       onTapBuildingPause: (id) => app.battleManager.toggleBuildingPause(id),
-      onTapBuildingReassign: (id) => { const res = app.battleManager.reassignSupport(id); this.hud?.appendEventLog(`【调岗】${res.message}`); this.hud?.setHint(res.message); this.hud?.refreshBuildingState(app.battleManager.getRuntimeState()); },
-      onTapStabilize: () => { const res = app.battleManager.stabilizeTown(); this.hud?.appendEventLog(`【安抚】${res.message}`); this.hud?.setHint(res.message); this.hud?.refreshTopState(app.battleManager.getRuntimeState()); },
+      onTapBuildingReassign: (id) => { const res = app.battleManager.reassignSupport(id); this.hud?.appendEventLog(`${res.ok ? '【重要】' : '【提示】'} 调岗：${res.message}`); this.hud?.setHint(res.message); this.hud?.refreshBuildingState(app.battleManager.getRuntimeState()); },
+      onTapStabilize: () => { const res = app.battleManager.stabilizeTown(); this.hud?.appendEventLog(`${res.ok ? '【警报级】' : '【提示】'} 安抚：${res.message}`); this.hud?.setHint(res.message); this.hud?.refreshTopState(app.battleManager.getRuntimeState()); },
       onTapBackHome: () => void app.sceneRouter.goHome(),
     });
 
@@ -75,10 +75,14 @@ export class BattleSceneController extends Component {
     const app = App.instance;
     if (!app || !this.hud) return;
 
-    this.unsubscribers.push(app.eventBus.on(EVENT_NAME.BATTLE_RESOURCE_CHANGED, () => { const snap = app.battleManager.getRuntimeState(); this.hud?.refreshTopState(snap); if (snap.order <= 25 || snap.joy <= 25) this.hud?.appendEventLog('【警报】秩序或快乐过低，小镇处于危险边缘！'); }));
-    this.unsubscribers.push(app.eventBus.on(EVENT_NAME.BATTLE_BUILDINGS_CHANGED, () => { const snap = app.battleManager.getRuntimeState(); this.hud?.refreshBuildingState(snap); snap.buildings.filter((b) => b.state === 'understaffed' || b.state === 'overloaded' || b.state === 'abnormal').forEach((b) => this.hud?.appendEventLog(`【建筑预警】${b.name} 进入${b.state}状态`)); }));
-    this.unsubscribers.push(app.eventBus.on<any>(EVENT_NAME.BATTLE_RULE_SELECTED, (payload) => { this.hud?.refreshRuleState(app.battleManager.getRuntimeState()); this.hud?.appendEventLog(`【镇规生效】${payload?.ruleName ?? ''}｜风险${payload?.risk ?? '-'} 趣味${payload?.fun ?? '-'}`); }));
-    this.unsubscribers.push(app.eventBus.on<TriggeredEvent>(EVENT_NAME.BATTLE_EVENT_TRIGGERED, (payload) => payload && this.hud?.appendEventLog(`【镇报快讯】${payload.name}｜${payload.desc}`)));
+    this.unsubscribers.push(app.eventBus.on(EVENT_NAME.BATTLE_RESOURCE_CHANGED, () => { const snap = app.battleManager.getRuntimeState(); this.hud?.refreshTopState(snap); if (snap.order <= 25 || snap.joy <= 25) this.hud?.appendEventLog('【警报级】秩序或快乐过低，建议立刻安抚或暂停高风险建筑！'); if (snap.order <= 20 || snap.joy <= 20) this.hud?.setHint('危险：优先安抚，再调岗补缺员。'); if (snap.goalProgress >= 95 && snap.order > 25 && snap.joy > 25) this.hud?.setHint('即将成功：守住秩序与快乐，避免最后翻车。'); }));
+    this.unsubscribers.push(app.eventBus.on(EVENT_NAME.BATTLE_BUILDINGS_CHANGED, () => { const snap = app.battleManager.getRuntimeState(); this.hud?.refreshBuildingState(snap); snap.buildings.filter((b) => b.state === 'understaffed' || b.state === 'overloaded' || b.state === 'abnormal').forEach((b) => this.hud?.appendEventLog(`【警报级】${b.name}进入${b.state}，可考虑调岗或暂停`)); }));
+    this.unsubscribers.push(app.eventBus.on<any>(EVENT_NAME.BATTLE_RULE_SELECTED, (payload) => { this.hud?.refreshRuleState(app.battleManager.getRuntimeState()); this.hud?.setRuleFlavor(`风险${payload?.risk ?? '-'} | 趣味${payload?.fun ?? '-'} | ${payload?.ruleDesc ?? ''}`); this.hud?.appendEventLog(`【重要】镇规生效：${payload?.ruleName ?? ''}｜风险${payload?.risk ?? '-'} 趣味${payload?.fun ?? '-'}｜${payload?.ruleDesc ?? ''}`); }));
+    this.unsubscribers.push(app.eventBus.on<TriggeredEvent>(EVENT_NAME.BATTLE_EVENT_TRIGGERED, (payload) => {
+      if (!payload) return;
+      const level = payload.name.includes('播报') || payload.desc.includes('警报级') ? '【警报级】' : payload.desc.includes('重要') ? '【重要】' : '【快讯】';
+      this.hud?.appendEventLog(`${level} ${payload.name}｜${payload.desc}`);
+    }));
     this.unsubscribers.push(app.eventBus.on(EVENT_NAME.BATTLE_SETTLEMENT_READY, async () => { this.hud?.setHint('战局结束，正在进入结算...'); await app.sceneRouter.load(SCENE_NAME.RESULT); }));
   }
 }

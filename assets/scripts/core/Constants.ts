@@ -36,12 +36,12 @@ export const DEFAULT_PLAYER_STATE = {
 };
 
 export const BATTLE_DEFAULTS = {
-  durationSeconds: 120,
-  startOrder: 70,
-  startJoy: 60,
-  startGold: 100,
-  targetGold: 180,
-  targetProgress: 100,
+  durationSeconds: 105,
+  startOrder: 65,
+  startJoy: 58,
+  startGold: 90,
+  targetGold: 190,
+  targetProgress: 110,
   buildingTickInterval: 1,
-  eventTickInterval: 5,
+  eventTickInterval: 4,
 };

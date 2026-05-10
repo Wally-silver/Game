@@ -17,6 +17,9 @@ export class ResultReportView extends Component {
   @property(Label) public keyEventLabel: Label | null = null;
   @property(Label) public commentLabel: Label | null = null;
   @property(Label) public unlockLabel: Label | null = null;
+  @property(Label) public newEventLabel: Label | null = null;
+  @property(Label) public decisionLabel: Label | null = null;
+  @property(Label) public breakdownLabel: Label | null = null;
   @property(Button) public backButton: Button | null = null;
   @property(Button) public retryButton: Button | null = null;
 
@@ -39,6 +42,9 @@ export class ResultReportView extends Component {
     this.keyEventLabel && (this.keyEventLabel.string = `关键事件：${report.keyEventTitle}`);
     this.commentLabel && (this.commentLabel.string = report.mayorComment);
     this.unlockLabel && (this.unlockLabel.string = report.unlockedRuleId ? `新解锁镇规：${report.unlockedRuleId}` : '本局未解锁新镇规');
+    this.breakdownLabel && (this.breakdownLabel.string = `拆项评分｜秩序${report.scoreBreakdown.order} 快乐${report.scoreBreakdown.joy} 经济${report.scoreBreakdown.gold} 事件控场${report.scoreBreakdown.eventControl} 目标${report.scoreBreakdown.goal}`);
+    this.decisionLabel && (this.decisionLabel.string = report.decisionHighlight);
+    this.newEventLabel && (this.newEventLabel.string = report.newlySeenEventCount > 0 ? `首次见闻事件 +${report.newlySeenEventCount}` : '本局无新增见闻事件');
   }
 
   private ensureUI(): void {
@@ -55,6 +61,9 @@ export class ResultReportView extends Component {
     this.keyEventLabel = this.keyEventLabel ?? SceneUIFactory.ensureLabel(col, 'KeyEvent', '关键事件：-');
     this.commentLabel = this.commentLabel ?? SceneUIFactory.ensureLabel(col, 'Comment', '镇长点评：-', 20);
     this.unlockLabel = this.unlockLabel ?? SceneUIFactory.ensureLabel(col, 'Unlock', '本局未解锁新镇规', 20);
+    this.breakdownLabel = this.breakdownLabel ?? SceneUIFactory.ensureLabel(col, 'Breakdown', '拆项评分：-', 18);
+    this.decisionLabel = this.decisionLabel ?? SceneUIFactory.ensureLabel(col, 'Decision', '关键决策：-', 20);
+    this.newEventLabel = this.newEventLabel ?? SceneUIFactory.ensureLabel(col, 'NewEvent', '本局无新增见闻事件', 20);
     this.backButton = this.backButton ?? SceneUIFactory.ensureButton(col, 'BackBtn', '返回主页').button;
     this.retryButton = this.retryButton ?? SceneUIFactory.ensureButton(col, 'RetryBtn', '再来一局').button;
   }

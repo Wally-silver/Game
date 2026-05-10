@@ -32,7 +32,11 @@ export class BattleManager {
   private lastBuildingSignature = '';
   private stabilizeCharges = 2;
   private stabilizeCooldown = 0;
+  private milestone25Done = false;
   private milestone50Done = false;
+  private milestone75Done = false;
+  private milestone100Done = false;
+  private seenEventsBeforeRun = 0;
 
   constructor(private readonly gameState: GameState, private readonly configManager: ConfigManager, private readonly eventBus: EventBus) {
     this.ruleSystem = new RuleSystem(this.configManager);
@@ -56,7 +60,11 @@ export class BattleManager {
     this.lastBuildingSignature = '';
     this.stabilizeCharges = 2;
     this.stabilizeCooldown = 0;
+    this.milestone25Done = false;
     this.milestone50Done = false;
+    this.milestone75Done = false;
+    this.milestone100Done = false;
+    this.seenEventsBeforeRun = this.gameState.getSnapshot().seenEvents.length;
 
     const buildings = this.buildingSystem.initialize();
     this.residentSystem.initialize(buildings);
@@ -126,9 +134,21 @@ export class BattleManager {
       this.emitBuildingsIfChanged();
     }
 
+    if (!this.milestone25Done && this.runtime.goalProgress >= 25) {
+      this.milestone25Done = true;
+      this.eventBus.emit(EVENT_NAME.BATTLE_EVENT_TRIGGERED, { id: 'milestone_25', name: '里程碑播报', desc: '【重要】目标进度达到 25%，第一波压力即将到来。', effect_order: 0, effect_joy: 0, effect_gold: 0, effect_goal: 0 });
+    }
     if (!this.milestone50Done && this.runtime.goalProgress >= 50) {
       this.milestone50Done = true;
-      this.eventBus.emit(EVENT_NAME.BATTLE_EVENT_TRIGGERED, { id: 'milestone_50', name: '里程碑播报', desc: '【镇报】本局目标已突破 50%，全镇士气上扬！', effect_order: 0, effect_joy: 0, effect_gold: 0, effect_goal: 0 });
+      this.eventBus.emit(EVENT_NAME.BATTLE_EVENT_TRIGGERED, { id: 'milestone_50', name: '里程碑播报', desc: '【重要】目标过半，建议检查缺员建筑并准备干预。', effect_order: 0, effect_joy: 0, effect_gold: 0, effect_goal: 0 });
+    }
+    if (!this.milestone75Done && this.runtime.goalProgress >= 75) {
+      this.milestone75Done = true;
+      this.eventBus.emit(EVENT_NAME.BATTLE_EVENT_TRIGGERED, { id: 'milestone_75', name: '冲线播报', desc: '【警报级】已进入冲线阶段，稳住秩序与快乐！', effect_order: 0, effect_joy: 0, effect_gold: 0, effect_goal: 0 });
+    }
+    if (!this.milestone100Done && this.runtime.goalProgress >= 100) {
+      this.milestone100Done = true;
+      this.eventBus.emit(EVENT_NAME.BATTLE_EVENT_TRIGGERED, { id: 'milestone_100', name: '冲线播报', desc: '【重要】目标达到 100%，请守住最后局势直到结算。', effect_order: 0, effect_joy: 0, effect_gold: 0, effect_goal: 0 });
     }
     this.checkEndConditions();
   }
@@ -161,12 +181,12 @@ export class BattleManager {
   public stabilizeTown(): { ok: boolean; message: string } {
     if (this.stabilizeCharges <= 0) return { ok: false, message: '安抚次数已用尽。' };
     if (this.stabilizeCooldown > 0) return { ok: false, message: `安抚冷却中（${Math.ceil(this.stabilizeCooldown)}s）` };
-    if (this.runtime.gold < 20) return { ok: false, message: '金币不足，无法组织安抚。' };
-    this.runtime.gold -= 20;
-    this.runtime.joy = Math.min(100, this.runtime.joy + 10);
-    this.runtime.order = Math.min(100, this.runtime.order + 8);
+    if (this.runtime.gold < 28) return { ok: false, message: '金币不足，无法组织安抚。' };
+    this.runtime.gold -= 28;
+    this.runtime.joy = Math.min(100, this.runtime.joy + 9);
+    this.runtime.order = Math.min(100, this.runtime.order + 7);
     this.stabilizeCharges -= 1;
-    this.stabilizeCooldown = 20;
+    this.stabilizeCooldown = 26;
     this.emitResourceIfChanged();
     return { ok: true, message: `已执行全镇安抚，局势回稳（剩余${this.stabilizeCharges}次）` };
   }
@@ -239,7 +259,8 @@ export class BattleManager {
       if (next) { this.gameState.unlockRule(next); unlockedRuleId = next; }
     }
 
-    this.lastReport = this.reportSystem.buildReport(this.settlementData, unlockedRuleId);
+    const newlySeenEventCount = Math.max(0, this.gameState.getSnapshot().seenEvents.length - this.seenEventsBeforeRun);
+    this.lastReport = this.reportSystem.buildReport(this.settlementData, unlockedRuleId, newlySeenEventCount);
     if (App.instance) {
       App.instance.latestBattleReport = this.lastReport;
     }
