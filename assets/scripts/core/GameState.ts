@@ -21,6 +21,9 @@ export interface GameStateSnapshot {
   encyclopediaProgress: Record<string, boolean>;
   seenEvents: string[];
   runCount: number;
+  winCount: number;
+  highestStars: number;
+  settings: { musicOn: boolean; sfxOn: boolean; };
   currentRunData: CurrentRunData | null;
 }
 
@@ -36,6 +39,9 @@ export class GameState {
     encyclopediaProgress: {},
     seenEvents: [],
     runCount: 0,
+    winCount: 0,
+    highestStars: 0,
+    settings: { musicOn: true, sfxOn: true },
     currentRunData: null,
   };
 
@@ -77,6 +83,35 @@ export class GameState {
   public incrementRunCount(): void {
     this.state.runCount += 1;
     this.broadcast();
+  }
+
+  public incrementWinCount(): void { this.state.winCount += 1; this.broadcast(); }
+  public updateHighestStars(stars: number): void { if (stars > this.state.highestStars) { this.state.highestStars = stars; this.broadcast(); } }
+  public updateSettings(patch: Partial<{ musicOn: boolean; sfxOn: boolean; }>): void { this.state.settings = { ...this.state.settings, ...patch }; this.broadcast(); }
+
+  public importProgression(data: { playerGold: number; inspiration: number; highestStars: number; unlockedRules: string[]; seenEvents: string[]; totalRuns: number; totalWins: number; settings: { musicOn: boolean; sfxOn: boolean; }; }): void {
+    this.state.gold = Math.max(0, data.playerGold);
+    this.state.inspiration = Math.max(0, data.inspiration);
+    this.state.highestStars = Math.max(0, data.highestStars);
+    this.state.unlockedRules = [...new Set(data.unlockedRules)];
+    this.state.seenEvents = [...new Set(data.seenEvents)];
+    this.state.runCount = Math.max(0, data.totalRuns);
+    this.state.winCount = Math.max(0, data.totalWins);
+    this.state.settings = { ...data.settings };
+    this.broadcast();
+  }
+
+  public exportProgression(): { playerGold: number; inspiration: number; highestStars: number; unlockedRules: string[]; seenEvents: string[]; totalRuns: number; totalWins: number; settings: { musicOn: boolean; sfxOn: boolean; }; } {
+    return {
+      playerGold: this.state.gold,
+      inspiration: this.state.inspiration,
+      highestStars: this.state.highestStars,
+      unlockedRules: [...this.state.unlockedRules],
+      seenEvents: [...this.state.seenEvents],
+      totalRuns: this.state.runCount,
+      totalWins: this.state.winCount,
+      settings: { ...this.state.settings },
+    };
   }
 
   public patchCurrentRunData(patch: Partial<CurrentRunData>): void {

@@ -58,18 +58,15 @@ export class BuildingActionItem extends Component {
 
     const overtime = SceneUIFactory.ensureButton(this.node, 'OvertimeBtn', '加班');
     this.overtimeButton = this.overtimeButton ?? overtime.button;
-    overtime.node.off(Button.EventType.CLICK);
-    overtime.node.on(Button.EventType.CLICK, () => this.onTapOvertime());
+    SceneUIFactory.bindSingleClick(overtime.node, () => this.onTapOvertime());
 
     const pause = SceneUIFactory.ensureButton(this.node, 'PauseBtn', '暂停');
     const reassign = SceneUIFactory.ensureButton(this.node, 'ReassignBtn', '调岗支援');
     this.pauseButton = this.pauseButton ?? pause.button;
-    pause.node.off(Button.EventType.CLICK);
-    pause.node.on(Button.EventType.CLICK, () => this.onTapPause());
+    SceneUIFactory.bindSingleClick(pause.node, () => this.onTapPause());
 
     this.reassignButton = this.reassignButton ?? reassign.button;
-    reassign.node.off(Button.EventType.CLICK);
-    reassign.node.on(Button.EventType.CLICK, () => this.onTapReassign());
+    SceneUIFactory.bindSingleClick(reassign.node, () => this.onTapReassign());
 
     if (!this.abnormalHighlight) {
       this.abnormalHighlight = this.node.getChildByName('AbnormalHighlight') ?? new Node('AbnormalHighlight');

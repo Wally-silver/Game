@@ -1,5 +1,5 @@
 import { _decorator, Button, Component, Node } from 'cc';
-import { App } from '../../core/App';
+import { App, AppServices } from '../../core/App';
 import { ResultReportView } from './ResultReportView';
 
 const { ccclass, property } = _decorator;
@@ -7,8 +7,10 @@ const { ccclass, property } = _decorator;
 @ccclass('ResultSceneController')
 export class ResultSceneController extends Component {
   @property(ResultReportView) public reportView: ResultReportView | null = null;
+  private services: AppServices | null = null;
 
   protected start(): void {
+    this.services = App.getServices();
     if (!this.reportView) {
       const node = new Node('ResultReportViewNode');
       node.parent = this.node;
@@ -16,19 +18,18 @@ export class ResultSceneController extends Component {
     }
 
     const app = App.instance;
-    const report = app?.getLatestBattleReport() ?? app?.battleManager.getLastReport() ?? null;
+    const report = app?.getLatestBattleReport() ?? this.services?.battleManager.getLastReport() ?? null;
+    if (report) { this.services?.gameState.updateHighestStars(report.stars); if (report.settlement.success) this.services?.gameState.incrementWinCount(); }
     this.reportView.bindReport(report);
 
     if (this.reportView.backButton) {
-      this.reportView.backButton.node.off(Button.EventType.CLICK);
-      this.reportView.backButton.node.on(Button.EventType.CLICK, () => this.onTapBackHome());
+      SceneUIFactory.bindSingleClick(this.reportView.backButton.node, () => this.onTapBackHome());
     }
     if (this.reportView.retryButton) {
-      this.reportView.retryButton.node.off(Button.EventType.CLICK);
-      this.reportView.retryButton.node.on(Button.EventType.CLICK, () => this.onTapReplay());
+      SceneUIFactory.bindSingleClick(this.reportView.retryButton.node, () => this.onTapReplay());
     }
   }
 
-  public onTapBackHome(): void { void App.instance?.sceneRouter.goHome(); }
-  public onTapReplay(): void { void App.instance?.sceneRouter.goBattle(); }
+  public onTapBackHome(): void { if (this.services) void this.services.sceneRouter.goHome(); }
+  public onTapReplay(): void { if (this.services) void this.services.sceneRouter.goBattle(); }
 }

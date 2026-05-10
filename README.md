@@ -84,3 +84,10 @@ Launch -> Home -> Battle -> Result
 - Battle 播报分级为【快讯/重要/警报级】，并补充危险与决策提示。
 - Result 增加拆项评分、关键决策复盘、新增见闻事件提示。
 - 复玩钩子增强：规则解锁节奏更清晰、首次见闻事件前台化。
+
+
+## 13) 稳定性与持久化升级
+- SaveManager 已接入 progression 持久化（version、金币、灵感、最高星级、解锁规则、见闻事件、总局数、总胜局、基础设置）。
+- GameState 支持 progression 的导入/导出，Battle 临时态与永久态分离。
+- SceneUIFactory 增加安全点击绑定与模板保留清理能力，降低重复绑定与重复创建风险。
+- Battle 生命周期补充 pause/resume/stop，场景反复进入更稳。

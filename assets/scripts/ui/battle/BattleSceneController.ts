@@ -1,5 +1,5 @@
 import { _decorator, Component, Node } from 'cc';
-import { App } from '../../core/App';
+import { App, AppServices } from '../../core/App';
 import { EVENT_NAME, SCENE_NAME } from '../../core/Constants';
 import { TriggeredEvent } from '../../models/EventModel';
 import { BattleHUD } from './BattleHUD';
@@ -13,16 +13,18 @@ export class BattleSceneController extends Component {
   @property(RuleSelectPopup) public rulePopup: RuleSelectPopup | null = null;
 
   private unsubscribers: Array<() => void> = [];
+  private services: AppServices | null = null;
 
   protected onLoad(): void {
     this.ensureRuntimeUI();
   }
 
   protected start(): void {
+    this.services = App.getServices();
     this.unsubscribers.forEach((off) => off());
     this.unsubscribers = [];
 
-    const app = App.instance;
+    const app = this.services;
     if (!app || !this.hud) return;
 
     this.hud.resetView();
@@ -48,11 +50,14 @@ export class BattleSceneController extends Component {
     });
   }
 
-  protected update(dt: number): void { const app = App.instance; if (app) app.battleManager.update(dt); }
+  protected update(dt: number): void { if (this.services) this.services.battleManager.update(dt); }
+  protected onEnable(): void { this.services?.battleManager.resumeBattle(); }
+  protected onDisable(): void { this.services?.battleManager.pauseBattle(); }
   protected onDestroy(): void {
     this.unsubscribers.forEach((off) => off());
     this.unsubscribers = [];
     this.hud?.resetView();
+    this.services?.battleManager.stopBattle();
   }
 
   private ensureRuntimeUI(): void {
@@ -72,7 +77,7 @@ export class BattleSceneController extends Component {
   }
 
   private bindEvents(): void {
-    const app = App.instance;
+    const app = this.services;
     if (!app || !this.hud) return;
 
     this.unsubscribers.push(app.eventBus.on(EVENT_NAME.BATTLE_RESOURCE_CHANGED, () => { const snap = app.battleManager.getRuntimeState(); this.hud?.refreshTopState(snap); if (snap.order <= 25 || snap.joy <= 25) this.hud?.appendEventLog('【警报级】秩序或快乐过低，建议立刻安抚或暂停高风险建筑！'); if (snap.order <= 20 || snap.joy <= 20) this.hud?.setHint('危险：优先安抚，再调岗补缺员。'); if (snap.goalProgress >= 95 && snap.order > 25 && snap.joy > 25) this.hud?.setHint('即将成功：守住秩序与快乐，避免最后翻车。'); }));

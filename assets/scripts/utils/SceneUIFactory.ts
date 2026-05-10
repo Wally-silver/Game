@@ -36,6 +36,17 @@ export class SceneUIFactory {
     return this.ensureVerticalGroup(parent, name, spacingY);
   }
 
+  public static ensureHorizontalGroup(parent: Node, name: string, spacingX = 12): Node {
+    const existed = parent.getChildByName(name);
+    const node = existed ?? new Node(name);
+    const layout = node.getComponent(Layout) ?? node.addComponent(Layout);
+    layout.type = Layout.Type.HORIZONTAL;
+    layout.spacingX = spacingX;
+    layout.resizeMode = Layout.ResizeMode.CONTAINER;
+    if (!existed) node.parent = parent;
+    return node;
+  }
+
   public static ensureLabel(parent: Node, name: string, text: string, fontSize = 24): Label {
     const existed = parent.getChildByName(name);
     const node = existed ?? new Node(name);
@@ -70,6 +81,15 @@ export class SceneUIFactory {
 
   public static createButton(parent: Node, name: string, text: string): { node: Node; button: Button; label: Label } {
     return this.ensureButton(parent, name, text);
+  }
+
+  public static bindSingleClick(node: Node, cb: () => void): void {
+    node.off(Button.EventType.CLICK);
+    node.on(Button.EventType.CLICK, cb);
+  }
+
+  public static clearChildrenButKeepTemplate(parent: Node, templateName: string): void {
+    parent.children.forEach((child) => { if (child.name !== templateName) child.destroy(); });
   }
 
 }

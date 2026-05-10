@@ -71,8 +71,27 @@ export class App extends Component {
   }
 
   public async bootstrap(): Promise<void> {
+    const defaultSave = {
+      version: SaveManager.CURRENT_VERSION,
+      playerGold: this.gameState.getSnapshot().gold,
+      inspiration: this.gameState.getSnapshot().inspiration,
+      highestStars: 0,
+      unlockedRules: [],
+      seenEvents: [],
+      totalRuns: 0,
+      totalWins: 0,
+      settings: { musicOn: true, sfxOn: true },
+    };
+    const save = this.saveManager.loadProgression(defaultSave);
+    this.gameState.importProgression(save);
+
     await this.configManager.loadAllConfigs();
     this.eventBus.emit(EVENT_NAME.CONFIG_LOADED, { allLoaded: true });
+
+    this.eventBus.on(EVENT_NAME.GAME_STATE_CHANGED, () => {
+      const data = this.gameState.exportProgression();
+      this.saveManager.saveProgression({ version: SaveManager.CURRENT_VERSION, ...data });
+    });
 
     if (director.getScene()?.name === SCENE_NAME.LAUNCH) {
       await this.sceneRouter.goHome();

@@ -37,6 +37,7 @@ export class BattleManager {
   private milestone75Done = false;
   private milestone100Done = false;
   private seenEventsBeforeRun = 0;
+  private paused = false;
 
   constructor(private readonly gameState: GameState, private readonly configManager: ConfigManager, private readonly eventBus: EventBus) {
     this.ruleSystem = new RuleSystem(this.configManager);
@@ -65,6 +66,7 @@ export class BattleManager {
     this.milestone75Done = false;
     this.milestone100Done = false;
     this.seenEventsBeforeRun = this.gameState.getSnapshot().seenEvents.length;
+    this.paused = false;
 
     const buildings = this.buildingSystem.initialize();
     this.residentSystem.initialize(buildings);
@@ -97,7 +99,7 @@ export class BattleManager {
   }
 
   public update(deltaTime: number): void {
-    if (!this.runtime.running || this.runtime.ended) return;
+    if (!this.runtime.running || this.runtime.ended || this.paused) return;
 
     this.runtime.timer = Math.max(0, this.runtime.timer - deltaTime);
     this.buildingTickAccumulator += deltaTime;
@@ -190,6 +192,10 @@ export class BattleManager {
     this.emitResourceIfChanged();
     return { ok: true, message: `已执行全镇安抚，局势回稳（剩余${this.stabilizeCharges}次）` };
   }
+
+  public pauseBattle(): void { this.paused = true; }
+  public resumeBattle(): void { this.paused = false; }
+  public stopBattle(): void { this.runtime.running = false; this.paused = false; }
 
   public getRuntimeState(): BattleRuntimeState { return JSON.parse(JSON.stringify(this.runtime)) as BattleRuntimeState; }
   public getLastReport(): ReportModel | null { return this.lastReport ? JSON.parse(JSON.stringify(this.lastReport)) : null; }
