@@ -28,6 +28,8 @@ export class RuleSelectPopup extends Component {
 
   public close(): void { (this.root ?? this.node).active = false; }
 
+  public ensureRuntimeNodes(): void { this.ensureUI(); }
+
   private ensureUI(): void {
     if (!this.root) {
       this.root = SceneUIFactory.createPanel(this.node, 'RulePopupRoot', 680, 800);

@@ -2,7 +2,6 @@ import { _decorator, Component, Node } from 'cc';
 import { App } from '../../core/App';
 import { EVENT_NAME, SCENE_NAME } from '../../core/Constants';
 import { TriggeredEvent } from '../../models/EventModel';
-import { SceneUIFactory } from '../../utils/SceneUIFactory';
 import { BattleHUD } from './BattleHUD';
 import { RuleSelectPopup } from '../popup/RuleSelectPopup';
 
@@ -15,11 +14,18 @@ export class BattleSceneController extends Component {
 
   private unsubscribers: Array<() => void> = [];
 
-  protected start(): void {
+  protected onLoad(): void {
     this.ensureRuntimeUI();
+  }
+
+  protected start(): void {
+    this.unsubscribers.forEach((off) => off());
+    this.unsubscribers = [];
 
     const app = App.instance;
     if (!app || !this.hud) return;
+
+    this.hud.resetView();
 
     this.hud.bindCallbacks({
       onTapBuildingOvertime: (id) => app.battleManager.toggleBuildingOvertime(id),
@@ -41,7 +47,11 @@ export class BattleSceneController extends Component {
   }
 
   protected update(dt: number): void { const app = App.instance; if (app) app.battleManager.update(dt); }
-  protected onDestroy(): void { this.unsubscribers.forEach((off) => off()); }
+  protected onDestroy(): void {
+    this.unsubscribers.forEach((off) => off());
+    this.unsubscribers = [];
+    this.hud?.resetView();
+  }
 
   private ensureRuntimeUI(): void {
     if (!this.hud) {
@@ -55,26 +65,8 @@ export class BattleSceneController extends Component {
       this.rulePopup = popupNode.addComponent(RuleSelectPopup);
     }
 
-    // ensure minimal roots exist so components can build children safely
-    const root = SceneUIFactory.createPanel(this.node, 'BattleUIRoot');
-    if (!this.hud!.buildingListRoot) {
-      this.hud!.buildingListRoot = SceneUIFactory.createVerticalLayout(root, 'BuildingListRoot', 8);
-    }
-    if (!this.hud!.buildingItemTemplate) {
-      const t = new Node('BuildingItemTemplate');
-      t.parent = this.hud!.buildingListRoot;
-      this.hud!.buildingItemTemplate = t;
-      t.active = false;
-    }
-    if (!this.rulePopup!.optionListRoot) {
-      this.rulePopup!.optionListRoot = SceneUIFactory.createVerticalLayout(root, 'RuleOptionList', 10);
-    }
-    if (!this.rulePopup!.optionTemplate) {
-      const t = new Node('RuleOptionTemplate');
-      t.parent = this.rulePopup!.optionListRoot;
-      this.rulePopup!.optionTemplate = t;
-      t.active = false;
-    }
+    this.hud.ensureRuntimeNodes();
+    this.rulePopup!.ensureRuntimeNodes();
   }
 
   private bindEvents(): void {

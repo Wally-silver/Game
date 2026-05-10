@@ -1,38 +1,10 @@
-import { _decorator, Component, Label } from 'cc';
-import { App } from '../../core/App';
+import { _decorator, Component } from 'cc';
 
-const { ccclass, property } = _decorator;
+const { ccclass } = _decorator;
 
 /**
- * Home.scene 控制器：显示资源并进入原型战局。
+ * Deprecated: Home scene logic has been consolidated into HomeSceneController.
+ * Keep this component as a no-op view placeholder for compatibility.
  */
 @ccclass('HomeView')
-export class HomeView extends Component {
-  @property(Label)
-  public goldLabel: Label | null = null;
-
-  @property(Label)
-  public inspirationLabel: Label | null = null;
-
-  protected start(): void {
-    this.refreshPlayerInfo();
-  }
-
-  public onTapStartGame(): void {
-    void App.instance?.sceneRouter.goBattle();
-  }
-
-  public onTapViewResult(): void {
-    void App.instance?.sceneRouter.goResult();
-  }
-
-  private refreshPlayerInfo(): void {
-    const snapshot = App.instance?.gameState.getSnapshot();
-    if (!snapshot) {
-      return;
-    }
-
-    this.goldLabel && (this.goldLabel.string = `金币: ${snapshot.gold}`);
-    this.inspirationLabel && (this.inspirationLabel.string = `灵感: ${snapshot.inspiration}`);
-  }
-}
+export class HomeView extends Component {}

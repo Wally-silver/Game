@@ -31,6 +31,31 @@ export class BattleHUD extends Component {
 
   protected onLoad(): void { this.ensureUI(); }
 
+  public ensureRuntimeNodes(): void {
+    this.ensureUI();
+    if (!this.buildingListRoot) {
+      const root = this.node.getChildByName('HUDRoot') ?? SceneUIFactory.createPanel(this.node, 'HUDRoot');
+      const col = root.getChildByName('HUDColumn') ?? SceneUIFactory.createVerticalLayout(root, 'HUDColumn', 8);
+      this.buildingListRoot = SceneUIFactory.createVerticalLayout(col, 'BuildingList', 6);
+    }
+    if (!this.buildingItemTemplate) {
+      this.buildingItemTemplate = new Node('BuildingItemTemplate');
+      this.buildingItemTemplate.parent = this.buildingListRoot;
+      this.buildingItemTemplate.active = false;
+      this.buildingItemTemplate.addComponent(BuildingActionItem);
+    }
+  }
+
+  public resetView(): void {
+    this.callbacks = null;
+    this.eventLogs = [];
+    this.latestHint = '';
+    this.buildingItems.forEach((item) => item.node.destroy());
+    this.buildingItems.clear();
+    this.refreshEvents();
+    this.refreshHint();
+  }
+
   public bindCallbacks(callbacks: BattleHudCallbacks): void { this.callbacks = callbacks; }
   public refreshFromRuntimeState(snapshot: BattleRuntimeState): void { this.refreshTopBar(snapshot); this.refreshRuleInfo(snapshot); this.refreshGoal(snapshot); this.refreshBuildings(snapshot); this.refreshEvents(); this.refreshHint(); }
   public refreshTopState(snapshot: BattleRuntimeState): void { this.refreshTopBar(snapshot); this.refreshGoal(snapshot); }

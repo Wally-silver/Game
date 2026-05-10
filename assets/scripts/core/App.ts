@@ -9,15 +9,24 @@ import { ConfigManager } from '../managers/ConfigManager';
 import { SaveManager } from '../managers/SaveManager';
 import { UIManager } from '../managers/UIManager';
 import { Logger } from '../utils/Logger';
+import { ReportModel } from '../models/ReportModel';
 
 const { ccclass } = _decorator;
 
-/**
- * 全局入口组件：建议挂在 Launch.scene 的常驻节点。
- */
+export interface AppServices {
+  eventBus: EventBus;
+  gameState: GameState;
+  configManager: ConfigManager;
+  saveManager: SaveManager;
+  uiManager: UIManager;
+  audioManager: AudioManager;
+  battleManager: BattleManager;
+  sceneRouter: SceneRouter;
+}
+
 @ccclass('App')
 export class App extends Component {
-  public latestBattleReport: import('../models/ReportModel').ReportModel | null = null;
+  public latestBattleReport: ReportModel | null = null;
   public static instance: App | null = null;
 
   public readonly eventBus = new EventBus();
@@ -32,6 +41,22 @@ export class App extends Component {
     afterLoad: (scene) => Logger.info(`Loaded scene: ${scene}`),
   });
 
+  public static getServices(): AppServices {
+    if (!App.instance) {
+      throw new Error('App is not initialized.');
+    }
+    return {
+      eventBus: App.instance.eventBus,
+      gameState: App.instance.gameState,
+      configManager: App.instance.configManager,
+      saveManager: App.instance.saveManager,
+      uiManager: App.instance.uiManager,
+      audioManager: App.instance.audioManager,
+      battleManager: App.instance.battleManager,
+      sceneRouter: App.instance.sceneRouter,
+    };
+  }
+
   protected onLoad(): void {
     if (App.instance) {
       this.node.destroy();
@@ -39,10 +64,6 @@ export class App extends Component {
     }
     App.instance = this;
     director.addPersistRootNode(this.node);
-  }
-
-  protected start(): void {
-    // LaunchView 会在 Launch.scene 中显式调用 bootstrap。
   }
 
   public async bootstrap(): Promise<void> {
