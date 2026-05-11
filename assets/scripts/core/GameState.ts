@@ -43,7 +43,7 @@ export class GameState {
     winCount: 0,
     highestStars: 0,
     settings: { musicOn: true, sfxOn: true },
-    unlockedBuildings: ['Bakery', 'Office', 'Park'],
+    unlockedBuildings: ['bakery', 'office', 'park'],
     currentRunData: null,
   };
 

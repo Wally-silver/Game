@@ -1,21 +1,21 @@
-export type EventPayload = Record<string, unknown> | string | number | boolean | null | undefined;
-export type EventHandler<T = EventPayload> = (payload?: T) => void;
+export type EventPayload = unknown;
+export type EventHandler<T = unknown> = (payload?: T) => void;
 
 /**
  * 轻量事件总线：模块间通信统一从这里走。
  */
 export class EventBus {
-  private handlers = new Map<string, Set<EventHandler>>();
+  private handlers = new Map<string, Set<EventHandler<unknown>>>();
 
-  public on<T = EventPayload>(event: string, handler: EventHandler<T>): () => void {
+  public on<T = unknown>(event: string, handler: EventHandler<T>): () => void {
     if (!this.handlers.has(event)) {
-      this.handlers.set(event, new Set<EventHandler>());
+      this.handlers.set(event, new Set<EventHandler<unknown>>());
     }
-    this.handlers.get(event)!.add(handler as EventHandler);
+    this.handlers.get(event)!.add(handler as EventHandler<unknown>);
     return () => this.off(event, handler);
   }
 
-  public once<T = EventPayload>(event: string, handler: EventHandler<T>): () => void {
+  public once<T = unknown>(event: string, handler: EventHandler<T>): () => void {
     const unsubscribe = this.on<T>(event, (payload) => {
       unsubscribe();
       handler(payload);
@@ -23,18 +23,18 @@ export class EventBus {
     return unsubscribe;
   }
 
-  public off<T = EventPayload>(event: string, handler: EventHandler<T>): void {
+  public off<T = unknown>(event: string, handler: EventHandler<T>): void {
     const set = this.handlers.get(event);
     if (!set) {
       return;
     }
-    set.delete(handler as EventHandler);
+    set.delete(handler as EventHandler<unknown>);
     if (set.size === 0) {
       this.handlers.delete(event);
     }
   }
 
-  public emit<T = EventPayload>(event: string, payload?: T): void {
+  public emit<T = unknown>(event: string, payload?: T): void {
     const set = this.handlers.get(event);
     if (!set) {
       return;

@@ -78,8 +78,12 @@ export class RuleSelectPopup extends Component {
   private normalizeCandidates(candidates: RuleModel[]): RuleModel[] {
     if (candidates.length >= 3) return candidates.slice(0, 3);
     if (candidates.length === 0) {
-      console.error('[RuleSelectPopup] no rule candidates, popup will stay hidden');
-      return [];
+      console.error('[RuleSelectPopup] no rule candidates, using fallback rules');
+      return [
+        { id: 'fallback_rule_1', name: '稳妥经营', desc: '基础稳态，便于观察局势。', category: 'balance', risk_score: 3, fun_score: 3, tags: ['safe'], effects: [] },
+        { id: 'fallback_rule_2', name: '拼命冲刺', desc: '高收益高风险。', category: 'rush', risk_score: 8, fun_score: 6, tags: ['rush'], effects: [] },
+        { id: 'fallback_rule_3', name: '先稳后快', desc: '先稳住秩序，再冲目标。', category: 'safe', risk_score: 4, fun_score: 4, tags: ['safe'], effects: [] },
+      ];
     }
     const padded = [...candidates];
     while (padded.length < 3) padded.push(candidates[padded.length % candidates.length]);

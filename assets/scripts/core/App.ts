@@ -88,7 +88,7 @@ export class App extends Component {
       totalRuns: 0,
       totalWins: 0,
       settings: { musicOn: true, sfxOn: true },
-      unlockedBuildings: ['Bakery', 'Office', 'Park'],
+      unlockedBuildings: ['bakery', 'office', 'park'],
     };
     const save = this.saveManager.loadProgression(defaultSave);
     this.gameState.importProgression(save);

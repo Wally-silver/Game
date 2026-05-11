@@ -109,7 +109,9 @@ export class BattleHUD extends Component {
   private refreshGoal(snapshot: BattleRuntimeState): void { this.goalLabel && (this.goalLabel.string = `目标进度: ${Math.round(snapshot.goalProgress)}%`); }
 
   private refreshBuildings(snapshot: BattleRuntimeState): void {
-    if (!this.buildingListRoot || !this.buildingItemTemplate) return;
+    const listRoot = this.buildingListRoot;
+    const template = this.buildingItemTemplate;
+    if (!listRoot || !template) return;
     if (snapshot.buildings.length === 0) {
       console.error('[BattleHUD] no buildings to render');
     }
@@ -117,8 +119,8 @@ export class BattleHUD extends Component {
     snapshot.buildings.forEach((b) => {
       let item = this.buildingItems.get(b.id);
       if (!item) {
-        const node = instantiate(this.buildingItemTemplate);
-        node.parent = this.buildingListRoot!;
+        const node = instantiate(template);
+        node.parent = listRoot;
         node.active = true;
         item = node.getComponent(BuildingActionItem) ?? node.addComponent(BuildingActionItem);
         item.bind(b, { onOvertime: (id) => this.onTapBuildingOvertime(id), onPause: (id) => this.onTapBuildingPause(id), onReassign: (id) => this.onTapBuildingReassign(id) });

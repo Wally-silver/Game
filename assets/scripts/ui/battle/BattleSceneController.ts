@@ -31,8 +31,24 @@ export class BattleSceneController extends Component {
     this.hud.resetView();
 
     this.hud.bindCallbacks({
-      onTapBuildingOvertime: (id) => app.battleManager.toggleBuildingOvertime(id),
-      onTapBuildingPause: (id) => app.battleManager.toggleBuildingPause(id),
+      onTapBuildingOvertime: (id) => {
+        app.battleManager.toggleBuildingOvertime(id);
+        const snap = app.battleManager.getRuntimeState();
+        const b = snap.buildings.find((it) => it.id === id);
+        const msg = `【操作】${b?.name ?? id} 已切换加班状态`;
+        this.hud?.appendEventLog(msg);
+        this.hud?.setHint(msg);
+        this.hud?.refreshBuildingState(snap);
+      },
+      onTapBuildingPause: (id) => {
+        app.battleManager.toggleBuildingPause(id);
+        const snap = app.battleManager.getRuntimeState();
+        const b = snap.buildings.find((it) => it.id === id);
+        const msg = `【操作】${b?.name ?? id} 已切换暂停状态`;
+        this.hud?.appendEventLog(msg);
+        this.hud?.setHint(msg);
+        this.hud?.refreshBuildingState(snap);
+      },
       onTapBuildingReassign: (id) => { const res = app.battleManager.reassignSupport(id); this.hud?.appendEventLog(`${res.ok ? '【重要】' : '【提示】'} 调岗：${res.message}`); this.hud?.setHint(res.message); this.hud?.refreshBuildingState(app.battleManager.getRuntimeState()); },
       onTapStabilize: () => { const res = app.battleManager.stabilizeTown(); this.hud?.appendEventLog(`${res.ok ? '【警报级】' : '【提示】'} 安抚：${res.message}`); this.hud?.setHint(res.message); this.hud?.refreshTopState(app.battleManager.getRuntimeState()); },
       onTapBackHome: () => void app.sceneRouter.goHome(),

@@ -41,11 +41,11 @@ export class ConfigManager {
     return Array.isArray(this.cache[configKey]) && this.cache[configKey].length > 0;
   }
 
-  public getAll<T extends ConfigRecord>(configKey: string): T[] {
-    return (this.cache[configKey] ?? []) as T[];
+  public getAll<T = ConfigRecord>(configKey: string): T[] {
+    return (this.cache[configKey] ?? []) as unknown as T[];
   }
 
-  public getById<T extends ConfigRecord>(configKey: string, id: string): T | null {
+  public getById<T extends { id: string } = ConfigRecord>(configKey: string, id: string): T | null {
     const rows = this.getAll<T>(configKey);
     return rows.find((row) => row.id === id) ?? null;
   }
@@ -84,9 +84,9 @@ export class ConfigManager {
     }
     if (forceAll || !this.cache[CONFIG_KEY.BUILDINGS]?.length) {
       this.cache[CONFIG_KEY.BUILDINGS] = [
-        { id: 'Bakery', name: '面包坊', worker_need: 2, base_output: 6, joy_effect: 1, order_effect: 0, risk_factor: 1.1, pressure_limit: 72, display_order: 1 },
-        { id: 'Office', name: '事务所', worker_need: 3, base_output: 9, joy_effect: -1, order_effect: 1, risk_factor: 1.2, pressure_limit: 70, display_order: 2 },
-        { id: 'Park', name: '公园', worker_need: 2, base_output: 4, joy_effect: 2, order_effect: 0, risk_factor: 1.0, pressure_limit: 75, display_order: 3 },
+        { id: 'bakery', name: '面包坊', worker_need: 2, base_output: 6, joy_effect: 1, order_effect: 0, risk_factor: 1.1, pressure_limit: 72, display_order: 1 },
+        { id: 'office', name: '事务所', worker_need: 3, base_output: 9, joy_effect: -1, order_effect: 1, risk_factor: 1.2, pressure_limit: 70, display_order: 2 },
+        { id: 'park', name: '公园', worker_need: 2, base_output: 4, joy_effect: 2, order_effect: 0, risk_factor: 1.0, pressure_limit: 75, display_order: 3 },
       ];
     }
     if (forceAll || !this.cache[CONFIG_KEY.EVENTS]?.length) {

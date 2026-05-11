@@ -72,6 +72,9 @@ export class BattleManager {
 
     const buildings = this.buildingSystem.initialize(this.gameState.getSnapshot().unlockedBuildings);
     this.residentSystem.initialize(buildings);
+    this.buildingSystem.getRuntimeBuildings().forEach((b) => {
+      this.buildingSystem.setWorkers(b.id, this.residentSystem.getBuildingWorkforce(b.id));
+    });
     this.eventSystem.initialize();
     const snapshot = this.gameState.getSnapshot();
     if (snapshot.unlockedRules.length === 0) {
@@ -82,6 +85,13 @@ export class BattleManager {
     if (this.candidates.length < 3) {
       console.error(`[BattleManager] rule candidates not enough (${this.candidates.length}), using fallback pool`);
       this.candidates = this.ruleSystem.generateCandidates(3);
+    }
+    if (this.candidates.length === 0) {
+      this.candidates = [
+        { id: 'fallback_rule_1', name: '稳妥经营', desc: '基础稳态', category: 'balance', risk_score: 3, fun_score: 3, tags: ['safe'], effects: [] },
+        { id: 'fallback_rule_2', name: '拼命冲刺', desc: '收益更高风险更高', category: 'rush', risk_score: 8, fun_score: 6, tags: ['rush'], effects: [] },
+        { id: 'fallback_rule_3', name: '先稳后快', desc: '秩序优先', category: 'safe', risk_score: 4, fun_score: 4, tags: ['safe'], effects: [] },
+      ];
     }
     this.runtime.buildings = this.buildingSystem.getRuntimeBuildings();
     this.runtime.residents = this.residentSystem.getResidents();
