@@ -38,6 +38,7 @@ export class BattleManager {
   private milestone100Done = false;
   private seenEventsBeforeRun = 0;
   private paused = false;
+  private hasSettled = false;
 
   constructor(private readonly gameState: GameState, private readonly configManager: ConfigManager, private readonly eventBus: EventBus) {
     this.ruleSystem = new RuleSystem(this.configManager);
@@ -67,8 +68,9 @@ export class BattleManager {
     this.milestone100Done = false;
     this.seenEventsBeforeRun = this.gameState.getSnapshot().seenEvents.length;
     this.paused = false;
+    this.hasSettled = false;
 
-    const buildings = this.buildingSystem.initialize();
+    const buildings = this.buildingSystem.initialize(this.gameState.getSnapshot().unlockedBuildings);
     this.residentSystem.initialize(buildings);
     this.eventSystem.initialize();
     const snapshot = this.gameState.getSnapshot();
@@ -239,12 +241,14 @@ export class BattleManager {
   }
 
   private endBattle(success: boolean): void {
+    if (this.hasSettled) return;
+    this.hasSettled = true;
     this.runtime.running = false;
     this.runtime.ended = true;
     this.runtime.success = success;
 
     const starsEstimate = this.runtime.success ? (this.runtime.goalProgress >= 95 ? 4 : 3) : 1;
-    const rewardGold = Math.max(6, Math.floor(this.runtime.gold * 0.12) + (success ? 12 : 0) + starsEstimate * 3);
+    const rewardGold = Math.max(4, 2 + (success ? 8 : 0) + starsEstimate * 2 + Math.floor(this.runtime.gold * 0.06));
 
     this.settlementData = {
       rewardGold,
@@ -278,6 +282,12 @@ export class BattleManager {
     this.gameState.patchCurrentRunData({ ended: true });
     this.gameState.incrementRunCount();
     if (success) this.gameState.incrementWinCount();
+
+    const snap = this.gameState.getSnapshot();
+    if (snap.runCount >= 2) this.gameState.unlockBuilding('RepairShop');
+    if (snap.winCount >= 1) this.gameState.unlockBuilding('ConvenienceStore');
+    if (snap.highestStars >= 4) this.gameState.unlockBuilding('PostOffice');
+
     this.eventBus.emit(EVENT_NAME.BATTLE_SETTLEMENT_READY, this.lastReport);
     this.eventBus.emit(EVENT_NAME.BATTLE_ENDED, this.lastReport);
   }

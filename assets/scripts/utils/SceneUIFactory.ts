@@ -1,6 +1,9 @@
 import { Button, Color, Label, Layout, Node, UITransform } from 'cc';
 
 export class SceneUIFactory {
+  public static ensureRootOnce(parent: Node, name: string): Node {
+    return parent.getChildByName(name) ?? (() => { const n = new Node(name); n.parent = parent; return n; })();
+  }
   public static ensurePanel(parent: Node, name: string, width = 720, height = 1280): Node {
     const existed = parent.getChildByName(name);
     if (existed) {

@@ -40,6 +40,9 @@ export class App extends Component {
     beforeLoad: (scene) => Logger.info(`Loading scene: ${scene}`),
     afterLoad: (scene) => Logger.info(`Loaded scene: ${scene}`),
   });
+  private isBootstrapping = false;
+  private isBootstrapped = false;
+  private stateSaveListenerBound = false;
 
   public getLatestBattleReport(): ReportModel | null {
     return this.latestBattleReport ? JSON.parse(JSON.stringify(this.latestBattleReport)) : null;
@@ -71,6 +74,8 @@ export class App extends Component {
   }
 
   public async bootstrap(): Promise<void> {
+    if (this.isBootstrapped || this.isBootstrapping) return;
+    this.isBootstrapping = true;
     const defaultSave = {
       version: SaveManager.CURRENT_VERSION,
       playerGold: this.gameState.getSnapshot().gold,
@@ -81,6 +86,7 @@ export class App extends Component {
       totalRuns: 0,
       totalWins: 0,
       settings: { musicOn: true, sfxOn: true },
+      unlockedBuildings: ['Bakery', 'Office', 'Park'],
     };
     const save = this.saveManager.loadProgression(defaultSave);
     this.gameState.importProgression(save);
@@ -88,14 +94,19 @@ export class App extends Component {
     await this.configManager.loadAllConfigs();
     this.eventBus.emit(EVENT_NAME.CONFIG_LOADED, { allLoaded: true });
 
-    this.eventBus.on(EVENT_NAME.GAME_STATE_CHANGED, () => {
-      const data = this.gameState.exportProgression();
-      this.saveManager.saveProgression({ version: SaveManager.CURRENT_VERSION, ...data });
-    });
+    if (!this.stateSaveListenerBound) {
+      this.stateSaveListenerBound = true;
+      this.eventBus.on(EVENT_NAME.GAME_STATE_CHANGED, () => {
+        const data = this.gameState.exportProgression();
+        this.saveManager.saveProgression({ version: SaveManager.CURRENT_VERSION, ...data });
+      });
+    }
 
     if (director.getScene()?.name === SCENE_NAME.LAUNCH) {
       await this.sceneRouter.goHome();
     }
+    this.isBootstrapped = true;
+    this.isBootstrapping = false;
   }
 
   protected onDestroy(): void {

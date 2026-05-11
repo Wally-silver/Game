@@ -102,3 +102,15 @@ Launch -> Home -> Battle -> Result
   - `rewardGold = max(6, floor(finalGold * 0.12) + successBonus + starsEstimateBonus)`
   - 其中 successBonus 成功时 +12，starsEstimateBonus 按结算阶段给 3~12。
   - rewardGold 在结算时写入 `GameState.addGold()` 并持久化。
+
+
+## 15) 本轮三方向升级（稳定性/解锁/解耦）
+- App.bootstrap 增加幂等保护（防重复初始化、防重复注册保存监听）。
+- BattleManager.endBattle 增加 `hasSettled` 防重复结算，避免重复发奖励与重复累计局数/胜局。
+- 建筑解锁接入 progression：
+  - 初始解锁：Bakery/Office/Park
+  - 累计局数>=2：解锁 RepairShop
+  - 累计胜局>=1：解锁 ConvenienceStore
+  - 最高星级>=4：解锁 PostOffice
+- 奖励金币公式收紧：降低 finalGold 转换比例，避免 progression 经济膨胀。
+- SceneController 继续向显式依赖持有收敛，HomeView 维持 no-op。

@@ -96,11 +96,9 @@ export class BattleHUD extends Component {
       this.buildingItemTemplate.addComponent(BuildingActionItem);
     }
     const stabilize = SceneUIFactory.ensureButton(col, 'StabilizeBtn', '全镇安抚(20金币)');
-    stabilize.node.off(Button.EventType.CLICK);
-    stabilize.node.on(Button.EventType.CLICK, () => this.onTapStabilize());
+    SceneUIFactory.bindSingleClick(stabilize.node, () => this.onTapStabilize());
     const back = SceneUIFactory.ensureButton(col, 'BackHomeBtn', '返回主页');
-    back.node.off(Button.EventType.CLICK);
-    back.node.on(Button.EventType.CLICK, () => this.onTapBackHome());
+    SceneUIFactory.bindSingleClick(back.node, () => this.onTapBackHome());
   }
 
   private refreshTopBar(snapshot: BattleRuntimeState): void { this.timerLabel && (this.timerLabel.string = `时间: ${Math.ceil(snapshot.timer)}s`); this.orderLabel && (this.orderLabel.string = `秩序: ${Math.round(snapshot.order)}`); this.joyLabel && (this.joyLabel.string = `快乐: ${Math.round(snapshot.joy)}`); this.goldLabel && (this.goldLabel.string = `金币: ${Math.round(snapshot.gold)}`); }

@@ -8,6 +8,7 @@ export interface ProgressionSaveData {
   totalRuns: number;
   totalWins: number;
   settings: { musicOn: boolean; sfxOn: boolean; };
+  unlockedBuildings: string[];
 }
 
 export class SaveManager {
@@ -62,6 +63,7 @@ export class SaveManager {
         musicOn: raw.settings?.musicOn ?? fallback.settings.musicOn,
         sfxOn: raw.settings?.sfxOn ?? fallback.settings.sfxOn,
       },
+      unlockedBuildings: raw.unlockedBuildings ?? fallback.unlockedBuildings,
     };
   }
 }

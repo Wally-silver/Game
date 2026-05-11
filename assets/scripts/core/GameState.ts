@@ -24,6 +24,7 @@ export interface GameStateSnapshot {
   winCount: number;
   highestStars: number;
   settings: { musicOn: boolean; sfxOn: boolean; };
+  unlockedBuildings: string[];
   currentRunData: CurrentRunData | null;
 }
 
@@ -42,6 +43,7 @@ export class GameState {
     winCount: 0,
     highestStars: 0,
     settings: { musicOn: true, sfxOn: true },
+    unlockedBuildings: ['Bakery', 'Office', 'Park'],
     currentRunData: null,
   };
 
@@ -88,8 +90,9 @@ export class GameState {
   public incrementWinCount(): void { this.state.winCount += 1; this.broadcast(); }
   public updateHighestStars(stars: number): void { if (stars > this.state.highestStars) { this.state.highestStars = stars; this.broadcast(); } }
   public updateSettings(patch: Partial<{ musicOn: boolean; sfxOn: boolean; }>): void { this.state.settings = { ...this.state.settings, ...patch }; this.broadcast(); }
+  public unlockBuilding(buildingId: string): void { if (!this.state.unlockedBuildings.includes(buildingId)) { this.state.unlockedBuildings.push(buildingId); this.broadcast(); } }
 
-  public importProgression(data: { playerGold: number; inspiration: number; highestStars: number; unlockedRules: string[]; seenEvents: string[]; totalRuns: number; totalWins: number; settings: { musicOn: boolean; sfxOn: boolean; }; }): void {
+  public importProgression(data: { playerGold: number; inspiration: number; highestStars: number; unlockedRules: string[]; seenEvents: string[]; totalRuns: number; totalWins: number; settings: { musicOn: boolean; sfxOn: boolean; }; unlockedBuildings: string[]; }): void {
     this.state.gold = Math.max(0, data.playerGold);
     this.state.inspiration = Math.max(0, data.inspiration);
     this.state.highestStars = Math.max(0, data.highestStars);
@@ -98,10 +101,11 @@ export class GameState {
     this.state.runCount = Math.max(0, data.totalRuns);
     this.state.winCount = Math.max(0, data.totalWins);
     this.state.settings = { ...data.settings };
+    this.state.unlockedBuildings = [...new Set(data.unlockedBuildings)];
     this.broadcast();
   }
 
-  public exportProgression(): { playerGold: number; inspiration: number; highestStars: number; unlockedRules: string[]; seenEvents: string[]; totalRuns: number; totalWins: number; settings: { musicOn: boolean; sfxOn: boolean; }; } {
+  public exportProgression(): { playerGold: number; inspiration: number; highestStars: number; unlockedRules: string[]; seenEvents: string[]; totalRuns: number; totalWins: number; settings: { musicOn: boolean; sfxOn: boolean; }; unlockedBuildings: string[]; } {
     return {
       playerGold: this.state.gold,
       inspiration: this.state.inspiration,
@@ -111,6 +115,7 @@ export class GameState {
       totalRuns: this.state.runCount,
       totalWins: this.state.winCount,
       settings: { ...this.state.settings },
+      unlockedBuildings: [...this.state.unlockedBuildings],
     };
   }
 
