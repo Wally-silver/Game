@@ -1,0 +1,484 @@
+[
+  {
+    "id": "r001",
+    "name": "今天所有人必须快步走",
+    "desc": "镇广播要求全员快步，效率上升但情绪起伏更大。",
+    "category": "tempo",
+    "risk_score": 6,
+    "fun_score": 8,
+    "tags": [
+      "fast_walk",
+      "speed"
+    ],
+    "effects": [
+      {
+        "target": "resident_speed",
+        "type": "mul",
+        "value": 1.2
+      },
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": -1
+      }
+    ]
+  },
+  {
+    "id": "r002",
+    "name": "办公室今天禁止抱怨",
+    "desc": "抱怨被记分，秩序更稳但快乐略降。",
+    "category": "discipline",
+    "risk_score": 5,
+    "fun_score": 6,
+    "tags": [
+      "no_complain",
+      "order"
+    ],
+    "effects": [
+      {
+        "target": "order_change",
+        "type": "add",
+        "value": 2
+      },
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": -1
+      }
+    ]
+  },
+  {
+    "id": "r003",
+    "name": "公园必须全天开放",
+    "desc": "公园热闹提升快乐，金币效率稍降。",
+    "category": "public",
+    "risk_score": 4,
+    "fun_score": 7,
+    "tags": [
+      "park_open",
+      "joy"
+    ],
+    "effects": [
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": 2
+      },
+      {
+        "target": "gold_gain",
+        "type": "mul",
+        "value": 0.95
+      }
+    ]
+  },
+  {
+    "id": "r004",
+    "name": "面包统一半价",
+    "desc": "居民心情变好，金币收益略降。",
+    "category": "economy",
+    "risk_score": 6,
+    "fun_score": 7,
+    "tags": [
+      "bread_half_price",
+      "market"
+    ],
+    "effects": [
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": 2
+      },
+      {
+        "target": "gold_gain",
+        "type": "mul",
+        "value": 0.9
+      }
+    ]
+  },
+  {
+    "id": "r005",
+    "name": "赞美同事日",
+    "desc": "受到赞美的居民更卖力。",
+    "category": "social",
+    "risk_score": 4,
+    "fun_score": 8,
+    "tags": [
+      "praise_day",
+      "positive_event"
+    ],
+    "effects": [
+      {
+        "target": "resident_speed",
+        "type": "mul",
+        "value": 1.1
+      },
+      {
+        "target": "building_output",
+        "type": "mul",
+        "value": 1.08
+      }
+    ]
+  },
+  {
+    "id": "r006",
+    "name": "影子先下班条例",
+    "desc": "影子提前离岗，本体也会分心。",
+    "category": "weird",
+    "risk_score": 8,
+    "fun_score": 9,
+    "tags": [
+      "shadow",
+      "risk_up"
+    ],
+    "effects": [
+      {
+        "target": "resident_speed",
+        "type": "mul",
+        "value": 1.08
+      },
+      {
+        "target": "order_change",
+        "type": "add",
+        "value": -3
+      },
+      {
+        "target": "building_output",
+        "type": "mul",
+        "value": 1.1
+      }
+    ]
+  },
+  {
+    "id": "r007",
+    "name": "累的人更容易出错",
+    "desc": "疲劳居民会拉低整体稳定性。",
+    "category": "fatigue",
+    "risk_score": 7,
+    "fun_score": 7,
+    "tags": [
+      "tired_risk",
+      "abnormal"
+    ],
+    "effects": [
+      {
+        "target": "order_change",
+        "type": "add",
+        "value": -2
+      },
+      {
+        "target": "building_output",
+        "type": "mul",
+        "value": 0.95
+      }
+    ]
+  },
+  {
+    "id": "r008",
+    "name": "心情好的人更卖力",
+    "desc": "情绪高涨时产出显著提升。",
+    "category": "mood",
+    "risk_score": 4,
+    "fun_score": 8,
+    "tags": [
+      "happy_boost",
+      "gold"
+    ],
+    "effects": [
+      {
+        "target": "building_output",
+        "type": "mul",
+        "value": 1.08
+      },
+      {
+        "target": "gold_gain",
+        "type": "mul",
+        "value": 1.06
+      }
+    ]
+  },
+  {
+    "id": "r009",
+    "name": "迟到冲刺补偿",
+    "desc": "迟到者会狂奔赶工，但更混乱。",
+    "category": "tempo",
+    "risk_score": 7,
+    "fun_score": 8,
+    "tags": [
+      "late_sprint",
+      "chaos"
+    ],
+    "effects": [
+      {
+        "target": "resident_speed",
+        "type": "mul",
+        "value": 1.3
+      },
+      {
+        "target": "order_change",
+        "type": "add",
+        "value": -3
+      },
+      {
+        "target": "gold_gain",
+        "type": "mul",
+        "value": 1.08
+      }
+    ]
+  },
+  {
+    "id": "r010",
+    "name": "公园恢复翻倍",
+    "desc": "休闲设施安抚效果翻倍。",
+    "category": "public",
+    "risk_score": 2,
+    "fun_score": 7,
+    "tags": [
+      "park_heal",
+      "stabilize"
+    ],
+    "effects": [
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "id": "r011",
+    "name": "夜间灯火通明",
+    "desc": "夜班效率提高，居民更疲惫。",
+    "category": "night",
+    "risk_score": 6,
+    "fun_score": 7,
+    "tags": [
+      "night_shift"
+    ],
+    "effects": [
+      {
+        "target": "building_output",
+        "type": "mul",
+        "value": 1.15
+      },
+      {
+        "target": "resident_mood",
+        "type": "add",
+        "value": -2
+      }
+    ]
+  },
+  {
+    "id": "r012",
+    "name": "金币必须当天花一点",
+    "desc": "流通提高士气，收益略有波动。",
+    "category": "economy",
+    "risk_score": 5,
+    "fun_score": 6,
+    "tags": [
+      "cashflow"
+    ],
+    "effects": [
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": 1
+      },
+      {
+        "target": "gold_gain",
+        "type": "mul",
+        "value": 1.05
+      }
+    ]
+  },
+  {
+    "id": "r013",
+    "name": "每小时一次掌声",
+    "desc": "秩序与快乐同步小幅上升。",
+    "category": "social",
+    "risk_score": 3,
+    "fun_score": 6,
+    "tags": [
+      "applause"
+    ],
+    "effects": [
+      {
+        "target": "order_change",
+        "type": "add",
+        "value": 1
+      },
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "r014",
+    "name": "便利店免排队承诺",
+    "desc": "服务效率提高，居民脚步更快。",
+    "category": "service",
+    "risk_score": 4,
+    "fun_score": 7,
+    "tags": [
+      "queue_free"
+    ],
+    "effects": [
+      {
+        "target": "resident_speed",
+        "type": "mul",
+        "value": 1.1
+      },
+      {
+        "target": "building_output",
+        "type": "mul",
+        "value": 1.05
+      }
+    ]
+  },
+  {
+    "id": "r015",
+    "name": "修理铺优先工单",
+    "desc": "维修相关工作更稳，其他区域稍慢。",
+    "category": "industry",
+    "risk_score": 4,
+    "fun_score": 6,
+    "tags": [
+      "repair_focus"
+    ],
+    "effects": [
+      {
+        "target": "order_change",
+        "type": "add",
+        "value": 1
+      },
+      {
+        "target": "gold_gain",
+        "type": "mul",
+        "value": 1.03
+      }
+    ]
+  },
+  {
+    "id": "r016",
+    "name": "花店闻香工作法",
+    "desc": "花香改善情绪但节奏放慢。",
+    "category": "mood",
+    "risk_score": 2,
+    "fun_score": 8,
+    "tags": [
+      "flower_aroma"
+    ],
+    "effects": [
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": 2
+      },
+      {
+        "target": "resident_speed",
+        "type": "mul",
+        "value": 0.95
+      }
+    ]
+  },
+  {
+    "id": "r017",
+    "name": "邮局今日急件潮",
+    "desc": "整体速度提升，风险上扬。",
+    "category": "service",
+    "risk_score": 7,
+    "fun_score": 8,
+    "tags": [
+      "post_rush",
+      "risk_up"
+    ],
+    "effects": [
+      {
+        "target": "resident_speed",
+        "type": "mul",
+        "value": 1.2
+      },
+      {
+        "target": "order_change",
+        "type": "add",
+        "value": -1
+      }
+    ]
+  },
+  {
+    "id": "r018",
+    "name": "午后十分钟静默",
+    "desc": "抱怨减少，产出略降。",
+    "category": "discipline",
+    "risk_score": 3,
+    "fun_score": 5,
+    "tags": [
+      "quiet_time"
+    ],
+    "effects": [
+      {
+        "target": "order_change",
+        "type": "add",
+        "value": 3
+      },
+      {
+        "target": "building_output",
+        "type": "mul",
+        "value": 0.95
+      },
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": "r019",
+    "name": "全镇微笑挑战",
+    "desc": "快乐显著提高，金币稳步上涨。",
+    "category": "festival",
+    "risk_score": 3,
+    "fun_score": 9,
+    "tags": [
+      "smile_day",
+      "positive_event"
+    ],
+    "effects": [
+      {
+        "target": "joy_change",
+        "type": "add",
+        "value": 3
+      },
+      {
+        "target": "gold_gain",
+        "type": "mul",
+        "value": 1.08
+      }
+    ]
+  },
+  {
+    "id": "r020",
+    "name": "异常上报从重从快",
+    "desc": "风险暴露更快但可控。",
+    "category": "safety",
+    "risk_score": 5,
+    "fun_score": 6,
+    "tags": [
+      "abnormal_watch"
+    ],
+    "effects": [
+      {
+        "target": "order_change",
+        "type": "add",
+        "value": 1
+      },
+      {
+        "target": "resident_mood",
+        "type": "add",
+        "value": -1
+      }
+    ]
+  }
+]

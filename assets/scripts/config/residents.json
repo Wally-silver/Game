@@ -1,0 +1,74 @@
+[
+  {
+    "id": "resident_001",
+    "name": "阿面",
+    "profession": "baker",
+    "mood": 62,
+    "energy": 88,
+    "currentBuilding": "bakery",
+    "currentState": "normal"
+  },
+  {
+    "id": "resident_002",
+    "name": "小赵",
+    "profession": "clerk",
+    "mood": 58,
+    "energy": 80,
+    "currentBuilding": "office",
+    "currentState": "normal"
+  },
+  {
+    "id": "resident_003",
+    "name": "圆圆",
+    "profession": "gardener",
+    "mood": 66,
+    "energy": 85,
+    "currentBuilding": "park",
+    "currentState": "normal"
+  },
+  {
+    "id": "resident_004",
+    "name": "胖达",
+    "profession": "assistant",
+    "mood": 54,
+    "energy": 82,
+    "currentBuilding": "office",
+    "currentState": "normal"
+  },
+  {
+    "id": "resident_005",
+    "name": "阿橘",
+    "profession": "vendor",
+    "mood": 60,
+    "energy": 84,
+    "currentBuilding": "bakery",
+    "currentState": "normal"
+  },
+  {
+    "id": "res_06",
+    "name": "林邮差",
+    "profession": "邮递员",
+    "mood": 62,
+    "energy": 78,
+    "currentBuilding": "PostOffice",
+    "currentState": "normal"
+  },
+  {
+    "id": "res_07",
+    "name": "顾修理",
+    "profession": "维修师",
+    "mood": 58,
+    "energy": 82,
+    "currentBuilding": "RepairShop",
+    "currentState": "normal"
+  },
+  {
+    "id": "res_08",
+    "name": "周店长",
+    "profession": "店员",
+    "mood": 70,
+    "energy": 74,
+    "currentBuilding": "ConvenienceStore",
+    "currentState": "normal"
+  }
+]
