@@ -1,0 +1,10 @@
+{
+  "name": "Result",
+  "description": "Minimal runtime scene entry. Mount ResultSceneController; controller ensures ResultReportView and binds report.",
+  "ui": {
+    "runtime_build": true,
+    "controller": "ResultSceneController",
+    "view": "ResultReportView",
+    "actions": ["back_home", "retry_battle"]
+  }
+}
