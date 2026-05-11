@@ -12,6 +12,7 @@ export class LaunchView extends Component {
   public statusLabel: Label | null = null;
 
   protected async start(): Promise<void> {
+    console.log('[LaunchView] start');
     if (this.statusLabel) {
       this.statusLabel.string = '初始化中...';
     }
@@ -22,9 +23,11 @@ export class LaunchView extends Component {
     }
 
     await App.instance?.bootstrap();
+    console.log('[LaunchView] bootstrap completed');
 
     if (this.statusLabel) {
       this.statusLabel.string = '初始化完成';
     }
+    console.log('[LaunchView] go home');
   }
 }

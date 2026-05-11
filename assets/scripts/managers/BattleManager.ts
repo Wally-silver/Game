@@ -146,7 +146,7 @@ export class BattleManager {
 
     if (dirtyResource || this.runtime.timer !== (this.lastTopState?.timer ?? -1)) {
       this.emitResourceIfChanged();
-      console.log(`[BattleManager] tick: timer=${Math.ceil(this.runtime.timer)} order=${Math.round(this.runtime.order)} joy=${Math.round(this.runtime.joy)} gold=${Math.round(this.runtime.gold)}`);
+      console.log(`[BattleManager] tick timer=${Math.ceil(this.runtime.timer)} order=${Math.round(this.runtime.order)} joy=${Math.round(this.runtime.joy)} gold=${Math.round(this.runtime.gold)}`);
     }
     if (dirtyBuilding) {
       this.emitBuildingsIfChanged();

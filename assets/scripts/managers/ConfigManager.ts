@@ -28,11 +28,12 @@ export class ConfigManager {
       this.cache[CONFIG_KEY.REPORT_TITLES] = reportTitles as ConfigRecord[];
       this.applyFallbacks();
       this.validateLoadedTables();
-      Logger.info('ConfigManager loaded all local tables.', this.getConfigSummary());
+      Logger.info('[ConfigManager] config loaded from json', this.getConfigSummary());
     } catch (error) {
-      Logger.error('ConfigManager load failed.', error);
+      Logger.error('[ConfigManager] config load failed, using fallback config', error);
+      this.applyFallbacks(true);
+      this.validateLoadedTables();
       this.eventBus.emit(EVENT_NAME.CONFIG_LOAD_FAILED, error as Error);
-      throw error;
     }
   }
 
@@ -72,13 +73,41 @@ export class ConfigManager {
     });
   }
 
-  private applyFallbacks(): void {
-    if (!this.cache[CONFIG_KEY.RULES]?.length) {
+  private applyFallbacks(forceAll = false): void {
+    if (forceAll || !this.cache[CONFIG_KEY.RULES]?.length) {
       Logger.error('[ConfigManager] rules missing, injecting fallback rules');
       this.cache[CONFIG_KEY.RULES] = [
         { id: 'fallback_rule_1', name: '稳妥经营', desc: '基础稳态', category: 'balance', risk_score: 3, fun_score: 3, tags: ['safe'], effects: [] },
         { id: 'fallback_rule_2', name: '拼命冲刺', desc: '收益更高风险更高', category: 'rush', risk_score: 8, fun_score: 6, tags: ['rush'], effects: [{ target: 'gold_gain', type: 'mul', value: 1.2 }] },
         { id: 'fallback_rule_3', name: '先稳后快', desc: '秩序优先', category: 'safe', risk_score: 4, fun_score: 4, tags: ['safe'], effects: [{ target: 'order_change', type: 'add', value: 1 }] },
+      ];
+    }
+    if (forceAll || !this.cache[CONFIG_KEY.BUILDINGS]?.length) {
+      this.cache[CONFIG_KEY.BUILDINGS] = [
+        { id: 'Bakery', name: '面包坊', worker_need: 2, base_output: 6, joy_effect: 1, order_effect: 0, risk_factor: 1.1, pressure_limit: 72, display_order: 1 },
+        { id: 'Office', name: '事务所', worker_need: 3, base_output: 9, joy_effect: -1, order_effect: 1, risk_factor: 1.2, pressure_limit: 70, display_order: 2 },
+        { id: 'Park', name: '公园', worker_need: 2, base_output: 4, joy_effect: 2, order_effect: 0, risk_factor: 1.0, pressure_limit: 75, display_order: 3 },
+      ];
+    }
+    if (forceAll || !this.cache[CONFIG_KEY.EVENTS]?.length) {
+      this.cache[CONFIG_KEY.EVENTS] = [
+        { id: 'evt_1', name: '集市热潮', desc: '人流增加，金币提升', chance: 0.35, cooldown: 6, effect_gold: 10, effect_joy: 1 },
+        { id: 'evt_2', name: '加班抗议', desc: '过劳导致快乐下降', chance: 0.25, cooldown: 7, trigger_building_state: 'overtime', effect_joy: -4, effect_order: -2 },
+        { id: 'evt_3', name: '街道巡查', desc: '秩序回升', chance: 0.2, cooldown: 8, effect_order: 5 },
+      ];
+    }
+    if (forceAll || !this.cache[CONFIG_KEY.RESIDENTS]?.length) {
+      this.cache[CONFIG_KEY.RESIDENTS] = [
+        { id: 'res_1', name: '阿木', mood: 60, energy: 80 },
+        { id: 'res_2', name: '小禾', mood: 55, energy: 75 },
+        { id: 'res_3', name: '老周', mood: 58, energy: 78 },
+      ];
+    }
+    if (forceAll || !this.cache[CONFIG_KEY.REPORT_TITLES]?.length) {
+      this.cache[CONFIG_KEY.REPORT_TITLES] = [
+        { id: 'rp_1', title: '稳住基本盘' },
+        { id: 'rp_2', title: '惊险冲线' },
+        { id: 'rp_3', title: '今日小镇纪要' },
       ];
     }
   }

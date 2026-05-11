@@ -110,6 +110,9 @@ export class BattleHUD extends Component {
 
   private refreshBuildings(snapshot: BattleRuntimeState): void {
     if (!this.buildingListRoot || !this.buildingItemTemplate) return;
+    if (snapshot.buildings.length === 0) {
+      console.error('[BattleHUD] no buildings to render');
+    }
     const used = new Set<string>();
     snapshot.buildings.forEach((b) => {
       let item = this.buildingItems.get(b.id);
