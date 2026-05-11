@@ -44,6 +44,7 @@ export class SceneRouter {
     });
 
     this.eventBus.emit(EVENT_NAME.SCENE_LOADING, { sceneName, loading: false });
+    console.log(`[SceneRouter] loaded scene: ${sceneName}`);
     this.hooks?.afterLoad?.(sceneName);
   }
 }
