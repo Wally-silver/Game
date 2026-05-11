@@ -26,6 +26,7 @@ export class ConfigManager {
       this.cache[CONFIG_KEY.RESIDENTS] = residents as ConfigRecord[];
       this.cache[CONFIG_KEY.EVENTS] = events as ConfigRecord[];
       this.cache[CONFIG_KEY.REPORT_TITLES] = reportTitles as ConfigRecord[];
+      this.validateLoadedTables();
       Logger.info('ConfigManager loaded all local tables.', this.getConfigSummary());
     } catch (error) {
       Logger.error('ConfigManager load failed.', error);
@@ -52,5 +53,21 @@ export class ConfigManager {
       acc[key] = this.cache[key].length;
       return acc;
     }, {});
+  }
+
+  private validateLoadedTables(): void {
+    Object.entries(this.cache).forEach(([key, rows]) => {
+      const ids = new Set<string>();
+      rows.forEach((row, idx) => {
+        if (!row.id || typeof row.id !== 'string') {
+          Logger.error(`Config ${key} row#${idx} missing id`, row);
+          return;
+        }
+        if (ids.has(row.id)) {
+          Logger.error(`Config ${key} duplicated id: ${row.id}`);
+        }
+        ids.add(row.id);
+      });
+    });
   }
 }

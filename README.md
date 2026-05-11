@@ -114,3 +114,16 @@ Launch -> Home -> Battle -> Result
   - 最高星级>=4：解锁 PostOffice
 - 奖励金币公式收紧：降低 finalGold 转换比例，避免 progression 经济膨胀。
 - SceneController 继续向显式依赖持有收敛，HomeView 维持 no-op。
+
+
+## 16) 稳定性最终收口与调试入口
+- App.bootstrap 幂等：`isBootstrapping/isBootstrapped`，重复调用安全返回。
+- Battle 结算幂等：`hasSettled` 防重复奖励、重复统计、重复派发事件。
+- progression 自动保存仍保留，但加了去重写入，避免无意义重复保存。
+- ConfigManager 增加最小配置校验（缺失 id / 重复 id）。
+- BattleSceneController 提供轻量 debug 方法：
+  - 强制结算
+  - 调整 order
+  - 调整 joy
+  - 调整 gold
+  - 打印建筑状态

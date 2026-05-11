@@ -199,6 +199,14 @@ export class BattleManager {
   public resumeBattle(): void { this.paused = false; }
   public stopBattle(): void { this.runtime.running = false; this.paused = false; }
 
+  public debugAdjustTopState(patch: Partial<{ order: number; joy: number; gold: number }>): void {
+    if (typeof patch.order === "number") this.runtime.order += patch.order;
+    if (typeof patch.joy === "number") this.runtime.joy += patch.joy;
+    if (typeof patch.gold === "number") this.runtime.gold += patch.gold;
+    this.emitResourceIfChanged();
+  }
+  public debugForceEnd(success: boolean): void { if (this.hasSettled) return; this.runtime.timer = 0; this.endBattle(success); }
+
   public getRuntimeState(): BattleRuntimeState { return JSON.parse(JSON.stringify(this.runtime)) as BattleRuntimeState; }
   public getLastReport(): ReportModel | null { return this.lastReport ? JSON.parse(JSON.stringify(this.lastReport)) : null; }
   public getSettlementData(): BattleSettlementData | null { return this.settlementData ? JSON.parse(JSON.stringify(this.settlementData)) : null; }

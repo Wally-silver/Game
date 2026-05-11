@@ -43,6 +43,7 @@ export class App extends Component {
   private isBootstrapping = false;
   private isBootstrapped = false;
   private stateSaveListenerBound = false;
+  private lastSavedProgression = '';
 
   public getLatestBattleReport(): ReportModel | null {
     return this.latestBattleReport ? JSON.parse(JSON.stringify(this.latestBattleReport)) : null;
@@ -76,6 +77,7 @@ export class App extends Component {
   public async bootstrap(): Promise<void> {
     if (this.isBootstrapped || this.isBootstrapping) return;
     this.isBootstrapping = true;
+    try {
     const defaultSave = {
       version: SaveManager.CURRENT_VERSION,
       playerGold: this.gameState.getSnapshot().gold,
@@ -98,6 +100,9 @@ export class App extends Component {
       this.stateSaveListenerBound = true;
       this.eventBus.on(EVENT_NAME.GAME_STATE_CHANGED, () => {
         const data = this.gameState.exportProgression();
+        const raw = JSON.stringify(data);
+        if (raw === this.lastSavedProgression) return;
+        this.lastSavedProgression = raw;
         this.saveManager.saveProgression({ version: SaveManager.CURRENT_VERSION, ...data });
       });
     }
@@ -107,6 +112,9 @@ export class App extends Component {
     }
     this.isBootstrapped = true;
     this.isBootstrapping = false;
+    } finally {
+      this.isBootstrapping = false;
+    }
   }
 
   protected onDestroy(): void {

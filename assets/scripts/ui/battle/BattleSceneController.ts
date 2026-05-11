@@ -60,6 +60,17 @@ export class BattleSceneController extends Component {
     this.services?.battleManager.stopBattle();
   }
 
+  // debug helpers
+  public debugForceEnd(success = true): void {
+    if (!this.services) return;
+    this.hud?.appendEventLog(`【DEBUG】强制结算 success=${success}`);
+    this.services.battleManager.debugForceEnd(success);
+  }
+  public debugAdjustOrder(delta: number): void { if (!this.services) return; this.services.battleManager.debugAdjustTopState({ order: delta }); this.hud?.appendEventLog(`【DEBUG】order ${delta > 0 ? '+' : ''}${delta}`); }
+  public debugAdjustJoy(delta: number): void { if (!this.services) return; this.services.battleManager.debugAdjustTopState({ joy: delta }); this.hud?.appendEventLog(`【DEBUG】joy ${delta > 0 ? '+' : ''}${delta}`); }
+  public debugAdjustGold(delta: number): void { if (!this.services) return; this.services.battleManager.debugAdjustTopState({ gold: delta }); this.hud?.appendEventLog(`【DEBUG】gold ${delta > 0 ? '+' : ''}${delta}`); }
+  public debugPrintBuildings(): void { const s = this.services?.battleManager.getRuntimeState(); if (!s) return; this.hud?.appendEventLog(`【DEBUG】buildings=${JSON.stringify(s.buildings.map((b) => ({ id: b.id, st: b.state, workers: b.current_workers, out: b.current_output })))}`); }
+
   private ensureRuntimeUI(): void {
     if (!this.hud) {
       const hudNode = new Node('BattleHUDRoot');
