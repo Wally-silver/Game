@@ -14,6 +14,11 @@ export class ResidentSystem {
 
   public initialize(buildings: BuildingRuntime[]): ResidentModel[] {
     const templates = this.configManager.getAll<ResidentModel>(CONFIG_KEY.RESIDENTS).slice(0, 8);
+    if (buildings.length === 0) {
+      console.error('[ResidentSystem] no buildings available, cannot assign residents');
+      this.residents = templates.map((item) => ({ ...item, currentBuilding: 'Unknown', currentState: 'normal' as ResidentState }));
+      return this.getResidents();
+    }
     this.residents = templates.map((item, index) => ({
       ...item,
       currentBuilding: buildings[index % buildings.length].id,

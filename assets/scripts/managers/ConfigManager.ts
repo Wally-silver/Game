@@ -26,6 +26,7 @@ export class ConfigManager {
       this.cache[CONFIG_KEY.RESIDENTS] = residents as ConfigRecord[];
       this.cache[CONFIG_KEY.EVENTS] = events as ConfigRecord[];
       this.cache[CONFIG_KEY.REPORT_TITLES] = reportTitles as ConfigRecord[];
+      this.applyFallbacks();
       this.validateLoadedTables();
       Logger.info('ConfigManager loaded all local tables.', this.getConfigSummary());
     } catch (error) {
@@ -69,5 +70,16 @@ export class ConfigManager {
         ids.add(row.id);
       });
     });
+  }
+
+  private applyFallbacks(): void {
+    if (!this.cache[CONFIG_KEY.RULES]?.length) {
+      Logger.error('[ConfigManager] rules missing, injecting fallback rules');
+      this.cache[CONFIG_KEY.RULES] = [
+        { id: 'fallback_rule_1', name: '稳妥经营', desc: '基础稳态', category: 'balance', risk_score: 3, fun_score: 3, tags: ['safe'], effects: [] },
+        { id: 'fallback_rule_2', name: '拼命冲刺', desc: '收益更高风险更高', category: 'rush', risk_score: 8, fun_score: 6, tags: ['rush'], effects: [{ target: 'gold_gain', type: 'mul', value: 1.2 }] },
+        { id: 'fallback_rule_3', name: '先稳后快', desc: '秩序优先', category: 'safe', risk_score: 4, fun_score: 4, tags: ['safe'], effects: [{ target: 'order_change', type: 'add', value: 1 }] },
+      ];
+    }
   }
 }

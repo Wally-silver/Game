@@ -79,11 +79,23 @@ export class BattleManager {
     }
     const unlocked = this.gameState.getSnapshot().unlockedRules;
     this.candidates = unlocked.length > 0 ? this.ruleSystem.generateCandidatesFromPool(unlocked, 3) : this.ruleSystem.generateCandidates(3);
+    if (this.candidates.length < 3) {
+      console.error(`[BattleManager] rule candidates not enough (${this.candidates.length}), using fallback pool`);
+      this.candidates = this.ruleSystem.generateCandidates(3);
+    }
     this.runtime.buildings = this.buildingSystem.getRuntimeBuildings();
     this.runtime.residents = this.residentSystem.getResidents();
 
     this.gameState.setCurrentRunData({ selectedRuleId: null, selectedRuleName: '未选择', order: this.runtime.order, joy: this.runtime.joy, gold: this.runtime.gold, timer: this.runtime.timer, goalProgress: this.runtime.goalProgress, started: false, ended: false });
 
+    console.log('[BattleManager] new battle initialized', {
+      timer: this.runtime.timer,
+      order: this.runtime.order,
+      joy: this.runtime.joy,
+      gold: this.runtime.gold,
+      buildings: this.runtime.buildings.length,
+      candidates: this.candidates.length,
+    });
     this.emitResourceIfChanged();
     this.emitBuildingsIfChanged();
     return this.candidates;
@@ -97,6 +109,7 @@ export class BattleManager {
     this.runtime.running = true;
     this.gameState.patchCurrentRunData({ selectedRuleId: rule.id, selectedRuleName: rule.name, started: true });
     this.eventBus.emit(EVENT_NAME.BATTLE_RULE_SELECTED, { ruleId: rule.id, ruleName: rule.name, ruleDesc: rule.desc, risk: rule.risk_score, fun: rule.fun_score });
+    console.log(`[BattleManager] battle started with rule: ${rule.name}`);
     return true;
   }
 
@@ -133,6 +146,7 @@ export class BattleManager {
 
     if (dirtyResource || this.runtime.timer !== (this.lastTopState?.timer ?? -1)) {
       this.emitResourceIfChanged();
+      console.log(`[BattleManager] tick: timer=${Math.ceil(this.runtime.timer)} order=${Math.round(this.runtime.order)} joy=${Math.round(this.runtime.joy)} gold=${Math.round(this.runtime.gold)}`);
     }
     if (dirtyBuilding) {
       this.emitBuildingsIfChanged();
@@ -298,6 +312,7 @@ export class BattleManager {
 
     this.eventBus.emit(EVENT_NAME.BATTLE_SETTLEMENT_READY, this.lastReport);
     this.eventBus.emit(EVENT_NAME.BATTLE_ENDED, this.lastReport);
+    console.log('[BattleManager] battle ended', { success, rewardGold, goal: this.runtime.goalProgress });
   }
 
   private emitResourceIfChanged(): void {

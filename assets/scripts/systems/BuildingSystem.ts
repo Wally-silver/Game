@@ -14,6 +14,10 @@ export class BuildingSystem {
   public initialize(unlockedBuildingIds: string[]): BuildingRuntime[] {
     const all = this.configManager.getAll<BuildingModel>(CONFIG_KEY.BUILDINGS).sort((a,b)=>(a.display_order??999)-(b.display_order??999));
     this.buildings = all.filter((b) => unlockedBuildingIds.includes(b.id));
+    if (this.buildings.length === 0) {
+      this.buildings = all.slice(0, 3);
+      console.error('[BuildingSystem] unlocked buildings empty, using fallback buildings');
+    }
     this.runtime.clear();
     this.buildings.forEach((item) => {
       this.runtime.set(item.id, { id:item.id,name:item.name,state:'normal',paused:false,overtime:false,current_output:0,current_workers:0,worker_need:item.worker_need,pressure:0,risk:0 });

@@ -29,6 +29,7 @@ export class SceneRouter {
   }
 
   public async load(sceneName: string): Promise<void> {
+    console.log(`[SceneRouter] loading scene: ${sceneName}`);
     this.hooks?.beforeLoad?.(sceneName);
     this.eventBus.emit(EVENT_NAME.SCENE_LOADING, { sceneName, loading: true });
 

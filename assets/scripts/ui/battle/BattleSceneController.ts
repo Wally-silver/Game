@@ -20,6 +20,7 @@ export class BattleSceneController extends Component {
   }
 
   protected start(): void {
+    console.log('[BattleSceneController] scene started');
     this.services = App.getServices();
     this.unsubscribers.forEach((off) => off());
     this.unsubscribers = [];
@@ -39,15 +40,26 @@ export class BattleSceneController extends Component {
 
     this.bindEvents();
 
+    console.log('[BattleSceneController] setupNewBattle');
     const candidates = app.battleManager.setupNewBattle();
     this.hud.refreshFromRuntimeState(app.battleManager.getRuntimeState());
     this.hud.setHint('请选择规则开始战局');
+    console.log('[BattleSceneController] show rule popup');
 
     this.rulePopup?.open(candidates, (ruleId) => {
       const ok = app.battleManager.selectRuleAndStart(ruleId);
       this.hud?.setHint(ok ? '镇规生效，全镇请立刻执行！' : '规则选择失败');
       this.hud?.refreshFromRuntimeState(app.battleManager.getRuntimeState());
     });
+
+    if (candidates.length === 0) {
+      this.hud.setHint('规则加载失败，使用兜底规则自动开局');
+      const fallback = app.configManager.getAll<any>('rules')[0];
+      if (fallback?.id) {
+        app.battleManager.selectRuleAndStart(fallback.id);
+        this.hud.refreshFromRuntimeState(app.battleManager.getRuntimeState());
+      }
+    }
   }
 
   protected update(dt: number): void { if (this.services) this.services.battleManager.update(dt); }

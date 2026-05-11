@@ -26,7 +26,10 @@ export class HomeSceneController extends Component {
     this.inspirationLabel = SceneUIFactory.ensureLabel(col, 'Inspiration', '灵感: 0');
 
     const start = SceneUIFactory.ensureButton(col, 'StartBattleBtn', '开始战局');
-    SceneUIFactory.bindSingleClick(start.node, () => void sceneRouter.goBattle());
+    SceneUIFactory.bindSingleClick(start.node, () => {
+      console.log('[HomeSceneController] start battle clicked');
+      void sceneRouter.goBattle();
+    });
 
     const result = SceneUIFactory.ensureButton(col, 'DebugResultBtn', '查看结果页(调试)');
     SceneUIFactory.bindSingleClick(result.node, () => void sceneRouter.goResult());

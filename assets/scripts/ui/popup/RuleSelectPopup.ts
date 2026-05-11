@@ -23,7 +23,9 @@ export class RuleSelectPopup extends Component {
     this.onPicked = onPicked;
     (this.root ?? this.node).active = true;
     this.titleLabel && (this.titleLabel.string = '请选择今日生效镇规（3选1）');
-    this.renderCandidates(candidates);
+    const safe = this.normalizeCandidates(candidates);
+    console.log(`[RuleSelectPopup] opened with ${safe.length} rules`);
+    this.renderCandidates(safe);
   }
 
   public close(): void { (this.root ?? this.node).active = false; }
@@ -68,7 +70,19 @@ export class RuleSelectPopup extends Component {
 
   private pick(ruleId: string): void {
     if (!this.onPicked) return;
+    console.log(`[RuleSelectPopup] selected rule: ${ruleId}`);
     this.onPicked(ruleId);
     this.close();
+  }
+
+  private normalizeCandidates(candidates: RuleModel[]): RuleModel[] {
+    if (candidates.length >= 3) return candidates.slice(0, 3);
+    if (candidates.length === 0) {
+      console.error('[RuleSelectPopup] no rule candidates, popup will stay hidden');
+      return [];
+    }
+    const padded = [...candidates];
+    while (padded.length < 3) padded.push(candidates[padded.length % candidates.length]);
+    return padded;
   }
 }

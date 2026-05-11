@@ -127,6 +127,7 @@ export class BattleHUD extends Component {
       used.add(b.id);
     });
     this.buildingItems.forEach((item, id) => { if (!used.has(id)) item.node.active = false; });
+    console.log(`[BattleHUD] buildings rendered: ${used.size}`);
   }
 
   private refreshEvents(): void { if (this.eventFeedLabel) this.eventFeedLabel.string = this.eventLogs.length > 0 ? this.eventLogs.join('\n') : '暂无事件'; }
