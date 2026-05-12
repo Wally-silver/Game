@@ -25,7 +25,7 @@
     "desc": "居民在便利店门口聊开了，心情回暖。",
     "chance": 0.35,
     "cooldown": 14,
-    "building_id": "ConvenienceStore",
+    "building_id": "convenience_store",
     "effect_joy": 6,
     "effect_order": 2
   },
@@ -35,7 +35,7 @@
     "desc": "异常工单被飞快处理，秩序回升。",
     "chance": 0.3,
     "cooldown": 16,
-    "building_id": "RepairShop",
+    "building_id": "repair_shop",
     "trigger_building_state": "overloaded",
     "effect_order": 7,
     "effect_goal": 5
@@ -55,7 +55,7 @@
     "desc": "邮局急件堆到门口，局势短时混乱。",
     "chance": 0.35,
     "cooldown": 12,
-    "building_id": "PostOffice",
+    "building_id": "post_office",
     "effect_order": -7,
     "effect_gold": 6
   },

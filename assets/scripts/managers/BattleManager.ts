@@ -326,9 +326,9 @@ export class BattleManager {
     if (success) this.gameState.incrementWinCount();
 
     const snap = this.gameState.getSnapshot();
-    if (snap.runCount >= 2) this.gameState.unlockBuilding('RepairShop');
-    if (snap.winCount >= 1) this.gameState.unlockBuilding('ConvenienceStore');
-    if (snap.highestStars >= 4) this.gameState.unlockBuilding('PostOffice');
+    if (snap.runCount >= 2) this.gameState.unlockBuilding('repair_shop');
+    if (snap.winCount >= 1) this.gameState.unlockBuilding('convenience_store');
+    if (snap.highestStars >= 4) this.gameState.unlockBuilding('post_office');
 
     this.eventBus.emit(EVENT_NAME.BATTLE_SETTLEMENT_READY, this.lastReport);
     this.eventBus.emit(EVENT_NAME.BATTLE_ENDED, this.lastReport);

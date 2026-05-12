@@ -1,53 +1,25 @@
 # Weird Rule Town
 
-## 当前状态（务必先读）
+当前项目为 **Cocos Creator 3.8.8 脚本工程 + Editor 初始化工具**。
 
-**当前仓库还不是“可直接打开即运行”的完整 Cocos Creator 3.8.8 工程。**
-
-原因：
-- Cocos `.scene` 是编辑器序列化产物，组件挂载依赖资源数据库 UUID 与导入缓存。
-- 在纯文本环境中手工伪造 `Main.scene/.meta` 和脚本 `.meta` 无法保证不出现 Missing Script。
-- 为避免继续误导，本次已删除所有 placeholder 场景文件，不再假装可运行。
-
-## 入口场景
-
-- 计划入口：`assets/scenes/Main.scene`（**需要你在 Cocos Creator 3.8.8 内创建一次真实场景**）
-
-## 如何在 Cocos Creator 3.8.8 补齐真实场景
+## 一键初始化真实 Main.scene
 
 1. 用 Cocos Creator 3.8.8 打开项目根目录。
-2. 新建场景 `assets/scenes/Main.scene`。
-3. 场景中创建：`Canvas`（含 UITransform） -> 子节点 `MainRoot`（含 UITransform + Widget）。
-4. 给 `MainRoot` 挂载脚本：`assets/scripts/ui/GameMainController.ts`。
-5. 保存场景，确保自动生成并更新：
-   - `assets/scenes/Main.scene`
-   - `assets/scenes/Main.scene.meta`
-   - `assets/scripts/ui/GameMainController.ts.meta`
-6. 在 Project Settings / Build 或编辑器首页把启动场景设为 `Main.scene`。
+2. 点击菜单：**怪话小镇 / 初始化 Main 场景**。
+3. 工具会尝试自动：创建 `assets/scenes/Main.scene`、创建 Canvas、创建 MainRoot、设置基础 UI 节点并保存场景。
+4. 然后打开 `assets/scenes/Main.scene`，点击预览运行。
 
-## 运行
+默认不需要你手动创建 Canvas / MainRoot / UITransform / Widget。
 
-- 打开 `Main.scene` 后点击预览（Play）。
+> 若当前编辑器 API 环境下自动挂载 `GameMainController` 失败，唯一补救步骤：
+> 给 `MainRoot` 手动挂载 `assets/scripts/ui/GameMainController.ts`。
 
-## 黑屏排查日志
+## 初始化工具位置
 
-优先看 Console：
-- `[GameMainController] bootstrap failed`
-- `[SceneUIFactory] Canvas not found, created runtime Canvas`
-- `[BattleManager] rule candidates not enough`
+- `extensions/weird-rule-town-bootstrap/package.json`
+- `extensions/weird-rule-town-bootstrap/main.js`
 
-## 清存档（调试）
+## 调试
 
-在浏览器控制台执行：
-
-```js
-localStorage.removeItem('gh_town_progression_v1')
-```
-
-## 闭环验证（手动）
-
-1. 进入 Home，点击“开始战局”。
-2. 出现 3 选 1 规则弹窗，选择后看到“镇规生效”事件。
-3. Battle 顶部数值变化，建筑按钮可点有反馈。
-4. 达成 `goalProgress >= 100` 可提前成功结算；`order<=0` 或 `joy<=0` 失败结算；计时到 0 也可结算。
-5. Result 可返回主页与“再来一局”。
+- 清存档：`localStorage.removeItem('gh_town_progression_v1')`
+- 运行时检查日志关键字：`[RuntimeCheck]`

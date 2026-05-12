@@ -50,7 +50,7 @@
     "profession": "邮递员",
     "mood": 62,
     "energy": 78,
-    "currentBuilding": "PostOffice",
+    "currentBuilding": "post_office",
     "currentState": "normal"
   },
   {
@@ -59,7 +59,7 @@
     "profession": "维修师",
     "mood": 58,
     "energy": 82,
-    "currentBuilding": "RepairShop",
+    "currentBuilding": "repair_shop",
     "currentState": "normal"
   },
   {
@@ -68,7 +68,7 @@
     "profession": "店员",
     "mood": 70,
     "energy": 74,
-    "currentBuilding": "ConvenienceStore",
+    "currentBuilding": "convenience_store",
     "currentState": "normal"
   }
 ]

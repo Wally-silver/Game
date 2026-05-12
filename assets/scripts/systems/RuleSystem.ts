@@ -27,7 +27,9 @@ export class RuleSystem {
   }
 
   public applyRule(ruleId: string): RuleModel | null {
-    const picked = this.candidates.find((rule) => rule.id === ruleId) ?? null;
+    const picked = this.candidates.find((rule) => rule.id === ruleId)
+      ?? this.configManager.getAll<RuleModel>(CONFIG_KEY.RULES).find((rule) => rule.id === ruleId)
+      ?? null;
     this.activeRule = picked;
     return picked;
   }

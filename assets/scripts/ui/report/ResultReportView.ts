@@ -27,7 +27,20 @@ export class ResultReportView extends Component {
 
   public bindReport(report: ReportModel | null): void {
     if (!report) {
-      this.titleLabel && (this.titleLabel.string = '暂无结算数据');
+      this.ruleNameLabel && (this.ruleNameLabel.string = '今日规则：-');
+      this.titleLabel && (this.titleLabel.string = '标题：本局中断');
+      this.successLabel && (this.successLabel.string = '结果：未完成');
+      this.orderLabel && (this.orderLabel.string = '最终秩序：-');
+      this.joyLabel && (this.joyLabel.string = '最终快乐：-');
+      this.goldLabel && (this.goldLabel.string = '最终金币：-（本局奖励+0）');
+      this.eventCountLabel && (this.eventCountLabel.string = '关键事件数：-');
+      this.starsLabel && (this.starsLabel.string = '评级：★☆☆☆☆');
+      this.keyEventLabel && (this.keyEventLabel.string = '关键事件：-');
+      this.commentLabel && (this.commentLabel.string = '镇长点评：暂无结算数据，本局可能被中断');
+      this.unlockLabel && (this.unlockLabel.string = '本局未解锁新镇规');
+      this.breakdownLabel && (this.breakdownLabel.string = '拆项评分：-');
+      this.decisionLabel && (this.decisionLabel.string = '关键决策：-');
+      this.newEventLabel && (this.newEventLabel.string = '本局无新增见闻事件');
       return;
     }
     const s = report.settlement;

@@ -93,6 +93,13 @@ export class GameState {
   public unlockBuilding(buildingId: string): void { if (!this.state.unlockedBuildings.includes(buildingId)) { this.state.unlockedBuildings.push(buildingId); this.broadcast(); } }
 
   public importProgression(data: { playerGold: number; inspiration: number; highestStars: number; unlockedRules: string[]; seenEvents: string[]; totalRuns: number; totalWins: number; settings: { musicOn: boolean; sfxOn: boolean; }; unlockedBuildings: string[]; }): void {
+    const mapBuildingId = (id: string): string => ({
+      Bakery: 'bakery', Office: 'office', Park: 'park',
+      RepairShop: 'repair_shop', ConvenienceStore: 'convenience_store', PostOffice: 'post_office',
+    }[id] ?? id);
+    const validBuildings = new Set(['bakery', 'office', 'park', 'repair_shop', 'convenience_store', 'post_office']);
+    const migrated = [...new Set((data.unlockedBuildings ?? []).map(mapBuildingId).filter((id) => validBuildings.has(id)))];
+    const fallbackBuildings = ['bakery', 'office', 'park'];
     this.state.gold = Math.max(0, data.playerGold);
     this.state.inspiration = Math.max(0, data.inspiration);
     this.state.highestStars = Math.max(0, data.highestStars);
@@ -101,7 +108,7 @@ export class GameState {
     this.state.runCount = Math.max(0, data.totalRuns);
     this.state.winCount = Math.max(0, data.totalWins);
     this.state.settings = { ...data.settings };
-    this.state.unlockedBuildings = [...new Set(data.unlockedBuildings)];
+    this.state.unlockedBuildings = migrated.length > 0 ? migrated : fallbackBuildings;
     this.broadcast();
   }
 

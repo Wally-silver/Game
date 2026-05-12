@@ -1,4 +1,4 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, UITransform } from 'cc';
 import { App } from '../core/App';
 import { EVENT_NAME } from '../core/Constants';
 import { SceneUIFactory } from '../utils/SceneUIFactory';
@@ -62,6 +62,7 @@ export class GameMainController extends Component {
       this.showBattle();
     });
     console.log('[GameMainController] show home');
+    this.logRuntimeCheck('Home');
   }
 
   private showBattle(): void {
@@ -85,8 +86,8 @@ export class GameMainController extends Component {
     this.popup.ensureRuntimeNodes();
 
     this.hud.bindCallbacks({
-      onTapBuildingOvertime: (id) => { app.battleManager.toggleBuildingOvertime(id); this.hud?.appendEventLog(`【操作】${id} 加班切换`); this.hud?.refreshBuildingState(app.battleManager.getRuntimeState()); },
-      onTapBuildingPause: (id) => { app.battleManager.toggleBuildingPause(id); this.hud?.appendEventLog(`【操作】${id} 暂停切换`); this.hud?.refreshBuildingState(app.battleManager.getRuntimeState()); },
+      onTapBuildingOvertime: (id) => { const r = app.battleManager.toggleBuildingOvertime(id); this.hud?.appendEventLog(r.message); this.hud?.refreshBuildingState(app.battleManager.getRuntimeState()); },
+      onTapBuildingPause: (id) => { const r = app.battleManager.toggleBuildingPause(id); this.hud?.appendEventLog(r.message); this.hud?.refreshBuildingState(app.battleManager.getRuntimeState()); },
       onTapBuildingReassign: (id) => { const r = app.battleManager.reassignSupport(id); this.hud?.appendEventLog(r.message); this.hud?.refreshBuildingState(app.battleManager.getRuntimeState()); },
       onTapStabilize: () => { const r = app.battleManager.stabilizeTown(); this.hud?.appendEventLog(r.message); this.hud?.refreshTopState(app.battleManager.getRuntimeState()); },
       onTapBackHome: () => this.showHome(),
@@ -110,6 +111,7 @@ export class GameMainController extends Component {
     this.unsubscribers.push(app.eventBus.on<any>(EVENT_NAME.BATTLE_EVENT_TRIGGERED, (evt) => this.hud?.appendEventLog(`${evt?.name ?? '事件'} ${evt?.desc ?? ''}`)));
     this.unsubscribers.push(app.eventBus.on(EVENT_NAME.BATTLE_SETTLEMENT_READY, () => this.showResult()));
     console.log('[GameMainController] show battle');
+    this.logRuntimeCheck('Battle');
   }
 
   private showResult(): void {
@@ -129,6 +131,16 @@ export class GameMainController extends Component {
     if (this.resultView.retryButton) SceneUIFactory.bindSingleClick(this.resultView.retryButton, () => this.showBattle());
 
     console.log('[GameMainController] show result');
+    this.logRuntimeCheck('Result');
+  }
+
+  private logRuntimeCheck(page: 'Home' | 'Battle' | 'Result'): void {
+    const root = this.node;
+    const rootTrans = root.getComponent(UITransform);
+    const canvas = SceneUIFactory.ensureCanvasFor(root);
+    const canvasTrans = canvas?.getComponent(UITransform);
+    const config = App.getServices().configManager;
+    console.log(`[RuntimeCheck] page=${page} root=${root.name} rootSize=${Math.round(rootTrans?.width ?? 0)}x${Math.round(rootTrans?.height ?? 0)} canvasSize=${Math.round(canvasTrans?.width ?? 0)}x${Math.round(canvasTrans?.height ?? 0)} appReady=${!!App.instance} configReady=${config.hasConfig('rules')} rules=${config.getAll('rules').length} buildings=${config.getAll('buildings').length} events=${config.getAll('events').length} residents=${config.getAll('residents').length}`);
   }
 
   private clearFlow(): void {

@@ -42,7 +42,12 @@ export class SaveManager {
   public loadProgression(fallback: ProgressionSaveData): ProgressionSaveData {
     const raw = this.load<Partial<ProgressionSaveData> | null>(SaveManager.PROGRESSION_KEY, null);
     if (!raw) return fallback;
-    return this.migrateProgression(raw, fallback);
+    try {
+      return this.migrateProgression(raw, fallback);
+    } catch (error) {
+      console.warn('[SaveManager] progression data corrupted, fallback to default', error);
+      return fallback;
+    }
   }
 
   public saveProgression(data: ProgressionSaveData): void {
@@ -50,6 +55,11 @@ export class SaveManager {
   }
 
   private migrateProgression(raw: Partial<ProgressionSaveData>, fallback: ProgressionSaveData): ProgressionSaveData {
+    const mapBuildingId = (id: string): string => ({
+      Bakery: 'bakery', Office: 'office', Park: 'park',
+      RepairShop: 'repair_shop', ConvenienceStore: 'convenience_store', PostOffice: 'post_office',
+    }[id] ?? id);
+    const migratedBuildings = (raw.unlockedBuildings ?? fallback.unlockedBuildings).map(mapBuildingId);
     return {
       version: SaveManager.CURRENT_VERSION,
       playerGold: raw.playerGold ?? fallback.playerGold,
@@ -63,7 +73,7 @@ export class SaveManager {
         musicOn: raw.settings?.musicOn ?? fallback.settings.musicOn,
         sfxOn: raw.settings?.sfxOn ?? fallback.settings.sfxOn,
       },
-      unlockedBuildings: raw.unlockedBuildings ?? fallback.unlockedBuildings,
+      unlockedBuildings: [...new Set(migratedBuildings)],
     };
   }
 }

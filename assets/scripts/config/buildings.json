@@ -36,7 +36,7 @@
     "display_order": 3
   },
   {
-    "id": "RepairShop",
+    "id": "repair_shop",
     "name": "修理铺",
     "type": "industry",
     "base_output": 17,
@@ -48,7 +48,7 @@
     "display_order": 4
   },
   {
-    "id": "ConvenienceStore",
+    "id": "convenience_store",
     "name": "便利店",
     "type": "service",
     "base_output": 18,
@@ -60,7 +60,7 @@
     "display_order": 5
   },
   {
-    "id": "PostOffice",
+    "id": "post_office",
     "name": "邮局",
     "type": "service",
     "base_output": 21,

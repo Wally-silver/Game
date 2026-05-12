@@ -84,9 +84,9 @@ export class ConfigManager {
     }
     if (forceAll || !this.cache[CONFIG_KEY.BUILDINGS]?.length) {
       this.cache[CONFIG_KEY.BUILDINGS] = [
-        { id: 'bakery', name: '面包坊', worker_need: 2, base_output: 6, joy_effect: 1, order_effect: 0, risk_factor: 1.1, pressure_limit: 72, display_order: 1 },
-        { id: 'office', name: '事务所', worker_need: 3, base_output: 9, joy_effect: -1, order_effect: 1, risk_factor: 1.2, pressure_limit: 70, display_order: 2 },
-        { id: 'park', name: '公园', worker_need: 2, base_output: 4, joy_effect: 2, order_effect: 0, risk_factor: 1.0, pressure_limit: 75, display_order: 3 },
+        { id: 'bakery', name: '面包坊', type: 'production', worker_need: 2, base_output: 6, joy_effect: 1, order_effect: 0, risk_factor: 1.1, pressure_limit: 72, display_order: 1 },
+        { id: 'office', name: '事务所', type: 'business', worker_need: 3, base_output: 9, joy_effect: -1, order_effect: 1, risk_factor: 1.2, pressure_limit: 70, display_order: 2 },
+        { id: 'park', name: '公园', type: 'public', worker_need: 2, base_output: 4, joy_effect: 2, order_effect: 0, risk_factor: 1.0, pressure_limit: 75, display_order: 3 },
       ];
     }
     if (forceAll || !this.cache[CONFIG_KEY.EVENTS]?.length) {
@@ -98,9 +98,9 @@ export class ConfigManager {
     }
     if (forceAll || !this.cache[CONFIG_KEY.RESIDENTS]?.length) {
       this.cache[CONFIG_KEY.RESIDENTS] = [
-        { id: 'res_1', name: '阿木', mood: 60, energy: 80 },
-        { id: 'res_2', name: '小禾', mood: 55, energy: 75 },
-        { id: 'res_3', name: '老周', mood: 58, energy: 78 },
+        { id: 'res_1', name: '阿木', profession: 'baker', mood: 60, energy: 80, currentBuilding: 'bakery', currentState: 'idle' },
+        { id: 'res_2', name: '小禾', profession: 'clerk', mood: 55, energy: 75, currentBuilding: 'office', currentState: 'idle' },
+        { id: 'res_3', name: '老周', profession: 'caretaker', mood: 58, energy: 78, currentBuilding: 'park', currentState: 'idle' },
       ];
     }
     if (forceAll || !this.cache[CONFIG_KEY.REPORT_TITLES]?.length) {
