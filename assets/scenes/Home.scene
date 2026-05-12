@@ -1,0 +1,9 @@
+{
+  "name": "Home",
+  "description": "Minimal runtime scene entry. Mount HomeSceneController only; controller builds UI tree at runtime.",
+  "ui": {
+    "runtime_build": true,
+    "controller": "HomeSceneController",
+    "actions": ["start_battle", "debug_result"]
+  }
+}

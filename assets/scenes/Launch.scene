@@ -1,0 +1,7 @@
+{
+  "name": "Launch",
+  "description": "Attach LaunchView + App on root node. LaunchView calls App.bootstrap() then routes to Home.",
+  "ui": {
+    "statusLabel": "初始化状态文本"
+  }
+}

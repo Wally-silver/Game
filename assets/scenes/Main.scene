@@ -1,0 +1,8 @@
+{
+  "note": "Main scene placeholder. If Cocos cannot parse this JSON placeholder, create Main.scene in editor and attach GameMainController to MainRoot under Canvas.",
+  "entry": {
+    "scene": "Main",
+    "root": "MainRoot",
+    "component": "GameMainController"
+  }
+}

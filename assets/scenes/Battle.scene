@@ -1,0 +1,10 @@
+{
+  "name": "Battle",
+  "description": "Minimal runtime scene entry. Mount BattleSceneController; controller creates HUD + rule popup roots when missing.",
+  "ui": {
+    "runtime_build": true,
+    "controller": "BattleSceneController",
+    "hud": "BattleHUD",
+    "popup": "RuleSelectPopup"
+  }
+}
