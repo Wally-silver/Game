@@ -1,4 +1,4 @@
-import { _decorator, Component, Label } from 'cc';
+import { _decorator, Component, Label, Node, director } from 'cc';
 import { App } from './App';
 
 const { ccclass, property } = _decorator;
@@ -18,7 +18,11 @@ export class LaunchView extends Component {
     }
 
     if (!App.instance) {
-      this.node.addComponent(App);
+      console.log('[LaunchView] create AppRoot');
+      const scene = director.getScene();
+      const appRoot = new Node('AppRoot');
+      appRoot.parent = scene;
+      appRoot.addComponent(App);
       await Promise.resolve();
     }
 
@@ -29,5 +33,6 @@ export class LaunchView extends Component {
       this.statusLabel.string = '初始化完成';
     }
     console.log('[LaunchView] go home');
+    await App.instance?.sceneRouter.goHome();
   }
 }

@@ -107,9 +107,7 @@ export class App extends Component {
       });
     }
 
-    if (director.getScene()?.name === SCENE_NAME.LAUNCH) {
-      await this.sceneRouter.goHome();
-    }
+    // LaunchView is responsible for navigation after bootstrap.
     this.isBootstrapped = true;
     this.isBootstrapping = false;
     } finally {
