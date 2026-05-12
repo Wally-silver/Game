@@ -1,0 +1,151 @@
+[
+  {
+    "id": "e001",
+    "name": "小镇早报：快步令见效",
+    "desc": "主街脚步声整齐如鼓点，产出线短时提振。",
+    "chance": 0.35,
+    "cooldown": 14,
+    "trigger_rule_tag": "fast_walk",
+    "effect_gold": 12,
+    "effect_goal": 4
+  },
+  {
+    "id": "e002",
+    "name": "广播失真：影子抢先下班",
+    "desc": "影子们提前散会，本体纷纷走神。",
+    "chance": 0.42,
+    "cooldown": 14,
+    "trigger_rule_tag": "shadow",
+    "effect_order": -8,
+    "effect_joy": -3
+  },
+  {
+    "id": "e003",
+    "name": "便利店暖灯夜谈",
+    "desc": "居民在便利店门口聊开了，心情回暖。",
+    "chance": 0.35,
+    "cooldown": 14,
+    "building_id": "ConvenienceStore",
+    "effect_joy": 6,
+    "effect_order": 2
+  },
+  {
+    "id": "e004",
+    "name": "修理铺神速抢修",
+    "desc": "异常工单被飞快处理，秩序回升。",
+    "chance": 0.3,
+    "cooldown": 16,
+    "building_id": "RepairShop",
+    "trigger_building_state": "overloaded",
+    "effect_order": 7,
+    "effect_goal": 5
+  },
+  {
+    "id": "e005",
+    "name": "花香游行",
+    "desc": "花店飘香一路，抱怨声显著下降。",
+    "chance": 0.35,
+    "cooldown": 14,
+    "trigger_rule_tag": "flower_aroma",
+    "effect_joy": 8
+  },
+  {
+    "id": "e006",
+    "name": "邮袋爆仓",
+    "desc": "邮局急件堆到门口，局势短时混乱。",
+    "chance": 0.35,
+    "cooldown": 12,
+    "building_id": "PostOffice",
+    "effect_order": -7,
+    "effect_gold": 6
+  },
+  {
+    "id": "e007",
+    "name": "镇长临检",
+    "desc": "秩序较低触发临检，短痛长益。",
+    "chance": 0.35,
+    "cooldown": 14,
+    "min_order": 55,
+    "effect_order": 5,
+    "effect_joy": -2
+  },
+  {
+    "id": "e008",
+    "name": "自发加油站",
+    "desc": "居民互相鼓劲，目标推进。",
+    "chance": 0.35,
+    "cooldown": 14,
+    "min_event_count": 2,
+    "effect_goal": 8,
+    "effect_joy": 3
+  },
+  {
+    "id": "e009",
+    "name": "抱怨墙被清空",
+    "desc": "执行禁止抱怨后，投诉骤降。",
+    "chance": 0.35,
+    "cooldown": 14,
+    "trigger_rule_tag": "no_complain",
+    "effect_order": 6
+  },
+  {
+    "id": "e010",
+    "name": "半价面包排长队",
+    "desc": "面包半价吸引全镇，快乐涨但秩序抖动。",
+    "chance": 0.35,
+    "cooldown": 14,
+    "trigger_rule_tag": "bread_half_price",
+    "effect_joy": 7,
+    "effect_order": -3
+  },
+  {
+    "id": "e011",
+    "name": "疲劳误操作",
+    "desc": "疲惫员工按错流程，产出受损。",
+    "chance": 0.35,
+    "cooldown": 12,
+    "trigger_resident_state": "tired",
+    "effect_gold": -10,
+    "effect_order": -4
+  },
+  {
+    "id": "e012",
+    "name": "笑容连锁反应",
+    "desc": "微笑挑战引发连锁好评。",
+    "chance": 0.3,
+    "cooldown": 16,
+    "trigger_rule_tag": "smile_day",
+    "effect_joy": 9,
+    "effect_gold": 8
+  },
+  {
+    "id": "e013",
+    "name": "异常警报演练",
+    "desc": "系统演练让大家更警惕。",
+    "chance": 0.35,
+    "cooldown": 14,
+    "trigger_rule_tag": "abnormal_watch",
+    "effect_order": 6,
+    "effect_goal": 4
+  },
+  {
+    "id": "e014",
+    "name": "公园即兴演出",
+    "desc": "公园人气爆棚，快乐上升。",
+    "chance": 0.35,
+    "cooldown": 14,
+    "rule_category": "public",
+    "effect_joy": 6,
+    "effect_gold": 5
+  },
+  {
+    "id": "e015",
+    "name": "新闻头条：目标过半",
+    "desc": "关键里程碑上报，全员受激励。",
+    "chance": 0.3,
+    "cooldown": 16,
+    "min_goal_progress": 50,
+    "effect_goal": 6,
+    "effect_order": 3
+  }
+]

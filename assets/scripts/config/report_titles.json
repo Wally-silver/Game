@@ -1,0 +1,74 @@
+[
+  {
+    "id": "report_001",
+    "title": "怪话生效，小镇稳住了",
+    "success_bias": true
+  },
+  {
+    "id": "report_002",
+    "title": "今日镇规：有惊无险",
+    "success_bias": true
+  },
+  {
+    "id": "report_003",
+    "title": "秩序与快乐勉强平衡",
+    "success_bias": true
+  },
+  {
+    "id": "report_004",
+    "title": "居民满意度尚可",
+    "success_bias": true
+  },
+  {
+    "id": "report_005",
+    "title": "离谱但有效的一天",
+    "success_bias": true
+  },
+  {
+    "id": "report_006",
+    "title": "怪话失控，镇务告急",
+    "success_bias": false
+  },
+  {
+    "id": "report_007",
+    "title": "居民情绪崩盘的一天",
+    "success_bias": false
+  },
+  {
+    "id": "report_008",
+    "title": "秩序跌穿警戒线",
+    "success_bias": false
+  },
+  {
+    "id": "report_009",
+    "title": "办公室怨气冲天",
+    "success_bias": false
+  },
+  {
+    "id": "report_010",
+    "title": "今日复盘：需要更稳健规则",
+    "success_bias": false
+  },
+  {
+    "id": "t11",
+    "title": "《怪话晨报》：镇民与影子同频上班"
+  },
+  {
+    "id": "t12",
+    "title": "《镇报头条》：便利店灯亮到天明"
+  },
+  {
+    "id": "t13",
+    "title": "《今日特刊》：修理铺拯救了秩序线"
+  },
+  {
+    "id": "t14",
+    "title": "《镇长专栏》：笑容挑战带来产能奇迹",
+    "success_bias": true
+  },
+  {
+    "id": "t15",
+    "title": "《紧急快讯》：疲劳误操作引发连锁混乱",
+    "success_bias": false
+  }
+]
